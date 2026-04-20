@@ -303,7 +303,7 @@
 
   {%- when 'swatch' -%}
     {%- unless product.has_only_default_variant -%}
-      <swatch-component data-status-sold-out="{{section.settings.status_variant_picker}}">
+      <variant-select data-url="{{ product.url }}" data-status-sold-out="{{section.settings.status_variant_picker}}">
         <div class="swatch-container">
           {%- for option in product.options_with_values -%}
             {%- liquid
@@ -412,7 +412,10 @@
             </div>
           {%- endfor -%}
         </div>
-      </swatch-component>
+        <script type="application/json">
+          {{ product.variants | json }}
+        </script>
+      </variant-select>
     {%- endunless -%}
   {% comment %} end {% endcomment %}
 
@@ -871,13 +874,27 @@
         </div>
       </div>
 
+      <style>
+        .product-media_main .slider-wrapper, .product-media_thumbnails .slider-wrapper { position: relative; }
+        .product-media_main .slider-prev-button, .product-media_main .slider-next-button {
+          position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; background: #fff; border: 1px solid #eee; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.08); font-size: 24px; cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
+        }
+        .product-media_main .slider-prev-button:hover, .product-media_main .slider-next-button:hover { background: #fed700; color: #000; }
+        .product-media_main .slider-prev-button { left: 10px; }
+        .product-media_main .slider-next-button { right: 10px; }
+        .product-media_main .slider-dots { position: absolute; bottom: 20px; left: 0; width: 100%; display: flex; justify-content: center; gap: 8px; z-index: 2; pointer-events: none; }
+        .product-media_main .slider-dot { pointer-events: auto; width: 10px; height: 10px; border-radius: 50%; background: rgba(0,0,0,0.2); border: none; padding: 0; cursor: pointer; transition: all 0.2s ease; }
+        .product-media_main .slider-dot.active { background: #fed700; transform: scale(1.2); }
+        .product-media_main .slider-list, .product-media_thumbnails .slider-list { scroll-snap-type: x mandatory; }
+      </style>
+
       <div class="product-media_main">
-        <slider-component id="{%- if quick_view -%}quick-view-{%- endif -%}product-media-main">
-          <div class="slider-container js-slider-container">
+        <native-slider id="{%- if quick_view -%}quick-view-{%- endif -%}product-media-main" style="display: block;">
+          <div class="slider-container">
             <div class="slider-wrapper">
-              <div class="slider-list d-block" id="{%- if quick_view -%}quick-view-{%- endif -%}slider-media-main">
+              <div class="slider-list d-flex" id="{%- if quick_view -%}quick-view-{%- endif -%}slider-media-main">
                 {%- for media in product.media -%}
-                  <div class="slider-item w-100{% unless media.media_type == 'image' %} slider-item-video{% endunless %}"{%- if media.media_type == 'image' -%} data-fancybox="gallery" data-src="{{media | img_url: 'master'}}" {%- endif -%}>
+                  <div class="slider-item w-100{% unless media.media_type == 'image' %} slider-item-video{% endunless %}" style="flex: 0 0 100%; scroll-snap-align: start;" {%- if media.media_type == 'image' -%} data-fancybox="gallery" data-src="{{media | img_url: 'master'}}" {%- endif -%}>
                     {%- case media.media_type -%}
                       {%- when 'image' -%}
                         {%- if forloop.first -%}
@@ -893,66 +910,62 @@
                   </div>
                 {%- endfor -%}
               </div>
-
-              {%- capture slider_main_id -%}#{%- if quick_view -%}quick-view-{%- endif -%}slider-media-main{%- endcapture -%}
-              {%- capture dots_id -%}#{%- if quick_view -%}quick-view-{%- endif -%}slider-media-thumbnails{%- endcapture -%}
-              {%- capture controls_id -%}#{%- if quick_view -%}quick-view-{%- endif -%}controls-media-main{%- endcapture -%}
-
-              {%- render 'set-tns-config'
-                slider_id: slider_main_id,
-                dots_id: dots_id,
-                dots: true,
-                controls: true,
-                controls_id: controls_id,
-                customDots: true,
-                navAsThumbnails: true,
-                total_item: product.media.size,
-                responsive: false
-                -%}
+              <button class="slider-prev-button" aria-label="Previous">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="slider-next-button" aria-label="Next">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+              <div class="slider-dots"></div>
             </div>
           </div>
-        </slider-component>
+        </native-slider>
       </div>
 
       <script>
         document.addEventListener('DOMContentLoaded', function () {
-          Fancybox.bind("[data-fancybox]");
+          if (window.Fancybox) Fancybox.bind("[data-fancybox]");
         });
       </script>
 
-      <div class="product-media_thumbnails">
-        <slider-component id="{%- if quick_view -%}quick-view-{%- endif -%}product-media-thumnails">
-          <div class="slider-container js-slider-container">
+      <div class="product-media_thumbnails mt-3">
+        <native-slider id="{%- if quick_view -%}quick-view-{%- endif -%}product-media-thumnails" style="display: block;">
+          <div class="slider-container">
             <div class="slider-wrapper">
-              <div class="slider-list" id="{%- if quick_view -%}quick-view-{%- endif -%}slider-media-thumbnails">
+              <div class="slider-list d-flex" style="gap: 12px; margin: 0; padding: 5px;" id="{%- if quick_view -%}quick-view-{%- endif -%}slider-media-thumbnails">
                 {%- for media in product.media -%}
-                  <div class="media-item slider-item{% if forloop.first %} tns-nav-active {% endif %}">
+                  <div class="media-item slider-item{% if forloop.first %} active {% endif %}" style="flex: 0 0 calc(20% - 9.6px); scroll-snap-align: start; cursor: pointer;">
                     <div class="item{% if media.media_type != 'image' %} item-external{% endif %}">
                       {%- if media.media_type == 'image' -%}
                         {%- render 'image-style' image: media, limit: 120 -%}
                       {%- else -%}
                         {%- render 'svg' type: 'youtube' -%}
-                        <img src="{{ media | img_url: '120x' }}" />
+                        <img src="{{ media | img_url: '120x' }}" alt="video thumbnail" />
                       {%- endif -%}
                     </div>
                   </div>
                 {%- endfor -%}
               </div>
-              {%- capture slider_thumbnails_id -%}#{%- if quick_view -%}quick-view-{%- endif -%}slider-media-thumbnails{%- endcapture -%}
-              {%- capture thumb_container_id -%}#{%- if quick_view -%}quick-view-{%- endif -%}product-media-thumnails{%- endcapture -%}
-
-              {%- render 'set-tns-config'
-                slider_id: slider_thumbnails_id,
-                padding: '12px',
-                items_resp: '5,4',
-                total_item: product.media.size,
-                slideBy: 'page',
-                classID: thumb_container_id
-                -%}
             </div>
           </div>
-        </slider-component>
+        </native-slider>
       </div>
+      
+      <script>
+        // Simple Thumbnail Sync Logic
+        (function() {
+          const mainSlider = document.getElementById('{%- if quick_view -%}quick-view-{%- endif -%}product-media-main');
+          const thumbSlider = document.getElementById('{%- if quick_view -%}quick-view-{%- endif -%}product-media-thumnails');
+          if (mainSlider && thumbSlider) {
+            const thumbs = thumbSlider.querySelectorAll('.media-item');
+            thumbs.forEach((thumb, index) => {
+              thumb.addEventListener('click', () => {
+                if(mainSlider.scrollToIndex) mainSlider.scrollToIndex(index);
+              });
+            });
+          }
+        })();
+      </script>
     </div>
   {% comment %} end {% endcomment %}
 

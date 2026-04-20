@@ -1,47 +1,36 @@
 {%- if _collection != blank -%}
   <div class="block-slider-component">
-    {%- if enable_slider -%}<slider-component>{%- endif -%}
-      <div class="slider-container js-slider-container">
-        <div class="slider-wrapper">
+    {%- if enable_slider -%}
+    <native-slider data-autoplay="{{ autoplay }}" data-autoplay-timeout="{{ autoplay_timeout | default: 5000 }}">
+    {%- endif -%}
+    
+      <div class="slider-container">
+        {%- if enable_slider and controls -%}
+        <div class="slider-header-controls">
+          <button type="button" class="slider-prev-button" aria-label="Previous">
+            {% render 'icon-dir-left' %}
+          </button>
+          <button type="button" class="slider-next-button" aria-label="Next">
+            {% render 'icon-dir-right' %}
+          </button>
+        </div>
+        {%- endif -%}
 
-          {%- if style == 'normal' or style == 'image' -%}
-          <div class="slider-list{% unless enable_slider %} row{% endunless %}" id="slider-{{section.id}}">
+        <div class="slider-wrapper">
+          <div class="slider-list" id="slider-{{section.id}}">
             {%- for product in collection.products limit: limit -%}
-              <div class="slider-item{% unless enable_slider %} {{ gridClass }}{% endunless %}">
+              <div class="slider-item">
                 {%- render 'product-item' product: product, collection: collection -%}
               </div>
             {%- endfor -%}
           </div>
-
-          {%- if enable_slider -%}
-            {%- render 'set-tns-config'
-              loop: loop,
-              dots: dots,
-              padding: items_spacing_slider,
-              classID: sectionID,
-              controls: controls,
-              autoplay: autoplay,
-              slider_id  : slider_id,
-              total_item : limit,
-              items_resp : items_resp,
-              controls_id: controls_id,
-              customControls  : true,
-              autoplay_timeout: autoplay_timeout,
-            -%}
+          
+          {%- if enable_slider and dots -%}
+          <div class="slider-dots"></div>
           {%- endif -%}
-
-          {%- else -%}
-            <div class="slider-list row" id="slider-{{section.id}}">
-              {%- for product in collection.products limit: limit -%}
-                <div class="slider-item {{ gridClass }}">
-                  {%- render 'product-item' product: product, collection: collection -%}
-                </div>
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
-
         </div>
       </div>
-    {%- if enable_slider -%}</slider-component>{%- endif -%}
+      
+    {%- if enable_slider -%}</native-slider>{%- endif -%}
   </div>
 {%- endif -%}

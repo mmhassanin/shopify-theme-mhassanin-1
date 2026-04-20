@@ -113,3 +113,22 @@
 ## Inline Style Migration
 - **Never hardcode CSS** in HTML `style=""` attributes for values controlled by section schema settings (e.g., font-size, font-weight, colors). Instead, move those rules into the section's `{% style %}` block using the section ID as a scope selector.
 - Example: `{{sectionID}} .element { font-size: {{ section.settings.fs }}px; }` inside `{%- style -%}`.
+
+## Modern UI Schema Standards
+- **Meticulous Schema Organization**: Schemas must group settings logically strictly using `"type": "header"` blocks (e.g., "General Settings", "Design & Colors", "Slider Settings", "Grid Settings").
+- **Clear English Labels**: UI `label`s must be clear, human-readable English (e.g., "Layout Mode", "Items Per Row (Responsive)") rather than utilizing untranslated or legacy Shopify translation strings (`t:sections...`). 
+- **Preserve IDs**: NEVER alter a setting's `"id"` string (e.g., `items_resp`) when modernizing a section, to prevent wiping the merchant's saved Customization Panel data.
+- **Deep Block Auditing**: Ensure nested blocks (e.g., Slider slides, Tabs) have clear names and their internal settings are well-grouped so the parent-child relationship in the Shopify admin is highly scannable.
+
+## Core JS Architecture ("Big Bang" Vanilla ES6 Framework)
+- The legacy `common.js`, `product-page.js`, and all minified dependencies (including `tiny-slider` and polyfills) are officially abandoned.
+- **Custom Elements Pattern**: All interactive functionality is now handled by Web Components housed in the new `theme-modern-core.js` framework. 
+  - Standard features must use native OS 2.0 tags like `<native-slider>`, `<variant-select>`, and `<quantity-input>`.
+  - No dependencies. Use pure ES6 classes extending `HTMLElement`.
+
+## Responsive Grid Variable Migration
+- **Abolish Bootstrap Grid Logic**: Legacy grid classes (`row`, `col-sm-`, `col-md-`) and the `set-item-per-row.liquid` sizing engine are deprecated.
+- When generating responsive grids from the `items_resp` comma-separated setting (e.g. `6,5,3,2`):
+  1. Parse the string into an array in Liquid.
+  2. Inject actual CSS variables directly into a `{% style %}` block mapped to `#section-{{section.id}}` (e.g., `--items-per-row-desk: 6;`).
+  3. Use modern CSS `flex` or `grid` with `gap` to automatically size the child elements in the global CSS (or injected CSS chunk) via calc functions.

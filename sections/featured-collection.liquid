@@ -66,10 +66,54 @@
   {%- render 'snippet-heading', type: 'render-html', config: section.settings -%}
 {%- endcapture -%}
 
-{%- capture gridClass -%}{%- render 'set-item-per-row', value: items_resp -%}{%- endcapture -%}
+{%- assign items_array = items_resp | split: ',' -%}
+{%- assign items_desk = items_array[0] | default: 4 -%}
+{%- assign items_tab = items_array[2] | default: 3 -%}
+{%- assign items_mob = items_array[3] | default: 2 -%}
+{%- assign grid_gap = '0px' -%}
+{%- if items_spacing -%}
+  {%- assign grid_gap = '30px' -%}
+  {%- if style == 'countdown' or style == 'textbox' -%}
+    {%- assign grid_gap = '4px' -%}
+  {%- endif -%}
+{%- endif -%}
+
+<style>
+  #section-{{section.id}} {
+    --grid-gap: {{ grid_gap }};
+    --items-per-row-desk: {{ items_desk }};
+    --items-per-row-tab: {{ items_tab }};
+    --items-per-row-mob: {{ items_mob }};
+  }
+  #section-{{section.id}} .slider-list {
+    display: flex;
+    gap: var(--grid-gap);
+  }
+  #section-{{section.id}} .slider-item {
+    flex: 0 0 calc((100% - (var(--grid-gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+    max-width: calc((100% - (var(--grid-gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+  }
+  @media (max-width: 991px) {
+    #section-{{section.id}} .slider-item {
+      flex: 0 0 calc((100% - (var(--grid-gap) * (var(--items-per-row-tab) - 1))) / var(--items-per-row-tab));
+      max-width: calc((100% - (var(--grid-gap) * (var(--items-per-row-tab) - 1))) / var(--items-per-row-tab));
+    }
+  }
+  @media (max-width: 767px) {
+    #section-{{section.id}} .slider-item {
+      flex: 0 0 calc((100% - (var(--grid-gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+      max-width: calc((100% - (var(--grid-gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+    }
+  }
+  {% unless enable_slider %}
+  #section-{{section.id}} .grid-layout {
+    flex-wrap: wrap;
+  }
+  {% endunless %}
+</style>
 
 <div class="section-featured-collection {% if border_radius %}border-radius{% endif %} {{bg_wide}}" id="section-{{section.id}}" data-section-id="{{section.id}}"{% if enable_slider %} data-section-type="featured-collection"{% endif %}>
-  <div class="{% if template == 'index' or template contains 'page' %}{{ layout_class }}{% endif %} controls-position-{{controls_position}}">
+  <div class="{% if layout == 'full' %}container-fluid{% else %}container{% endif %} controls-position-{{controls_position}}">
     <div class="section-wrapper block-type-{{style}} countdown-position-{{position}} {{items_spacing_row}}">
 
       {%- if section_heading != blank -%}
@@ -142,36 +186,37 @@
         {%- endcase -%}
 
         <div class="block-slider-component">
-          {%- if enable_slider -%}<slider-component>{%- endif -%}
-            <div class="slider-container js-slider-container">
-              <div class="slider-wrapper">
-                <div class="slider-list{% unless enable_slider %} row{% endunless %}" id="slider-{{section.id}}">
-                  {%- for product in collection.products limit: limit -%}
-                    <div class="slider-item{% unless enable_slider %} {{ gridClass }}{% endunless %}">
-                      {%- render 'product-item' product: product, collection: collection-%}
-                    </div>
-                  {%- endfor -%}
-                </div>
-
-                {%- if enable_slider -%}
-                  {%- render 'set-tns-config'
-                    loop: loop,
-                    dots: dots,
-                    padding: items_spacing_slider,
-                    classID: sectionID,
-                    controls: controls,
-                    autoplay: autoplay,
-                    slider_id  : slider_id,
-                    total_item : limit,
-                    items_resp : items_resp,
-                    controls_id: controls_id,
-                    customControls  : true,
-                    autoplay_timeout: autoplay_timeout
-                  -%}
-                {%- endif -%}
-              </div>
+          {%- if enable_slider -%}
+          <native-slider data-autoplay="{{ autoplay }}" data-autoplay-timeout="{{ autoplay_timeout | default: 5000 }}">
+            <div class="slider-header-controls">
+              {%- if controls -%}
+                <button type="button" class="slider-prev-button" aria-label="Previous">
+                  {% render 'icon-dir-left' %}
+                </button>
+                <button type="button" class="slider-next-button" aria-label="Next">
+                  {% render 'icon-dir-right' %}
+                </button>
+              {%- endif -%}
             </div>
-          {%- if enable_slider -%}</slider-component>{%- endif -%}
+            <div class="slider-container">
+          {%- endif -%}
+              
+              <div class="slider-list{% unless enable_slider %} grid-layout{% endunless %}" id="slider-{{section.id}}">
+                {%- for product in collection.products limit: limit -%}
+                  <div class="slider-item">
+                    {%- render 'product-item' product: product, collection: collection-%}
+                  </div>
+                {%- endfor -%}
+              </div>
+
+          {%- if enable_slider -%}
+            </div>
+            {%- if dots -%}
+            <div class="slider-dots"></div>
+            {%- endif -%}
+          </native-slider>
+          {%- endif -%}
+        </div>
         </div> 
 
       </div>
@@ -180,15 +225,7 @@
   </div>
 </div>
 
-{%- if enable_slider -%}
-<script>
-  (function() {
-    window.theme = window.theme || {};
-    (window.theme.sectionRegister = window.theme.sectionRegister || []).push("featured-collection");
-    (window.theme.customElementsList = window.theme.customElementsList || []).push("slider-component");
-  })();
-</script>
-{%- endif -%}
+
 
 {%- capture section_css -%}
   {{-heading_css-}}
@@ -197,107 +234,93 @@
 {%- style -%}{{section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
 {%- schema -%}
 {
-  "name": "t:sections.featured-collection.name",
+  "name": "Featured Collection",
   "tag": "section",
   "disabled_on": {
     "groups": ["header", "footer"]
   },
   "settings": [
     {
-      "type": "select",
-      "id": "style",
-      "label": "t:sections.common.style",
-      "default": "normal",
-      "options": [
-        { "value": "normal", "label": "t:sections.common.normal" },
-        { "value": "image", "label": "t:sections.common.image" },
-        { "value": "countdown", "label": "t:sections.common.countdown" },
-        { "value": "textbox", "label": "t:sections.common.textbox" }
-      ]
-    },
-    {
       "type": "header",
-      "content": "t:sections.common.general"
+      "content": "General Settings"
     },
     {
       "type": "select",
       "id": "layout",
-      "label": "t:sections.common.layout_mode",
+      "label": "Layout Mode",
       "default": "boxed",
       "options": [
-        {
-          "value": "boxed",
-          "label": "Boxed"
-        },
-        {
-          "value": "full",
-          "label": "Wide"
-        }
+        { "value": "boxed", "label": "Boxed" },
+        { "value": "full", "label": "Wide" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "Section Margin",
+      "info": "Order: Top Right Bottom Left (e.g. 10px 0 10px 0)"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Section Padding",
+      "info": "Order: Top Right Bottom Left (e.g. 10px 0 10px 0)"
+    },
+    {
+      "type": "header",
+      "content": "Design & Colors"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Section Style",
+      "default": "normal",
+      "options": [
+        { "value": "normal", "label": "Normal Grid" },
+        { "value": "image", "label": "Image Banner Beside" },
+        { "value": "countdown", "label": "Countdown Banner Beside" },
+        { "value": "textbox", "label": "Textbox Beside" }
       ]
     },
     {
       "type": "color",
       "id": "bg_color",
-      "label": "t:sections.common.background_color"
-    },
-    {
-      "type": "checkbox",
-      "id": "border_radius",
-      "label": "t:sections.common.border_radius"
+      "label": "Background Color"
     },
     {
       "type": "image_picker",
       "id": "bg_image",
-      "label": "t:sections.common.background_image"
+      "label": "Background Image"
     },
     {
-      "type": "text",
-      "id": "margin",
-      "label": "t:sections.common.section_margin",
-      "info": "t:sections.common.order_info"
-    },
-    {
-      "type": "text",
-      "id": "padding",
-      "label": "t:sections.common.section_padding",
-      "info": "t:sections.common.order_info"
+      "type": "checkbox",
+      "id": "border_radius",
+      "label": "Enable Border Radius"
     },
     {
       "type": "header",
-      "content": "t:sections.common.block_product"
+      "content": "Content Settings"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "t:sections.common.heading",
+      "label": "Heading",
       "default": "Featured products"
     },
     {
       "type": "inline_richtext",
       "id": "subheading",
-      "label": "t:sections.common.subtext"
+      "label": "Subheading"
     },
     {
       "type": "collection",
       "id": "collection",
-      "label": "t:sections.common.collection"
-    },
-    {
-      "type": "text",
-      "id": "items_resp",
-      "label": "t:sections.common.items_per_row",
-      "default": "6,5,3,2"
-    },
-    {
-      "type": "checkbox",
-      "id": "items_spacing",
-      "label": "t:sections.common.items_spacing",
-      "default": true
+      "label": "Target Collection"
     },
     {
       "type": "range",
       "id": "limit",
-      "label": "t:sections.common.limit",
+      "label": "Maximum Products to Show",
       "step": 1,
       "min": 1,
       "max": 20,
@@ -305,130 +328,159 @@
     },
     {
       "type": "header",
-      "content": "t:sections.common.block_image"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "t:sections.common.image"
-    },
-    {
-      "type": "url",
-      "id": "link",
-      "label": "t:sections.common.link"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.common.block_countdown"
-    },
-    {
-      "type": "select",
-      "id": "position",
-      "label": "t:sections.common.position",
-      "options": [
-        { "value": "1", "label": "t:sections.common.same_row_with_heading" },
-        { "value": "2", "label": "t:sections.common.below_heading" }
-      ],
-      "default": "2"
-    },
-    {
-      "type": "textarea",
-      "id": "text_1",
-      "label": "t:sections.common.text"
-    },
-    {
-      "type": "textarea",
-      "id": "text_2",
-      "label": "t:sections.common.subtext"
-    },
-    {
-      "type": "image_picker",
-      "id": "icon",
-      "label": "t:sections.common.image"
+      "content": "Grid Settings"
     },
     {
       "type": "text",
-      "id": "expire",
-      "label": "t:sections.common.expire",
-      "info": "mm/dd/yyyy.Eg: 12/20/2023"
+      "id": "items_resp",
+      "label": "Items Per Row (Responsive)",
+      "default": "6,5,3,2",
+      "info": "Format: Desktop-Large, Desktop, Tablet, Mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "items_spacing",
+      "label": "Enable Spacing Between Items",
+      "default": true
     },
     {
       "type": "header",
-      "content": "t:sections.common.textbox"
-    },
-    {
-      "type": "textarea",
-      "id": "textbox_1",
-      "label": "t:sections.common.text"
-    },
-    {
-      "type": "textarea",
-      "id": "textbox_2",
-      "label": "t:sections.common.subtext"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "t:sections.common.button_label"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "t:sections.common.button_link"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.common.slider_settings"
+      "content": "Slider Settings"
     },
     {
       "type": "checkbox",
       "id": "enable_slider",
-      "label": "t:sections.common.enable_slider",
+      "label": "Enable Native Slider",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "loop",
-      "label": "t:sections.common.loop",
+      "label": "Infinite Loop",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "controls",
-      "label": "t:sections.common.controls",
+      "label": "Show Arrow Controls",
       "default": true
     },
     {
       "type": "select",
       "id": "controls_position",
-      "label": "t:sections.common.controls_position",
+      "label": "Controls Position",
       "options": [
-        { "value": "1", "label": "t:sections.common.same_row_with_heading" },
-        { "value": "2", "label": "t:sections.common.below_heading" }
+        { "value": "1", "label": "Inline with Heading" },
+        { "value": "2", "label": "Below Heading" }
       ],
       "default": "2"
     },
     {
       "type": "checkbox",
       "id": "dots",
-      "label": "t:sections.common.dots",
+      "label": "Show Slider Pagination Dots",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "autoplay",
-      "label": "t:sections.common.autoplay",
+      "label": "Enable Autoplay",
       "default": false
     },
     {
       "type": "range",
       "id": "autoplay_timeout",
-      "label": "t:sections.common.autoplay_timeout",
+      "label": "Autoplay Timeout",
       "step": 0.1,
       "min": 2,
       "max": 10,
       "unit": "s",
       "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Block Style: Image"
+    },
+    {
+      "type": "paragraph",
+      "content": "Settings used only if 'Section Style' is set to 'Image Banner Beside'"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Side Image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Image Link"
+    },
+    {
+      "type": "header",
+      "content": "Block Style: Countdown"
+    },
+    {
+      "type": "paragraph",
+      "content": "Settings used only if 'Section Style' is set to 'Countdown'"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Countdown Position",
+      "options": [
+        { "value": "1", "label": "Same Row with Heading" },
+        { "value": "2", "label": "Below Heading" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "textarea",
+      "id": "text_1",
+      "label": "Primary Text"
+    },
+    {
+      "type": "textarea",
+      "id": "text_2",
+      "label": "Subtext"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon",
+      "label": "Icon Image"
+    },
+    {
+      "type": "text",
+      "id": "expire",
+      "label": "Expiration Date",
+      "info": "Format: mm/dd/yyyy. Example: 12/20/2023"
+    },
+    {
+      "type": "header",
+      "content": "Block Style: Textbox"
+    },
+    {
+      "type": "paragraph",
+      "content": "Settings used only if 'Section Style' is set to 'Textbox Beside'"
+    },
+    {
+      "type": "textarea",
+      "id": "textbox_1",
+      "label": "Textbox Header"
+    },
+    {
+      "type": "textarea",
+      "id": "textbox_2",
+      "label": "Textbox Description"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
     }
   ],
   "blocks": [
@@ -438,52 +490,40 @@
     {
       "type": "heading-style",
       "limit": 1,
-      "name": "t:sections.common.heading_style",
+      "name": "Heading Custom Styles",
       "settings": [
         {
           "type": "select",
           "id": "section_heading_container_align",
-          "label": "t:sections.common.alignment",
+          "label": "Heading Alignment",
           "options": [
-            {
-              "value": "auto",
-              "label": "t:sections.common.auto"
-            },
-            {
-              "value": "left",
-              "label": "t:sections.common.left"
-            },
-            {
-              "value": "center",
-              "label": "t:sections.common.center"
-            },
-            {
-              "value": "right",
-              "label": "t:sections.common.right"
-            }
+            { "value": "auto", "label": "Auto" },
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
           ]
         },
         {
           "type": "text",
           "id": "section_heading_margin",
-          "label": "t:sections.common.margin",
-          "info": "t:sections.common.order_info"
+          "label": "Heading Margin",
+          "info": "Order: Top Right Bottom Left (e.g. 10px 0 10px 0)"
         },
         {
           "type": "color",
           "id": "section_heading_color",
-          "label": "t:sections.common.text_color"
+          "label": "Text Color"
         },
         {
           "type": "text",
           "id": "section_heading_font_size",
-          "label": "t:sections.common.font_size",
-          "info": "t:sections.common.unit_px"
+          "label": "Font Size",
+          "info": "e.g., 24px"
         },
         {
           "type": "range",
           "id": "section_heading_font_weight",
-          "label": "t:sections.common.font_weight",
+          "label": "Font Weight",
           "step": 100,
           "min": 100,
           "max": 900,
@@ -492,15 +532,15 @@
         {
           "type": "text",
           "id": "section_heading_line_height",
-          "label": "t:sections.common.line_height",
-          "info": "t:sections.common.unit_px"
+          "label": "Line Height",
+          "info": "e.g., 32px"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "t:sections.featured-collection.name"
+      "name": "Featured Collection"
     }
   ]
 }

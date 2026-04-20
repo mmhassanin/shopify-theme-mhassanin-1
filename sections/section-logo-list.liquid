@@ -34,6 +34,44 @@
   {%- render 'snippet-heading' type:'render-html' config: section.settings -%}
 {%- endcapture -%}
 
+{%- assign items_array = items_resp | split: ',' -%}
+{%- assign items_desk = items_array[0] | default: 6 -%}
+{%- assign items_tab = items_array[2] | default: 4 -%}
+{%- assign items_mob = items_array[3] | default: 3 -%}
+{%- assign grid_gap = '0px' -%}
+{%- if items_spacing -%}
+  {%- assign grid_gap = '30px' -%}
+{%- endif -%}
+
+<style>
+  #section-{{section.id}} {
+    --grid-gap: {{ grid_gap }};
+    --items-per-row-desk: {{ items_desk }};
+    --items-per-row-tab: {{ items_tab }};
+    --items-per-row-mob: {{ items_mob }};
+  }
+  #section-{{section.id}} .slider-list {
+    display: flex;
+    gap: var(--grid-gap);
+  }
+  #section-{{section.id}} .slider-item {
+    flex: 0 0 calc((100% - (var(--grid-gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+    max-width: calc((100% - (var(--grid-gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+  }
+  @media (max-width: 991px) {
+    #section-{{section.id}} .slider-item {
+      flex: 0 0 calc((100% - (var(--grid-gap) * (var(--items-per-row-tab) - 1))) / var(--items-per-row-tab));
+      max-width: calc((100% - (var(--grid-gap) * (var(--items-per-row-tab) - 1))) / var(--items-per-row-tab));
+    }
+  }
+  @media (max-width: 767px) {
+    #section-{{section.id}} .slider-item {
+      flex: 0 0 calc((100% - (var(--grid-gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+      max-width: calc((100% - (var(--grid-gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+    }
+  }
+</style>
+
 <div class="section-logo-list" id="section-{{section.id}}" data-section-id="{{section.id}}" data-section-type="logo-list">
   <div class="{{ layout_class }}">
     <div class="section-wrapper{% unless section.settings.border %} remove-border-section{% endunless %}">
@@ -45,77 +83,57 @@
       {%- endif -%}
 
       <div class="section-body align-items-center">
-        <slider-component>
-          <div class="slider-container position-relative js-slider-container">
-            <div class="slider-wrapper">
-              <div class="slider-list" id="slider-{{section.id}}">
-                {%- for block in gallery_blocks -%}
-                  {%- liquid
-                    assign type  = block.settings.type
-                    assign svg   = block.settings.svg
-                    assign image = block.settings.image
-                    assign link  = block.settings.link
-                  -%}
-
-                  <div class="slider-item logo-item">
-                    {%- capture image -%}
-                      {%- if type == 'image' -%}
-                        {%- render 'image-style' image: image, limit: 200 -%}
-                      {%- else -%}
-                        {{svg}}
-                      {%- endif -%}
-                    {%- endcapture -%}
-
-                    <div class="logo-item_inner">
-                      {%- if link != blank -%}
-                        <a href="{{link}}" aria-label="Logo image">{{image}}</a>
-                      {%- else -%}
-                        {{image}}
-                      {%- endif -%}
-                    </div>
-                  </div>
-                {%- endfor -%}
-              </div>
-
-              {%- render 'set-tns-config'
-                loop: loop,
-                dots: dots,
-                classID : sectionID,
-                padding : items_spacing_slider,
-                controls: controls,
-                nav: controls,
-                autoplay: autoplay,
-                slider_id  : slider_id,
-                items_resp : items_resp,
-                total_item : section.blocks.size,
-                controls_id: controls_id,
-                customControls  : true,
-                autoplay_timeout: autoplay_timeout,
-               -%}
-            </div>
+        <native-slider data-autoplay="{{ autoplay }}" data-autoplay-timeout="{{ autoplay_timeout | default: 5000 }}">
+          <div class="slider-header-controls">
+            {%- if controls -%}
+              <button type="button" class="slider-prev-button" aria-label="Previous">
+                {% render 'icon-dir-left' %}
+              </button>
+              <button type="button" class="slider-next-button" aria-label="Next">
+                {% render 'icon-dir-right' %}
+              </button>
+            {%- endif -%}
           </div>
-        </slider-component>
+          <div class="slider-container position-relative">
+            <div class="slider-list" id="slider-{{section.id}}">
+              {%- for block in gallery_blocks -%}
+                {%- liquid
+                  assign type  = block.settings.type
+                  assign svg   = block.settings.svg
+                  assign image = block.settings.image
+                  assign link  = block.settings.link
+                -%}
+
+                <div class="slider-item logo-item">
+                  {%- capture image -%}
+                    {%- if type == 'image' -%}
+                      {%- render 'image-style' image: image, limit: 200 -%}
+                    {%- else -%}
+                      {{svg}}
+                    {%- endif -%}
+                  {%- endcapture -%}
+
+                  <div class="logo-item_inner">
+                    {%- if link != blank -%}
+                      <a href="{{link}}" aria-label="Logo image">{{image}}</a>
+                    {%- else -%}
+                      {{image}}
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+            
+            {%- if dots -%}
+            <div class="slider-dots"></div>
+            {%- endif -%}
+          </div>
+        </native-slider>
       </div>
     </div>
   </div>
 </div>
 
-<script>
-  window.theme = window.theme || {};
-  if(!!window.theme.sectionRegister){
-    !window.theme.sectionRegister.includes("logo-list") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "logo-list"]);
-  }else{
-    window.theme.sectionRegister = ["logo-list"];
-  }
-</script>
-<script>
-  window.theme = window.theme || {};
-  if(!!window.theme.customElementsList){
-    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
-  }else{
-    window.theme.customElementsList = ["slider-component"];
-  }
-</script>
 
 {%- capture section_css -%}
   {{-heading_css-}}
@@ -125,105 +143,108 @@
 
 {%- schema -%}
 {
-  "name": "t:sections.logo-list.name",
+  "name": "Logo List",
   "tag": "section",
   "disabled_on": {
-    "groups": ["header"]
+    "groups": ["header", "footer"]
   },
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.common.general"
+      "content": "General Settings"
     },
     {
       "type": "select",
       "id": "layout",
-      "label": "t:sections.common.layout_mode",
+      "label": "Layout Mode",
       "default": "boxed",
       "options": [
-        {
-          "value": "boxed",
-          "label": "Boxed"
-        },
-        {
-          "value": "full",
-          "label": "Wide"
-        }
+        { "value": "boxed", "label": "Boxed" },
+        { "value": "full", "label": "Wide" }
       ]
     },
     {
       "type": "text",
       "id": "margin",
-      "label": "t:sections.common.section_margin",
-      "info": "t:sections.common.order_info"
+      "label": "Section Margin",
+      "info": "Order: Top Right Bottom Left (e.g. 10px 0 10px 0)"
     },
     {
       "type": "text",
       "id": "padding",
-      "label": "t:sections.common.section_padding",
-      "info": "t:sections.common.order_info"
-    },
-    {
-      "type": "text",
-      "id": "items_resp",
-      "label": "t:sections.common.items_per_row",
-      "default": "6,5,4,3"
-    },
-    {
-      "type": "checkbox",
-      "id": "items_spacing",
-      "label": "t:sections.common.items_spacing",
-      "default" : true
+      "label": "Section Padding",
+      "info": "Order: Top Right Bottom Left (e.g. 10px 0 10px 0)"
     },
     {
       "type": "checkbox",
       "id": "border",
-      "label": "t:sections.common.border",
-      "default" : true
+      "label": "Enable Section Border",
+      "default": true
     },
     {
       "type": "color",
       "id": "bg_color",
-      "label": "t:sections.common.background_color"
+      "label": "Background Color"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "t:sections.common.heading",
+      "label": "Section Heading",
       "default": "Brands We Trust"
     },
     {
       "type": "header",
-      "content": "t:sections.common.slider_settings"
+      "content": "Grid Settings"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "Items Per Row (Responsive)",
+      "default": "6,5,4,3",
+      "info": "Format: Desktop-Large, Desktop, Tablet, Mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "items_spacing",
+      "label": "Enable Spacing Between Logos",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Slider Settings"
     },
     {
       "type": "checkbox",
       "id": "loop",
-      "label": "t:sections.common.loop",
+      "label": "Infinite Loop",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "controls",
-      "label": "t:sections.common.controls",
+      "label": "Show Arrow Controls",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "dots",
-      "label": "t:sections.common.dots",
+      "label": "Show Slider Pagination Dots",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "autoplay",
-      "label": "t:sections.common.autoplay",
+      "label": "Enable Autoplay",
       "default": false
     },
     {
       "type": "range",
       "id": "autoplay_timeout",
-      "label": "t:sections.common.autoplay_timeout",
+      "label": "Autoplay Timeout",
       "step": 0.1,
       "min": 2,
       "max": 10,
@@ -235,52 +256,40 @@
     {
       "type": "heading-style",
       "limit": 1,
-      "name": "t:sections.common.heading_style",
+      "name": "Heading Custom Styles",
       "settings": [
         {
           "type": "select",
           "id": "section_heading_container_align",
-          "label": "t:sections.common.alignment",
+          "label": "Heading Alignment",
           "options": [
-            {
-              "value": "auto",
-              "label": "t:sections.common.auto"
-            },
-            {
-              "value": "left",
-              "label": "t:sections.common.left"
-            },
-            {
-              "value": "center",
-              "label": "t:sections.common.center"
-            },
-            {
-              "value": "right",
-              "label": "t:sections.common.right"
-            }
+            { "value": "auto", "label": "Auto" },
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
           ]
         },
         {
           "type": "text",
           "id": "section_heading_margin",
-          "label": "t:sections.common.margin",
-          "info": "t:sections.common.order_info"
+          "label": "Heading Margin",
+          "info": "Order: Top Right Bottom Left (e.g. 10px 0 10px 0)"
         },
         {
           "type": "color",
           "id": "section_heading_color",
-          "label": "t:sections.common.text_color"
+          "label": "Text Color"
         },
         {
           "type": "text",
           "id": "section_heading_font_size",
-          "label": "t:sections.common.font_size",
-          "info": "t:sections.common.unit_px"
+          "label": "Font Size",
+          "info": "e.g., 24px"
         },
         {
           "type": "range",
           "id": "section_heading_font_weight",
-          "label": "t:sections.common.font_weight",
+          "label": "Font Weight",
           "step": 100,
           "min": 100,
           "max": 900,
@@ -289,70 +298,52 @@
         {
           "type": "text",
           "id": "section_heading_line_height",
-          "label": "t:sections.common.line_height",
-          "info": "t:sections.common.unit_px"
+          "label": "Line Height",
+          "info": "e.g., 32px"
         }
       ]
     },
     {
       "type": "block-item",
-      "name": "t:sections.common.block_item",
+      "name": "Logo Item",
       "settings": [
         {
           "type": "select",
           "id": "type",
-          "label": "t:sections.common.type",
+          "label": "Media Type",
           "options": [
-            {
-              "value": "image",
-              "label": "t:sections.common.image"
-            },
-            {
-              "value": "svg",
-              "label": "t:sections.common.svg"
-            }
+            { "value": "image", "label": "Upload Image" },
+            { "value": "svg", "label": "Raw SVG Code" }
           ]
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "t:sections.common.image"
+          "label": "Image (used if Media Type is Image)"
         },
         {
           "type": "html",
           "id": "svg",
-          "label": "t:sections.common.svg"
+          "label": "SVG Code (used if Media Type is SVG)"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "t:sections.common.link"
+          "label": "Link destination"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "t:sections.logo-list.name",
-      "blocks" : [
-        {
-          "type" : "block-item"
-        },
-        {
-          "type" : "block-item"
-        },
-        {
-          "type" : "block-item"
-        },
-        {
-          "type" : "block-item"
-        },
-        {
-          "type" : "block-item"
-        },
-        {
-          "type" : "block-item"
-        }
+      "name": "Logo List",
+      "blocks": [
+        { "type": "block-item" },
+        { "type": "block-item" },
+        { "type": "block-item" },
+        { "type": "block-item" },
+        { "type": "block-item" },
+        { "type": "block-item" }
       ]
     }
   ]
