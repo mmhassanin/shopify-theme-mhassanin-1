@@ -116,7 +116,7 @@
 {%- endstyle -%}
 {%- schema -%}
 {
-  "name": "t:sections.search-box-with-banner.name",
+  "name": "Search Box With Banner",
   "tag": "section",
   "disabled_on": {
     "groups": ["header", "footer"]
@@ -124,7 +124,7 @@
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.common.general"
+      "content": "General Settings"
     },
     {
       "type": "image_picker",
@@ -134,19 +134,19 @@
     {
       "type": "color",
       "id": "bg_color",
-      "label": "t:sections.common.background_color"
+      "label": "Background Color"
     },
     {
       "type": "text",
       "id": "margin",
-      "label": "t:sections.common.section_margin",
-      "info": "t:sections.common.order_info"
+      "label": "Section Margin",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "text",
       "id": "padding",
-      "label": "t:sections.common.section_padding",
-      "info": "t:sections.common.order_info"
+      "label": "Section Padding",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "header",
@@ -161,7 +161,7 @@
     {
       "type": "richtext",
       "id": "search_box_heading",
-      "label": "t:sections.common.heading"
+      "label": "Heading"
     },
     {
       "type": "richtext",
@@ -175,7 +175,7 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "t:sections.common.heading",
+      "label": "Heading",
       "default": "Featured products"
     },
     {
@@ -193,7 +193,7 @@
     {
       "type": "heading-style",
       "limit": 1,
-      "name": "t:sections.common.heading_style",
+      "name": "Heading Style",
       "settings": [
         {
           "type": "header",
@@ -202,18 +202,18 @@
         {
           "type": "color",
           "id": "section_heading_color",
-          "label": "t:sections.common.text_color"
+          "label": "Text Color"
         },
         {
           "type": "text",
           "id": "section_heading_font_size",
-          "label": "t:sections.common.font_size",
-          "info": "t:sections.common.unit_px"
+          "label": "Font Size",
+          "info": "E.g. 24px"
         },
         {
           "type": "range",
           "id": "section_heading_font_weight",
-          "label": "t:sections.common.font_weight",
+          "label": "Font Weight",
           "step": 100,
           "min": 100,
           "max": 900,
@@ -226,25 +226,25 @@
         {
           "type": "color",
           "id": "search_section_heading_color",
-          "label": "t:sections.common.text_color"
+          "label": "Text Color"
         },
         {
           "type": "text",
           "id": "search_section_heading_font_size",
           "label": "t:sections.search-box-with-banner.settings.heading_size",
-          "info": "t:sections.common.unit_px"
+          "info": "E.g. 24px"
         },
         {
           "type": "text",
           "id": "search_section_subtext_font_size",
           "label": "t:sections.search-box-with-banner.settings.subtext_size",
-          "info": "t:sections.common.unit_px"
+          "info": "E.g. 24px"
         }
       ]
     },
     {
       "type" : "block-item",
-      "name" : "t:sections.common.block_item",
+      "name" : "Block Item",
       "settings" : [
         {
           "type": "checkbox",
@@ -266,7 +266,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.search-box-with-banner.name"
+      "name": "Search Box With Banner"
     }
   ]
 }

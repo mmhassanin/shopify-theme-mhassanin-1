@@ -116,10 +116,10 @@
           </div>
 
           <div class="block-slider-component">
-            <slider-component>
+            <native-slider class="d-block position-relative" data-autoplay="{{ autoplay }}" data-autoplay-timeout="{{ autoplay_timeout | times: 1000 }}">
               <div class="slider-container js-slider-container">
-                <div class="slider-wrapper">
-                  <div class="slider-list" id="slider-{{section.id}}">
+                <div class="slider-wrapper position-relative">
+                  <div class="slider-list d-flex flex-nowrap" id="slider-{{section.id}}">
                     {%- for product in collection.products limit: limit -%}
                       <div class="slider-item">
                         {%- render 'product-item' product: product, collection: collection-%}
@@ -127,25 +127,21 @@
                     {%- endfor -%}
                   </div>
 
-                  {%- if enable_slider -%}
-                    {%- render 'set-tns-config'
-                      loop: loop,
-                      dots: dots,
-                      padding: items_spacing_slider,
-                      classID: sectionID,
-                      controls: controls,
-                      autoplay: autoplay,
-                      slider_id  : slider_id,
-                      total_item : limit,
-                      items_resp : items_resp,
-                      controls_id: controls_id,
-                      customControls  : true,
-                      autoplay_timeout: autoplay_timeout,
-                    -%}
+                  {%- if enable_slider and controls -%}
+                    <button class="slider-prev-button" aria-label="Previous">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button class="slider-next-button" aria-label="Next">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
                   {%- endif -%}
+                  {%- if enable_slider and dots -%}
+                    <div class="slider-dots"></div>
+                  {%- endif -%}
+
                 </div>
               </div>
-            </slider-component>
+            </native-slider>
           </div>
         </div>
 
@@ -174,28 +170,49 @@
   </div>
 </div>
 
-{%- if enable_slider -%}
-<script>
-  (function() {
-    window.theme = window.theme || {};
-    (window.theme.sectionRegister = window.theme.sectionRegister || []).push("featured-collection");
-    (window.theme.customElementsList = window.theme.customElementsList || []).push("slider-component");
-  })();
-</script>
-{%- endif -%}
-
+{%- liquid
+  assign grid_arr = items_resp | split: ','
+  assign grid_desk = grid_arr[0] | default: 3
+  assign grid_mob = grid_arr[1] | default: 2
+-%}
 {%- capture section_css -%}
   {{section_id}} {{bg_class}} {position: relative;}
   {{section_id}} .position-absolute{left: 50%;top: 50%;transform: translate(-50%, -50%);}
   {%- render 'css-responsive' preClassID: section_id, classID: bg_class, value_1: section_height, property_1: 'height' -%}
   {%- render 'snippet-theme' type: 'section-style', config: section.settings, preClassID: section_id, classID: bg_class -%}
+  {%- if enable_slider -%}
+  {{section_id}} {
+    --items-per-row-desk: {{ grid_desk }};
+    --items-per-row-mob: {{ grid_mob }};
+    --gap: 4px;
+  }
+  {{section_id}} .slider-list {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: var(--gap);
+    margin: 0;
+    padding: 10px 5px;
+  }
+  {{section_id}} .slider-item {
+    flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+    scroll-snap-align: start;
+    min-width: calc((100% - (var(--gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+  }
+  @media (max-width: 767px) {
+    {{section_id}} .slider-item {
+      flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+      min-width: calc((100% - (var(--gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+    }
+  }
+  {%- endif -%}
 {%- endcapture -%}
 
 {%- style -%}{{section_css | strip | strip_newlines | remove: '  '}}{%- endstyle -%}
 
 {%- schema -%}
 {
-  "name": "t:sections.single-banner-with-product.name",
+  "name": "Single Banner & Product",
   "tag": "section",
   "disabled_on": {
     "groups": ["header", "footer"]
@@ -203,18 +220,18 @@
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.common.general"
+      "content": "General Settings"
     },
     {
       "type": "text",
       "id": "section_height",
-      "label": "t:sections.common.section_height",
+      "label": "Section Height",
       "default": "260px"
     },
     {
       "type": "select",
       "id": "layout",
-      "label": "t:sections.common.layout_mode",
+      "label": "Layout Mode",
       "default": "boxed",
       "options": [
         {
@@ -230,32 +247,32 @@
     {
       "type": "text",
       "id": "margin",
-      "label": "t:sections.common.section_margin",
-      "info": "t:sections.common.order_info"
+      "label": "Section Margin",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "text",
       "id": "padding",
-      "label": "t:sections.common.section_padding",
-      "info": "t:sections.common.order_info"
+      "label": "Section Padding",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "header",
-      "content": "t:sections.common.background_image_on_desktop"
+      "content": "Desktop Background Image"
     },
     {
       "type": "image_picker",
       "id": "bg_image_desk",
-      "label": "t:sections.common.background_image"
+      "label": "Background Image"
     },
     {
       "type": "select",
       "id": "bg_size_desk",
-      "label": "t:sections.common.background_size",
+      "label": "Background Size",
       "options": [
         {
           "value": "auto",
-          "label": "t:sections.common.auto"
+          "label": "Auto"
         },
         {
           "value": "cover",
@@ -337,21 +354,21 @@
     },
     {
       "type": "header",
-      "content": "t:sections.common.background_image_on_mobile"
+      "content": "Mobile Background Image"
     },
     {
       "type": "image_picker",
       "id": "bg_image_mobi",
-      "label": "t:sections.common.background_image"
+      "label": "Background Image"
     },
     {
       "type": "select",
       "id": "bg_size_mobi",
-      "label": "t:sections.common.background_size",
+      "label": "Background Size",
       "options": [
         {
           "value": "auto",
-          "label": "t:sections.common.auto"
+          "label": "Auto"
         },
         {
           "value": "cover",
@@ -438,24 +455,24 @@
     {
       "type": "collection",
       "id": "collection",
-      "label": "t:sections.common.collection"
+      "label": "Collection"
     },
     {
       "type": "text",
       "id": "items_resp",
-      "label": "t:sections.common.items_per_row",
+      "label": "Items Per Row (Responsive)",
       "default": "6,5,3,2"
     },
     {
       "type": "checkbox",
       "id": "items_spacing",
-      "label": "t:sections.common.items_spacing",
+      "label": "Enable Items Spacing (Gap)",
       "default": true
     },
     {
       "type": "range",
       "id": "limit",
-      "label": "t:sections.common.limit",
+      "label": "Limit",
       "step": 1,
       "min": 1,
       "max": 20,
@@ -463,40 +480,39 @@
     },
     {
       "type": "header",
-      "content": "t:sections.common.slider_settings"
+      "content": "Slider Settings"
     },
     {
       "type": "checkbox",
       "id": "loop",
-      "label": "t:sections.common.loop",
+      "label": "Infinite Loop",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "controls",
-      "label": "t:sections.common.controls",
+      "label": "Show Navigation Arrows",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "dots",
-      "label": "t:sections.common.dots",
+      "label": "Show Navigation Dots",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "autoplay",
-      "label": "t:sections.common.autoplay",
+      "label": "Enable Autoplay",
       "default": false
     },
     {
       "type": "range",
       "id": "autoplay_timeout",
-      "label": "t:sections.common.autoplay_timeout",
+      "label": "Autoplay Timeout (Seconds)",
       "step": 0.1,
       "min": 2,
       "max": 10,
-      "unit": "s",
       "default": 4
     }
   ],
@@ -506,12 +522,12 @@
     },
     {
       "type" : "block-item",
-      "name" : "t:sections.common.block_item",
+      "name" : "Block Item",
       "settings" : [
         {
           "type": "text",
           "id": "tab_heading",
-          "label": "t:sections.common.tab_heading"
+          "label": "Tab Heading"
         },
         {
           "type": "image_picker",
@@ -525,7 +541,7 @@
         {
           "type": "textarea",
           "id": "heading",
-          "label": "t:sections.common.heading"
+          "label": "Heading"
         },
         {
           "type": "textarea",
@@ -634,7 +650,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.single-banner-with-product.name"
+      "name": "Single Banner & Product"
     }
   ]
 }

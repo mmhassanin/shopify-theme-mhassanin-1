@@ -125,6 +125,7 @@
 - **Custom Elements Pattern**: All interactive functionality is now handled by Web Components housed in the new `theme-modern-core.js` framework. 
   - Standard features must use native OS 2.0 tags like `<native-slider>`, `<variant-select>`, and `<quantity-input>`.
   - No dependencies. Use pure ES6 classes extending `HTMLElement`.
+- **Phase B Completion**: As of this refactor, zero legacy `<slider-component>` or `set-tns-config` slider footprints remain. The entire theme relies exclusively on CSS Scroll-Snap Native sliders with injected CSS flex gaps.
 
 ## Responsive Grid Variable Migration
 - **Abolish Bootstrap Grid Logic**: Legacy grid classes (`row`, `col-sm-`, `col-md-`) and the `set-item-per-row.liquid` sizing engine are deprecated.

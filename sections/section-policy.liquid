@@ -28,10 +28,10 @@
     <div class="section-wrapper{% unless section.settings.border %} remove-border{% endunless %}">
 
       <div class="section-body policy-list style-{{ section.settings.style }}">
-        <slider-component>
+        <native-slider class="d-block position-relative" data-autoplay="{{ autoplay }}" data-autoplay-timeout="{{ autoplay_timeout | times: 1000 }}">
           <div class="slider-container js-slider-container">
-            <div class="slider-wrapper">
-              <div class="slider-list" id="slider-{{section.id}}">
+            <div class="slider-wrapper position-relative">
+              <div class="slider-list d-flex flex-nowrap" id="slider-{{section.id}}">
                 {%- for block in section.blocks -%}
                   {%- assign svg = block.settings.svg -%}
                   {%- assign image = block.settings.image -%}
@@ -60,44 +60,70 @@
                 {%- endfor -%}
               </div>
 
-              {%- render 'set-tns-config'
-                loop: loop,
-                dots: dots,
-                padding: items_spacing,
-                classID: sectionID,
-                controls: controls,
-                autoplay: autoplay,
-                slider_id  : slider_id,
-                total_item : section.blocks.size,
-                items_resp : items_resp,
-                controls_id: controls_id,
-                customControls  : true,
-                autoplay_timeout: autoplay_timeout,
-              -%}
+              {%- if controls -%}
+                <button class="slider-prev-button" aria-label="Previous">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="slider-next-button" aria-label="Next">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+              {%- endif -%}
+              {%- if dots -%}
+                <div class="slider-dots"></div>
+              {%- endif -%}
 
             </div>
           </div>
-        </slider-component>
+        </native-slider>
       </div>
     </div>
   </div>
 </div>
 
-<script>
-  (function() {
-    window.theme = window.theme || {};
-    (window.theme.sectionRegister = window.theme.sectionRegister || []).push("featured-collection");
-    (window.theme.customElementsList = window.theme.customElementsList || []).push("slider-component");
-  })();
-</script>
-
+{%- liquid
+  assign grid_arr = items_resp | split: ','
+  assign grid_desk = grid_arr[0] | default: 4
+  assign grid_tab = grid_arr[2] | default: 3
+  assign grid_mob = grid_arr[3] | default: 1
+-%}
 {%- capture section_css -%}
 {%- render 'snippet-theme' type: 'section-style', preClassID: sectionID, classID: bg_class, config: section.settings -%}
+  {{sectionID}} {
+    --items-per-row-desk: {{ grid_desk }};
+    --items-per-row-tab: {{ grid_tab }};
+    --items-per-row-mob: {{ grid_mob }};
+    --gap: 0px;
+  }
+  {{sectionID}} .slider-list {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: var(--gap);
+    margin: 0;
+    padding: 10px 5px;
+  }
+  {{sectionID}} .slider-item {
+    flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+    scroll-snap-align: start;
+    min-width: calc((100% - (var(--gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+  }
+  @media (max-width: 991px) {
+    {{sectionID}} .slider-item {
+      flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-tab) - 1))) / var(--items-per-row-tab));
+      min-width: calc((100% - (var(--gap) * (var(--items-per-row-tab) - 1))) / var(--items-per-row-tab));
+    }
+  }
+  @media (max-width: 767px) {
+    {{sectionID}} .slider-item {
+      flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+      min-width: calc((100% - (var(--gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+    }
+  }
 {%- endcapture -%}
 {%- style -%}{{section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
 {%- schema -%}
 {
-  "name": "t:sections.policy.name",
+  "name": "Policy Section",
   "tag": "section",
   "disabled_on": {
     "groups": ["header", "footer"]
@@ -105,12 +131,12 @@
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.common.general"
+      "content": "General Settings"
     },
     {
       "type": "select",
       "id": "layout",
-      "label": "t:sections.common.layout_mode",
+      "label": "Layout Mode",
       "default": "boxed",
       "options": [
         {
@@ -126,72 +152,71 @@
     {
       "type": "text",
       "id": "margin",
-      "label": "t:sections.common.section_margin",
-      "info": "t:sections.common.order_info"
+      "label": "Section Margin",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "text",
       "id": "padding",
-      "label": "t:sections.common.section_padding",
-      "info": "t:sections.common.order_info"
+      "label": "Section Padding",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "checkbox",
       "id": "border",
-      "label": "t:sections.common.border",
+      "label": "Border",
       "default" : true
     },
     {
       "type": "color",
       "id": "bg_color",
-      "label": "t:sections.common.background_color"
+      "label": "Background Color"
     },
     {
       "type": "header",
-      "content": "t:sections.common.layout_settings"
+      "content": "Layout Settings"
     },
     {
       "type": "text",
       "id": "items_resp",
-      "label": "t:sections.common.items_per_row",
+      "label": "Items Per Row (Responsive)",
       "default": "6,5,3,2"
     },
     {
       "type": "header",
-      "content": "t:sections.common.slider_settings"
+      "content": "Slider Settings"
     },
     {
       "type": "checkbox",
       "id": "loop",
-      "label": "t:sections.common.loop",
+      "label": "Infinite Loop",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "controls",
-      "label": "t:sections.common.controls",
+      "label": "Show Navigation Arrows",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "dots",
-      "label": "t:sections.common.dots",
+      "label": "Show Navigation Dots",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "autoplay",
-      "label": "t:sections.common.autoplay",
+      "label": "Enable Autoplay",
       "default": false
     },
     {
       "type": "range",
       "id": "autoplay_timeout",
-      "label": "t:sections.common.autoplay_timeout",
+      "label": "Autoplay Timeout (Seconds)",
       "step": 0.1,
       "min": 2,
       "max": 10,
-      "unit": "s",
       "default": 4
     }
   ],
@@ -201,7 +226,7 @@
     },
     {
       "type": "image",
-      "name": "t:sections.common.block_item",
+      "name": "Block Item",
       "settings": [
         {
           "type": "textarea",
@@ -216,7 +241,7 @@
         {
           "type": "text",
           "id": "heading",
-          "label": "t:sections.common.heading",
+          "label": "Heading",
           "default": "Heading"
         },
         {
@@ -230,7 +255,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.policy.name"
+      "name": "Policy Section"
     }
   ]
 }

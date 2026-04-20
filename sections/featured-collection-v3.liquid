@@ -50,10 +50,11 @@
 
       <div class="section-body col-lg-6 col-12">
         <div class="block-slider-component">
-          <slider-component>
+        <div class="block-slider-component">
+          <native-slider class="d-block position-relative" data-autoplay="{{ autoplay }}" data-autoplay-timeout="{{ autoplay_timeout | times: 1000 }}">
             <div class="slider-container js-slider-container">
-              <div class="slider-wrapper">
-                <div class="slider-list" id="slider-{{section.id}}">
+              <div class="slider-wrapper position-relative">
+                <div class="slider-list d-flex flex-nowrap" id="slider-{{section.id}}">
                   {%- for product in collection.products limit: limit -%}
                     <div class="slider-item">
                       {%- render 'product-item' product: product, collection: collection-%}
@@ -61,23 +62,20 @@
                   {%- endfor -%}
                 </div>
 
-                {%- render 'set-tns-config'
-                  loop: loop,
-                  dots: dots,
-                  padding: items_spacing_slider,
-                  classID: sectionID,
-                  controls: controls,
-                  autoplay: autoplay,
-                  slider_id  : slider_id,
-                  total_item : limit,
-                  items_resp : items_resp,
-                  controls_id: controls_id,
-                  customControls  : true,
-                  autoplay_timeout: autoplay_timeout
-                -%}
+                {%- if controls -%}
+                  <button class="slider-prev-button" aria-label="Previous">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  </button>
+                  <button class="slider-next-button" aria-label="Next">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                {%- endif -%}
+                {%- if dots -%}
+                  <div class="slider-dots"></div>
+                {%- endif -%}
               </div>
             </div>
-          </slider-component>
+          </native-slider>
         </div> 
       </div>
 
@@ -85,32 +83,43 @@
   </div>
 </div>
 
-<script>
-  window.theme = window.theme || {};
-  if(!!window.theme.sectionRegister){
-    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
-  }else{
-    window.theme.sectionRegister = ["featured-collection"];
-  }
-</script>
-
-<script>
-  window.theme = window.theme || {};
-  if(!!window.theme.customElementsList){
-    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
-  }else{
-    window.theme.customElementsList = ["slider-component"];
-  }
-</script>
-
+{%- liquid
+  assign grid_arr = items_resp | split: ','
+  assign grid_desk = grid_arr[0] | default: 3
+  assign grid_mob = grid_arr[1] | default: 2
+-%}
 {%- capture section_css -%}
   {{-heading_css-}}
   {%- render 'snippet-theme' type: 'section-style', preClassID: sectionID, classID: bg_class, config: section.settings -%}
+  {{sectionID}} {
+    --items-per-row-desk: {{ grid_desk }};
+    --items-per-row-mob: {{ grid_mob }};
+    --gap: {{ items_spacing_slider | default: '30px' }};
+  }
+  {{sectionID}} .slider-list {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: var(--gap);
+    margin: 0;
+    padding: 10px 5px;
+  }
+  {{sectionID}} .slider-item {
+    flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+    scroll-snap-align: start;
+    min-width: calc((100% - (var(--gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+  }
+  @media (max-width: 767px) {
+    {{sectionID}} .slider-item {
+      flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+      min-width: calc((100% - (var(--gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+    }
+  }
 {%- endcapture -%}
 {%- style -%}{{section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
 {%- schema -%}
 {
-  "name": "t:sections.featured-collection-v3.name",
+  "name": "Featured Collection (V3)",
   "tag": "section",
   "disabled_on": {
     "groups": ["header", "footer"]
@@ -118,12 +127,12 @@
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.common.general"
+      "content": "General Settings"
     },
     {
       "type": "select",
       "id": "layout",
-      "label": "t:sections.common.layout_mode",
+      "label": "Layout Mode",
       "default": "boxed",
       "options": [
         {
@@ -139,46 +148,46 @@
     {
       "type": "color",
       "id": "bg_color",
-      "label": "t:sections.common.background_color"
+      "label": "Background Color"
     },
     {
       "type": "text",
       "id": "margin",
-      "label": "t:sections.common.section_margin",
-      "info": "t:sections.common.order_info"
+      "label": "Section Margin",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "text",
       "id": "padding",
-      "label": "t:sections.common.section_padding",
-      "info": "t:sections.common.order_info"
+      "label": "Section Padding",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "richtext",
       "id": "heading",
-      "label": "t:sections.common.heading"
+      "label": "Heading"
     },
     {
       "type": "collection",
       "id": "collection",
-      "label": "t:sections.common.collection"
+      "label": "Collection"
     },
     {
       "type": "text",
       "id": "items_resp",
-      "label": "t:sections.common.items_per_row",
+      "label": "Items Per Row (Responsive)",
       "default": "3,2"
     },
     {
       "type": "checkbox",
       "id": "items_spacing",
-      "label": "t:sections.common.items_spacing",
+      "label": "Enable Items Spacing (Gap)",
       "default": true
     },
     {
       "type": "range",
       "id": "limit",
-      "label": "t:sections.common.limit",
+      "label": "Limit",
       "step": 1,
       "min": 1,
       "max": 8,
@@ -186,40 +195,39 @@
     },
     {
       "type": "header",
-      "content": "t:sections.common.slider_settings"
+      "content": "Slider Settings"
     },
     {
       "type": "checkbox",
       "id": "loop",
-      "label": "t:sections.common.loop",
+      "label": "Infinite Loop",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "controls",
-      "label": "t:sections.common.controls",
+      "label": "Show Navigation Arrows",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "dots",
-      "label": "t:sections.common.dots",
+      "label": "Show Navigation Dots",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "autoplay",
-      "label": "t:sections.common.autoplay",
+      "label": "Enable Autoplay",
       "default": false
     },
     {
       "type": "range",
       "id": "autoplay_timeout",
-      "label": "t:sections.common.autoplay_timeout",
+      "label": "Autoplay Timeout (Seconds)",
       "step": 0.1,
       "min": 2,
       "max": 10,
-      "unit": "s",
       "default": 4
     }
   ],
@@ -227,19 +235,19 @@
     {
       "type": "heading-style",
       "limit": 1,
-      "name": "t:sections.common.heading_style",
+      "name": "Heading Style",
       "settings": [
         {
           "type": "color",
           "id": "section_heading_color",
-          "label": "t:sections.common.text_color"
+          "label": "Text Color"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "t:sections.featured-collection-v3.name"
+      "name": "Featured Collection (V3)"
     }
   ]
 }

@@ -155,7 +155,7 @@
 {%- endstyle -%}
 {%- schema -%}
 {
-  "name": "t:sections.featured-collection-with-left-sidebar.name",
+  "name": "Collection (Sidebar)",
   "tag": "section",
   "disabled_on": {
     "groups": ["header", "footer"]
@@ -163,12 +163,12 @@
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.common.general"
+      "content": "General Settings"
     },
     {
       "type": "select",
       "id": "layout",
-      "label": "t:sections.common.layout_mode",
+      "label": "Layout Mode",
       "default": "boxed",
       "options": [
         {
@@ -184,19 +184,19 @@
     {
       "type": "color",
       "id": "bg_color",
-      "label": "t:sections.common.background_color"
+      "label": "Background Color"
     },
     {
       "type": "text",
       "id": "margin",
-      "label": "t:sections.common.section_margin",
-      "info": "t:sections.common.order_info"
+      "label": "Section Margin",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "text",
       "id": "padding",
-      "label": "t:sections.common.section_padding",
-      "info": "t:sections.common.order_info"
+      "label": "Section Padding",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "header",
@@ -205,30 +205,30 @@
     {
       "type": "text",
       "id": "heading",
-      "label": "t:sections.common.heading",
+      "label": "Heading",
       "default": "Featured products"
     },
     {
       "type": "collection",
       "id": "collection",
-      "label": "t:sections.common.collection"
+      "label": "Collection"
     },
     {
       "type": "text",
       "id": "items_resp",
-      "label": "t:sections.common.items_per_row",
+      "label": "Items Per Row (Responsive)",
       "default": "6,5,3,2"
     },
     {
       "type": "checkbox",
       "id": "items_spacing",
-      "label": "t:sections.common.items_spacing",
+      "label": "Enable Items Spacing (Gap)",
       "default": true
     },
     {
       "type": "range",
       "id": "limit",
-      "label": "t:sections.common.limit",
+      "label": "Limit",
       "step": 1,
       "min": 1,
       "max": 20,
@@ -241,7 +241,7 @@
     {
       "type": "text",
       "id": "left_sidebar_heading",
-      "label": "t:sections.common.heading"
+      "label": "Heading"
     },
     {
       "type": "link_list",
@@ -266,28 +266,28 @@
     {
       "type": "heading-style",
       "limit": 1,
-      "name": "t:sections.common.heading_style",
+      "name": "Heading Style",
       "settings": [
         {
           "type": "select",
           "id": "section_heading_container_align",
-          "label": "t:sections.common.alignment",
+          "label": "Alignment",
           "options": [
             {
               "value": "auto",
-              "label": "t:sections.common.auto"
+              "label": "Auto"
             },
             {
               "value": "left",
-              "label": "t:sections.common.left"
+              "label": "Left"
             },
             {
               "value": "center",
-              "label": "t:sections.common.center"
+              "label": "Center"
             },
             {
               "value": "right",
-              "label": "t:sections.common.right"
+              "label": "Right"
             }
           ]
         },
@@ -295,23 +295,23 @@
           "type": "text",
           "id": "section_heading_margin",
           "label": "t:sections.common.margin",
-          "info": "t:sections.common.order_info"
+          "info": "Order: Top Right Bottom Left"
         },
         {
           "type": "color",
           "id": "section_heading_color",
-          "label": "t:sections.common.text_color"
+          "label": "Text Color"
         },
         {
           "type": "text",
           "id": "section_heading_font_size",
-          "label": "t:sections.common.font_size",
-          "info": "t:sections.common.unit_px"
+          "label": "Font Size",
+          "info": "E.g. 24px"
         },
         {
           "type": "range",
           "id": "section_heading_font_weight",
-          "label": "t:sections.common.font_weight",
+          "label": "Font Weight",
           "step": 100,
           "min": 100,
           "max": 900,
@@ -320,15 +320,15 @@
         {
           "type": "text",
           "id": "section_heading_line_height",
-          "label": "t:sections.common.line_height",
-          "info": "t:sections.common.unit_px"
+          "label": "Line Height",
+          "info": "E.g. 24px"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "t:sections.featured-collection-with-left-sidebar.name"
+      "name": "Collection (Sidebar)"
     }
   ]
 }

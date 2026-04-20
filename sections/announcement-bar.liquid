@@ -54,10 +54,10 @@
     <div class="{{layout_class}}">
       <div class="section-wrapper {{bg_boxed}}">
         <div class="section-body">
-          <slider-component>
+          <native-slider class="d-block position-relative" data-autoplay="{{ autoplay }}" data-autoplay-timeout="{{ autoplay_timeout | times: 1000 }}">
             <div class="slider-container js-slider-container">
-              <div class="slider-wrapper">
-                <div class="slider-list d-block" id="slider-{{section.id}}">
+              <div class="slider-wrapper position-relative">
+                <div class="slider-list d-flex flex-nowrap" id="slider-{{section.id}}">
                   {%- for block in announcement_blocks -%}
                     {%- capture attributes -%}{%- if request.design_mode -%}data-block-id="{{block.id}}" data-index="{{forloop.index0}}"{{block.shopify_attributes}}{%- endif -%}{%- endcapture -%}
                     <div class="slider-item w-100 text-center" {{attributes}}>
@@ -66,17 +66,19 @@
                   {%- endfor -%}
                 </div>
                 {%- if block_size > 1 -%}
-                  {%- render 'set-tns-config'
-                    slider_id: slider_id,
-                    loop     : loop,
-                    autoplay : autoplay,
-                    total_item: announcement_blocks.size,
-                    responsive: false,
-                    autoplay_timeout: autoplay_timeout -%}
+                  {%- if section.settings.controls -%}
+                    <button class="slider-prev-button" aria-label="Previous">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button class="slider-next-button" aria-label="Next">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                  {%- endif -%}
+                  <div class="slider-dots"></div>
                 {%- endif -%}
               </div>
             </div>
-          </slider-component>
+          </native-slider>
         </div>
       </div>
     </div>
@@ -98,10 +100,20 @@
         -%}
     {%- endif -%}
     {%- render 'snippet-theme' type: 'section-style', preClassID: section_id, classID: bg_class, config: section.settings -%}
+    {{section_id}} .slider-list {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin: 0;
+      padding: 0;
+    }
+    {{section_id}} .slider-item {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      min-width: 100%;
+    }
   {%- endcapture -%}
   {%- style -%}{{section_css | strip | strip_newlines | remove: '  '}}{%- endstyle -%}
-
-  <script>window.theme.customElementsList = [...window.theme.customElementsList,"slider-component"];window.theme.sectionRegister = [...window.theme.sectionRegister,"announcement-bar"];</script>
 
   {%- if request.design_mode -%}
     <script>
@@ -109,16 +121,20 @@
 
         document.addEventListener('shopify:block:select', function ({ detail: { blockId, sectionId, load } }) {
           var sectionElm = document.getElementById('section-{{section.id}}');
-          var sliderElm = sectionElm.querySelector('slider-component');
+          var sliderElm = sectionElm.querySelector('native-slider');
           var blockElm = sectionElm.querySelector('[data-block-id="' + blockId + '"]');
-          sliderElm.pause();
-          sliderElm.goTo(blockElm.dataset.index);
+          if (sliderElm && blockElm && sliderElm.goTo) {
+            sliderElm.pause();
+            sliderElm.goTo(parseInt(blockElm.dataset.index, 10));
+          }
         });
 
         document.addEventListener('shopify:section:deselect', function () {
           let sectionElm = document.getElementById('section-{{section.id}}');
-          let sliderElm = sectionElm.querySelector('slider-component');
-          sliderElm.play();
+          let sliderElm = sectionElm.querySelector('native-slider');
+          if (sliderElm && sliderElm.play) {
+            sliderElm.play();
+          }
         });
       })();
 
@@ -144,7 +160,7 @@
     {
       "type": "select",
       "id": "layout",
-      "label": "t:sections.common.layout_mode",
+      "label": "Layout Mode",
       "default": "boxed",
       "options": [
         {
@@ -178,14 +194,14 @@
     {
       "type": "text",
       "id": "margin",
-      "label": "t:sections.common.section_margin",
-      "info": "t:sections.common.order_info"
+      "label": "Section Margin",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "text",
       "id": "padding",
-      "label": "t:sections.common.section_padding",
-      "info": "t:sections.common.order_info"
+      "label": "Section Padding",
+      "info": "Order: Top Right Bottom Left"
     },
     {
       "type": "header",
@@ -200,7 +216,7 @@
     {
       "type": "color",
       "id": "bg_color",
-      "label": "t:sections.common.background_color"
+      "label": "Background Color"
     },
     {
       "type": "image_picker",
@@ -214,7 +230,7 @@
       "options": [
         {
           "value": "auto",
-          "label": "t:sections.common.auto"
+          "label": "Auto"
         },
         {
           "value": "cover",
@@ -296,24 +312,24 @@
     },
     {
       "type": "header",
-      "content": "t:sections.common.slider_settings"
+      "content": "Slider Settings"
     },
     {
       "type": "checkbox",
       "id": "loop",
-      "label": "t:sections.common.loop",
+      "label": "Infinite Loop",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "autoplay",
-      "label": "t:sections.common.autoplay",
+      "label": "Enable Autoplay",
       "default": true
     },
     {
       "type": "range",
       "id": "autoplay_timeout",
-      "label": "t:sections.common.autoplay_timeout",
+      "label": "Autoplay Timeout (Seconds)",
       "step": 0.1,
       "min": 2,
       "max": 10,
@@ -327,7 +343,7 @@
     },
     {
       "type": "block-item",
-      "name": "t:sections.common.block_item",
+      "name": "Block Item",
       "settings": [
         {
           "type": "richtext",
@@ -345,17 +361,17 @@
         {
           "type": "color",
           "id": "cl",
-          "label": "t:sections.common.text_color"
+          "label": "Text Color"
         },
         {
           "type": "text",
           "id": "fs",
-          "label": "t:sections.common.font_size"
+          "label": "Font Size"
         },
         {
           "type": "range",
           "id": "fw",
-          "label": "t:sections.common.font_weight",
+          "label": "Font Weight",
           "step": 100,
           "min": 100,
           "max": 900,
@@ -364,7 +380,7 @@
         {
           "type": "text",
           "id": "lh",
-          "label": "t:sections.common.line_height"
+          "label": "Line Height"
         }
       ]
     }
