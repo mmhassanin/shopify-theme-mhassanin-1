@@ -144,11 +144,6 @@
 
   let jsResources = [
       "{{'lazysizes.min.js' | asset_url}}",
-      {%- if settings.direction == 'RTL' -%}
-      "{{'tiny-slider-rtl.js' | asset_url}}",
-      {%- else -%}
-      "{{'tiny-slider.min.js' | asset_url}}",
-      {%- endif -%}
       "{{'common.js' | asset_url}}",
       {%- case template.name -%}
         {%- when 'product' -%}

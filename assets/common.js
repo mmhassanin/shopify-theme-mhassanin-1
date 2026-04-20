@@ -541,55 +541,313 @@
     }
   };
 
-  // app/scripts/common/model/slider-component.js
+  // app/scripts/common/model/slider-component.js [MODERNIZED — Native Vanilla JS]
   var SliderComponent = class extends HTMLElement {
     constructor() {
       super();
       this.sliderContainer = this.querySelector(".js-slider-container");
-      this.config = Object.assign(JSON.parse(this.querySelector("[data-tns-config]").innerHTML), {
-        onInit: () => {
-          this.sliderContainer.addClass("slider-initialized");
-        }
+      this._configJson = null;
+      try {
+        var configEl = this.querySelector("[data-tns-config]");
+        if (configEl) this._configJson = JSON.parse(configEl.innerHTML);
+      } catch (e) { console.warn("SliderComponent: config parse error", e); }
+    }
+
+    init(overrides = {}) {
+      try {
+        this.config = Object.assign({}, this._configJson || {}, overrides);
+        this.track = this.querySelector(this.config.container || ".slider-list");
+        if (!this.track) return this;
+        this.slides = [...this.track.children];
+        this.totalSlides = this.slides.length;
+        this.currentIndex = 0;
+        this._autoplayTimer = null;
+        this._isRTL = document.documentElement.dir === "rtl";
+
+        // Parse responsive config
+        this._breakpoints = this._parseResponsive();
+        this._currentBP = this._getActiveBreakpoint();
+
+        // Apply initial layout
+        this._applyLayout();
+
+        // Setup controls
+        this._setupControls();
+
+        // Setup touch/swipe
+        this._setupTouch();
+
+        // Setup autoplay
+        if (this.config.autoplay) this.play();
+
+        // Responsive handler
+        this._resizeHandler = this._onResize.bind(this);
+        window.addEventListener("resize", this._resizeHandler);
+
+        // Mark initialized
+        if (this.sliderContainer) this.sliderContainer.classList.add("slider-initialized");
+        if (typeof this.config.onInit === "function") this.config.onInit();
+
+        return this;
+      } catch (error) {
+        console.warn("SliderComponent init error:", error);
+        return this;
+      }
+    }
+
+    _parseResponsive() {
+      var resp = this.config.responsive;
+      if (!resp) return [{ bp: 0, items: 1, gutter: 0 }];
+      var bps = Object.keys(resp).map(Number).sort(function(a, b) { return a - b; });
+      return bps.map(function(bp) {
+        return { bp: bp, items: resp[bp].items || 1, gutter: resp[bp].gutter || 0 };
       });
     }
-    init(config = {}) {
-      try {
-        return this.slider = tns(Object.assign({ ...this.config }, config));
-      } catch (error) {
-        console.log(this);
-        console.error(error);
+
+    _getActiveBreakpoint() {
+      var w = window.innerWidth;
+      var active = this._breakpoints[0];
+      for (var i = 0; i < this._breakpoints.length; i++) {
+        if (w >= this._breakpoints[i].bp) active = this._breakpoints[i];
+      }
+      return active;
+    }
+
+    _applyLayout() {
+      var bp = this._currentBP;
+      var items = bp.items;
+      var gutter = bp.gutter;
+      var totalVisible = Math.min(items, this.totalSlides);
+
+      // Track styles
+      this.track.style.display = "flex";
+      this.track.style.transition = "transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)";
+      this.track.style.willChange = "transform";
+
+      // Slide styles
+      var gap = gutter;
+      for (var i = 0; i < this.slides.length; i++) {
+        var slide = this.slides[i];
+        slide.style.flex = "0 0 calc((100% - " + (gap * (totalVisible - 1)) + "px) / " + totalVisible + ")";
+        slide.style.maxWidth = "calc((100% - " + (gap * (totalVisible - 1)) + "px) / " + totalVisible + ")";
+        slide.style.marginRight = (i < this.slides.length - 1) ? gap + "px" : "0";
+        slide.style.boxSizing = "border-box";
+      }
+
+      // Show/hide controls based on total slides vs visible
+      this._updateControlsVisibility(totalVisible);
+
+      // Apply transform for current index
+      this._goToIndex(this.currentIndex, false);
+    }
+
+    _getSlideWidth() {
+      if (!this.slides.length) return 0;
+      return this.slides[0].getBoundingClientRect().width + (this._currentBP.gutter || 0);
+    }
+
+    _goToIndex(index, animate) {
+      if (animate === undefined) animate = true;
+      var bp = this._currentBP;
+      var maxIndex = Math.max(0, this.totalSlides - bp.items);
+      this.currentIndex = Math.max(0, Math.min(index, maxIndex));
+
+      var slideWidth = this._getSlideWidth();
+      var offset = this.currentIndex * slideWidth;
+
+      this.track.style.transition = animate ? "transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)" : "none";
+      if (this._isRTL) {
+        this.track.style.transform = "translateX(" + offset + "px)";
+      } else {
+        this.track.style.transform = "translateX(-" + offset + "px)";
       }
     }
-    destroy() {
-      this.slider.destroy();
+
+    _setupControls() {
+      var controlsId = this.config.controlsContainer;
+      if (!controlsId) return;
+
+      var controlsEl = this.closest("[data-section-id], [id]");
+      if (!controlsEl) controlsEl = document;
+      var container = controlsEl.querySelector ? controlsEl : document;
+
+      var prevBtn = container.querySelector(controlsId + " .js-prev-button");
+      var nextBtn = container.querySelector(controlsId + " .js-next-button");
+      if (!prevBtn) prevBtn = this.querySelector(".js-prev-button");
+      if (!nextBtn) nextBtn = this.querySelector(".js-next-button");
+
+      if (prevBtn) {
+        this._prevBtn = prevBtn;
+        this._prevHandler = this.prev.bind(this);
+        prevBtn.addEventListener("click", this._prevHandler);
+      }
+      if (nextBtn) {
+        this._nextBtn = nextBtn;
+        this._nextHandler = this.next.bind(this);
+        nextBtn.addEventListener("click", this._nextHandler);
+      }
     }
+
+    _updateControlsVisibility(visibleItems) {
+      var controlsId = this.config.controlsContainer;
+      if (!controlsId) return;
+      var controlsEl = this.querySelector(controlsId.replace("#", "#"));
+      if (!controlsEl) {
+        var parent = this.closest("[data-section-id], [id]");
+        if (parent) controlsEl = parent.querySelector(controlsId);
+      }
+      if (controlsEl) {
+        controlsEl.style.display = this.totalSlides <= visibleItems ? "none" : "";
+      }
+    }
+
+    _setupTouch() {
+      var startX = 0, startY = 0, diffX = 0, swiping = false;
+      var self = this;
+
+      this.track.addEventListener("touchstart", function(e) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        swiping = true;
+        self.track.style.transition = "none";
+      }, { passive: true });
+
+      this.track.addEventListener("touchmove", function(e) {
+        if (!swiping) return;
+        diffX = e.touches[0].clientX - startX;
+        var diffY = e.touches[0].clientY - startY;
+        if (Math.abs(diffX) < Math.abs(diffY)) return;
+
+        var slideWidth = self._getSlideWidth();
+        var baseOffset = self.currentIndex * slideWidth;
+        var rtlMult = self._isRTL ? 1 : -1;
+        self.track.style.transform = "translateX(" + (rtlMult * baseOffset + diffX) + "px)";
+      }, { passive: true });
+
+      this.track.addEventListener("touchend", function() {
+        if (!swiping) return;
+        swiping = false;
+        var threshold = 50;
+        if (self._isRTL) {
+          if (diffX > threshold) self.prev();
+          else if (diffX < -threshold) self.next();
+          else self._goToIndex(self.currentIndex, true);
+        } else {
+          if (diffX < -threshold) self.next();
+          else if (diffX > threshold) self.prev();
+          else self._goToIndex(self.currentIndex, true);
+        }
+        diffX = 0;
+      }, { passive: true });
+
+      // Mouse drag support
+      if (this.config.mouseDrag !== false) {
+        var mouseDown = false, mouseStartX = 0, mouseDiffX = 0;
+        this.track.addEventListener("mousedown", function(e) {
+          mouseDown = true; mouseStartX = e.clientX; mouseDiffX = 0;
+          self.track.style.transition = "none";
+          self.track.style.cursor = "grabbing";
+          e.preventDefault();
+        });
+        document.addEventListener("mousemove", function(e) {
+          if (!mouseDown) return;
+          mouseDiffX = e.clientX - mouseStartX;
+          var slideWidth = self._getSlideWidth();
+          var baseOffset = self.currentIndex * slideWidth;
+          var rtlMult = self._isRTL ? 1 : -1;
+          self.track.style.transform = "translateX(" + (rtlMult * baseOffset + mouseDiffX) + "px)";
+        });
+        document.addEventListener("mouseup", function() {
+          if (!mouseDown) return;
+          mouseDown = false;
+          self.track.style.cursor = "";
+          if (self._isRTL) {
+            if (mouseDiffX > 50) self.prev();
+            else if (mouseDiffX < -50) self.next();
+            else self._goToIndex(self.currentIndex, true);
+          } else {
+            if (mouseDiffX < -50) self.next();
+            else if (mouseDiffX > 50) self.prev();
+            else self._goToIndex(self.currentIndex, true);
+          }
+          mouseDiffX = 0;
+        });
+      }
+    }
+
+    _onResize() {
+      var newBP = this._getActiveBreakpoint();
+      if (newBP.items !== this._currentBP.items || newBP.gutter !== this._currentBP.gutter) {
+        this._currentBP = newBP;
+        this._applyLayout();
+      } else {
+        this._goToIndex(this.currentIndex, false);
+      }
+    }
+
+    // Public API (matches legacy tns interface)
+    prev() {
+      var slideBy = this.config.slideBy === "page" ? this._currentBP.items : (parseInt(this.config.slideBy) || 1);
+      var newIndex = this.currentIndex - slideBy;
+      if (newIndex < 0 && this.config.loop !== false) {
+        newIndex = Math.max(0, this.totalSlides - this._currentBP.items);
+      }
+      this._goToIndex(newIndex, true);
+    }
+
+    next() {
+      var slideBy = this.config.slideBy === "page" ? this._currentBP.items : (parseInt(this.config.slideBy) || 1);
+      var maxIndex = Math.max(0, this.totalSlides - this._currentBP.items);
+      var newIndex = this.currentIndex + slideBy;
+      if (newIndex > maxIndex && this.config.loop !== false) {
+        newIndex = 0;
+      }
+      this._goToIndex(newIndex, true);
+    }
+
     goTo(index) {
-      try {
-        this.slider.goTo(index);
-      } catch (error) {
-        console.log(this);
-        console.warn(error);
-      }
+      try { this._goToIndex(index, true); } catch (e) { console.warn("goTo error:", e); }
     }
+
     play() {
-      try {
-        this.slider.play();
-      } catch (error) {
-        console.log(this);
-        console.warn(error);
-      }
+      if (this._autoplayTimer) return;
+      var timeout = this.config.autoplayTimeout || 5000;
+      var self = this;
+      this._autoplayTimer = setInterval(function() { self.next(); }, timeout);
+
+      // Pause on hover
+      this.addEventListener("mouseenter", this._pauseAutoplay = function() { self.pause(); });
+      this.addEventListener("mouseleave", this._resumeAutoplay = function() {
+        self._autoplayTimer = setInterval(function() { self.next(); }, timeout);
+      });
     }
+
     pause() {
-      try {
-        this.slider.pause();
-      } catch (error) {
-        console.log(this);
-        console.warn(error);
+      if (this._autoplayTimer) {
+        clearInterval(this._autoplayTimer);
+        this._autoplayTimer = null;
       }
     }
-    getConfig() {
-      return this.config;
+
+    destroy() {
+      this.pause();
+      if (this._resizeHandler) window.removeEventListener("resize", this._resizeHandler);
+      if (this._prevBtn && this._prevHandler) this._prevBtn.removeEventListener("click", this._prevHandler);
+      if (this._nextBtn && this._nextHandler) this._nextBtn.removeEventListener("click", this._nextHandler);
+      if (this._pauseAutoplay) this.removeEventListener("mouseenter", this._pauseAutoplay);
+      if (this._resumeAutoplay) this.removeEventListener("mouseleave", this._resumeAutoplay);
+      this.track.style.transform = "";
+      this.track.style.transition = "";
+      this.track.style.display = "";
+      for (var i = 0; i < this.slides.length; i++) {
+        this.slides[i].style.flex = "";
+        this.slides[i].style.maxWidth = "";
+        this.slides[i].style.marginRight = "";
+      }
+      if (this.sliderContainer) this.sliderContainer.classList.remove("slider-initialized");
     }
+
+    getConfig() { return this.config; }
   };
 
   // app/scripts/common/model/collapse.js
