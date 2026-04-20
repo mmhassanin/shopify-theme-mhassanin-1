@@ -90,7 +90,7 @@
     <script>
       (() => {
         let popup = document.getElementById('newsletter-popup');
-        popup.querySelector('.btn-action').addEvent('click', () => {
+        popup.querySelector('.btn-action').addEventListener('click', () => {
           AT_cookie.set('newsletterPopup', true, {{newsletter_popup_expire}});
         });}
       )()
@@ -99,7 +99,7 @@
     <script>
       (() => {
         let popup = document.getElementById('newsletter-popup');
-        popup.querySelector('.js-popup-close').addEvent('click', () => {
+        popup.querySelector('.js-popup-close').addEventListener('click', () => {
           popup.classList.remove('is-open');
           AT_cookie.set('newsletterPopup', true, {{newsletter_popup_expire}});
         });}

@@ -39,17 +39,19 @@
           </div>
 
           <script type="text/javascript">
-            let _elements = document.querySelectorAll(".mi-expand");
-            _elements.forEach((e) => {
-                e.addEvent("click", () => {
-                  if(e.closest(".menu-item-dropdown").classList.contains("active")){
-                    e.closest(".menu-item-dropdown").classList.remove('active');
-                  }
-                  else{
-                    e.closest(".menu-item-dropdown").classList.add('active');
+            (function() {
+              var _elements = document.querySelectorAll(".mi-expand");
+              _elements.forEach(function(e) {
+                e.addEventListener("click", function() {
+                  var parent = e.closest(".menu-item-dropdown");
+                  if(parent.classList.contains("active")){
+                    parent.classList.remove('active');
+                  } else {
+                    parent.classList.add('active');
                   }
                 });
-            }); 
+              });
+            })();
           </script>
         {%- endunless -%}
 
@@ -108,7 +110,7 @@
                   <div class="latest-product-item">
                     {%- endif -%}
 
-                    {%- include 'product-listing-item' -%}
+                    {%- render 'product-listing-item', product: product -%}
 
                     {%- if mod == '0' or forloop.last -%}
                   </div>
@@ -135,21 +137,11 @@
       </div>
 
       <script>
-        window.theme = window.theme || {};
-        if(!!window.theme.sectionRegister){
-          !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
-        }else{
-          window.theme.sectionRegister = ["featured-collection"];
-        }
-      </script>
-
-      <script>
-        window.theme = window.theme || {};
-        if(!!window.theme.customElementsList){
-          !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
-        }else{
-          window.theme.customElementsList = ["slider-component"];
-        }
+        (function() {
+          window.theme = window.theme || {};
+          (window.theme.sectionRegister = window.theme.sectionRegister || []).push("featured-collection");
+          (window.theme.customElementsList = window.theme.customElementsList || []).push("slider-component");
+        })();
       </script>
     {%- endunless -%}
 

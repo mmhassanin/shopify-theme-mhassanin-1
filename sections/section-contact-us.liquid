@@ -63,7 +63,7 @@
   (() => {
     let contactMessage = document.getElementById('contact-message');
     let messageCharTotal = document.getElementById('char-total');
-    contactMessage.addEvent('input', function() {
+    contactMessage.addEventListener('input', function() {
       messageCharTotal.innerHTML = this.value.length
     })
   })()

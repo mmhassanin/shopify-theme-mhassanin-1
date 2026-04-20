@@ -70,7 +70,7 @@
                             <span class="featured_blog__item-publish">{{ article.published_at | date: "%b %d, %Y" }}</span>
                           {%- endif -%}
                           
-                          <h3 class="featured_blog__item-title" style="font-size: {{ section.settings.blog_post_heading_fs }}px; font-weight: {{ section.settings.blog_post_heading_fw }};">
+                          <h3 class="featured_blog__item-title">
                             <a href="{{ article.url }}">{{ article.title }}</a>
                           </h3>
 
@@ -118,25 +118,16 @@
 
 {%- if enable_slider -%}
 <script>
-  window.theme = window.theme || {};
-  if(!!window.theme.sectionRegister){
-    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
-  }else{
-    window.theme.sectionRegister = ["featured-collection"];
-  }
-</script>
-
-<script>
-  window.theme = window.theme || {};
-  if(!!window.theme.customElementsList){
-    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
-  }else{
-    window.theme.customElementsList = ["slider-component"];
-  }
+  (function() {
+    window.theme = window.theme || {};
+    (window.theme.sectionRegister = window.theme.sectionRegister || []).push("featured-collection");
+    (window.theme.customElementsList = window.theme.customElementsList || []).push("slider-component");
+  })();
 </script>
 {%- endif -%}
 {%- capture section_css -%}
   {{-heading_css-}}
+  {{sectionID}} .featured_blog__item-title { font-size: {{ section.settings.blog_post_heading_fs }}px; font-weight: {{ section.settings.blog_post_heading_fw }}; }
   {%- render 'snippet-theme' type: 'section-style', preClassID: sectionID, classID: bg_class, config: section.settings -%}
 {%- endcapture -%}
 {%- style -%}{{section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
@@ -302,6 +293,9 @@
     }
   ],
   "blocks": [
+    {
+      "type": "@app"
+    },
     {
       "type": "heading-style",
       "limit": 1,

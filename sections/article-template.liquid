@@ -160,7 +160,7 @@
 
     let textarea = commentForm.querySelector('textarea[name="comment[body]"]');
     let counter = commentForm.querySelector('.js-counter');
-    textarea.addEvent('input', function(){
+    textarea.addEventListener('input', function(){
       counter.innerHTML = this.value.length;
     })
   })()

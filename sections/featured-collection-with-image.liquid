@@ -35,7 +35,7 @@
 -%}
 
 {%- capture section_heading -%}
-  {%- include 'snippet-heading' type:'render-html' config: section.settings -%}
+  {%- render 'snippet-heading', type: 'render-html', config: section.settings -%}
 {%- endcapture -%}
 
 <div class="section-featured-collection-with-image border-radius-{{ border_radius }}" id="section-{{section.id}}" data-section-id="{{section.id}}"{% if enable_slider %} data-section-type="featured-collection"{% endif %}>
@@ -114,21 +114,11 @@
 
 {%- if enable_slider -%}
 <script>
-  window.theme = window.theme || {};
-  if(!!window.theme.sectionRegister){
-    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
-  }else{
-    window.theme.sectionRegister = ["featured-collection"];
-  }
-</script>
-
-<script>
-  window.theme = window.theme || {};
-  if(!!window.theme.customElementsList){
-    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
-  }else{
-    window.theme.customElementsList = ["slider-component"];
-  }
+  (function() {
+    window.theme = window.theme || {};
+    (window.theme.sectionRegister = window.theme.sectionRegister || []).push("featured-collection");
+    (window.theme.customElementsList = window.theme.customElementsList || []).push("slider-component");
+  })();
 </script>
 {%- endif -%}
 
@@ -301,6 +291,9 @@
     }
   ],
   "blocks": [
+    {
+      "type": "@app"
+    },
     {
       "type": "heading-style",
       "limit": 1,

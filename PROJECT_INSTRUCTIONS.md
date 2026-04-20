@@ -61,3 +61,55 @@
 - Use a clean `.gitignore` to exclude temporary directories like `/scratch`, `.shopify`, and OS-specific files.
 - Ensure the initial commit is clean and categorized.
 - All future AI-assisted edits should be committed with descriptive messages.
+
+## OS 2.0 Layout Architecture (`layout/theme.liquid`)
+- **NEVER use `{% capture mainContent %}{{ content_for_layout }}`**. Always output `{{ content_for_layout }}` directly at the correct DOM location. Capturing it blocks HTTP caching and breaks the Theme Editor.
+- **Always use `{% render %}` instead of `{% include %}`** for all snippet calls. `{% include %}` is deprecated.
+- The `<main>` layout is driven by three branches determined by `template` and `settings.left_column_style`:
+  1. `index` + left column active → container > row > left-col (3) + main-col (9)
+  2. `index` + no left column → bare `content_for_layout`
+  3. `page.*` templates → bare `content_for_layout` (no container wrap)
+  4. All other templates → `<div class="{{ layout_class }}">` container wrapping `content_for_layout`
+- The full-slideshow section is always rendered **outside** the container grid, directly before it.
+
+## Vanilla JS Standards
+- Never use `window.addEvent()` or `document.addEvent()` — these are custom polyfills defined in `js-resources.liquid`. Use the standard `window.addEventListener()` and `document.addEventListener()` in all layout and section code.
+- Wrap all inline `<script>` blocks in an **IIFE** `(function() { ... })();` to prevent variable scope leakage into the global namespace.
+- Prefer `var` in IIFE-wrapped inline scripts for maximum compatibility; use `const`/`let` only in ES module-style asset JS files.
+
+## DOM Integrity Rules
+- The RTL `dir="rtl"` attribute is applied conditionally on the `<html>` tag with a properly closed attribute: `{% if settings.direction == 'RTL' %} dir="rtl"{% endif %}`.
+- The `.body-main-content` `<div>` wraps the header, main, and footer. The utility-bar `<div>` (back-to-top, popups) sits **outside** `.body-main-content` but inside `<body>`.
+- All conditional `{% if %}` blocks that open a `<div>` must close that same `<div>` within the same logical block — never rely on a separate `{% if %}` further down to close it.
+
+## OS 2.0 Dynamic App Block (`"@app"`) Standards
+- **All main template sections** must include `{ "type": "@app" }` as the **first entry** in their `"blocks"` array to allow third-party Shopify apps (review apps, loyalty widgets, etc.) to inject into the Theme Editor without modifying theme code.
+- The following sections have been audited and upgraded to include `"@app"`:
+  - `product-template.liquid` ✅
+  - `collection-template.liquid` ✅
+  - `search-template.liquid` ✅
+  - `related-products.liquid` ✅
+  - `product-tabs-v2.liquid` ✅
+  - `announcement-bar.liquid` ✅
+  - `featured-collection.liquid` ✅
+  - `featured-collection-with-image.liquid` ✅
+  - `featured-collection-with-left-sidebar.liquid` ✅
+  - `product-tabs-v1.liquid` ✅
+  - `section-policy.liquid` ✅
+  - `section-image-gallery.liquid` ✅
+  - `section-image-gallery-v2.liquid` ✅
+  - `section-featured-blog.liquid` ✅
+  - `section-single-banner-with-product.liquid` ✅
+  - `section-single-product.liquid` ✅
+  - `section-support.liquid` ✅
+  - `section-newsletter.liquid` ✅
+- When creating new sections that use `"blocks"`, always add `"@app"` as the first block type unless the section is specifically restricted to header/footer groups.
+
+## Deprecated API Patterns (Never Use)
+- `{% include %}` → always use `{% render %}`. When converting, pass all required variables explicitly as named parameters (e.g., `{% render 'snippet', section: section, product: product %}`).
+- `window.addEvent()` / `document.addEvent()` → these are legacy polyfills defined in `js-resources.liquid`. Always use `window.addEventListener()` / `document.addEventListener()` in section and layout code.
+- **Theme-Wide Enforcement (Phase A Complete)**: As of this refactor, zero `{% include %}` tags and zero `.addEvent()` polyfill calls remain anywhere in the theme codebase (sections, snippets, layout, templates). This standard must be maintained for all future edits.
+
+## Inline Style Migration
+- **Never hardcode CSS** in HTML `style=""` attributes for values controlled by section schema settings (e.g., font-size, font-weight, colors). Instead, move those rules into the section's `{% style %}` block using the section ID as a scope selector.
+- Example: `{{sectionID}} .element { font-size: {{ section.settings.fs }}px; }` inside `{%- style -%}`.

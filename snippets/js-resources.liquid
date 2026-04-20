@@ -175,9 +175,9 @@
 
   jsPreload();
 
-  document.addEvent('DOMContentLoaded', jsLoad, {once: true});
+  document.addEventListener('DOMContentLoaded', jsLoad, {once: true});
 
-  window.addEvent('load', () => {
+  window.addEventListener('load', () => {
     [
       "{{'search.js' | asset_url}}",
       "{{'quick-view-popup.js' | asset_url}}",

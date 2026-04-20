@@ -5,22 +5,22 @@
     {% case block.type %}
 
       {%- when 'menu' -%}
-        {%- include 'sidebar-snippet', type: 'menu' -%}
+        {%- render 'sidebar-snippet', type: 'menu', block: block -%}
 
       {%- when 'banner' -%}
-        {%- include 'sidebar-snippet', type: 'banner' -%}
+        {%- render 'sidebar-snippet', type: 'banner', block: block -%}
   
       {%- when 'products-listing' -%}
-        {%- include 'sidebar-snippet', type: 'products-listing' -%}
+        {%- render 'sidebar-snippet', type: 'products-listing', block: block -%}
   
       {%- when 'service' -%}
-        {%- include 'sidebar-snippet', type: 'service' -%}
+        {%- render 'sidebar-snippet', type: 'service', block: block -%}
   
       {%- when 'products-grid' -%}
-        {%- include 'sidebar-snippet', type: 'products-grid' -%}
+        {%- render 'sidebar-snippet', type: 'products-grid', block: block -%}
   
       {%- when 'blog' -%}
-        {%- include 'sidebar-snippet', type: 'blog-post' -%}
+        {%- render 'sidebar-snippet', type: 'blog-post', block: block -%}
 
     {% endcase %}
   {%- endfor -%}

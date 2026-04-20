@@ -3,7 +3,7 @@
   {%- case special_product_position  -%}
     {%- when 'left-2' -%}
       <div class="special-item special-item-v2 special-item-{{ block.id }}">
-        {% include 'special-product-item-v2' %}
+        {%- render 'special-product-item-v2', product: product, block: block, produc_text: produc_text -%}
       </div>
 
       <div class="block-slider-component">
@@ -32,7 +32,7 @@
           
           <div class="tab-special-item col-lg-4 col-md-12 col-sm-12 col-12">
             <div class="special-item special-item-{{ block.id }}">
-              {% include 'special-product-item-tabs-v1' %}
+              {%- render 'special-product-item-tabs-v1', product: product, block: block, produc_text: produc_text -%}
             </div>
           </div>
 
@@ -68,7 +68,7 @@
           
           <div class="tab-special-item col-lg-6 col-md-6 col-sm-12 col-12">
             <div class="special-item special-item-{{ block.id }}">
-              {% include 'special-product-item-tabs-v1' %}
+              {%- render 'special-product-item-tabs-v1', product: product, block: block, produc_text: produc_text -%}
             </div>
           </div>
 
@@ -89,7 +89,7 @@
 
     {% else %}
       <div class="special-item special-item-{{ block.id }}">
-        {% include 'special-product-item-tabs-v1' %}
+        {%- render 'special-product-item-tabs-v1', product: product, block: block, produc_text: produc_text -%}
       </div>
 
       <div class="block-slider-component">

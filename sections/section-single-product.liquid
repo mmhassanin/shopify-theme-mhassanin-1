@@ -83,7 +83,7 @@
                   {%- unless _product == blank -%}
                     {%- assign product = all_products[_product] -%}
                     <div class="slider-item{% unless enable_slider %} {{ gridClass }}{% endunless %}">
-                      {%- include 'single-product-item' product: product -%}
+                      {%- render 'single-product-item', product: product -%}
                     </div>
                   {%- endunless -%}
                 {%- endfor -%}
@@ -115,21 +115,11 @@
 
 {%- if enable_slider -%}
 <script>
-  window.theme = window.theme || {};
-  if(!!window.theme.sectionRegister){
-    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
-  }else{
-    window.theme.sectionRegister = ["featured-collection"];
-  }
-</script>
-
-<script>
-  window.theme = window.theme || {};
-  if(!!window.theme.customElementsList){
-    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
-  }else{
-    window.theme.customElementsList = ["slider-component"];
-  }
+  (function() {
+    window.theme = window.theme || {};
+    (window.theme.sectionRegister = window.theme.sectionRegister || []).push("featured-collection");
+    (window.theme.customElementsList = window.theme.customElementsList || []).push("slider-component");
+  })();
 </script>
 {%- endif -%}
 {%- capture section_css -%}
@@ -278,6 +268,9 @@
     }
   ],
   "blocks": [
+    {
+      "type": "@app"
+    },
     {
       "type": "heading-style",
       "limit": 1,

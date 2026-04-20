@@ -24,7 +24,7 @@
 -%}
 
 {%- capture section_heading -%}
-  {%- include 'snippet-heading' type:'render-html' config: section.settings -%}
+  {%- render 'snippet-heading', type: 'render-html', config: section.settings -%}
 {%- endcapture -%}
 
 {%- capture gridClass -%}{%- render 'set-item-per-row', value: items_resp -%}{%- endcapture -%}
@@ -72,17 +72,19 @@
                 </div>
 
                 <script type="text/javascript">
-                  let _elements = document.querySelectorAll(".mi-expand");
-                  _elements.forEach((e) => {
-                      e.addEvent("click", () => {
-                        if(e.closest(".menu-item-dropdown").classList.contains("active")){
-                          e.closest(".menu-item-dropdown").classList.remove('active');
-                        }
-                        else{
-                          e.closest(".menu-item-dropdown").classList.add('active');
+                  (function() {
+                    var _elements = document.querySelectorAll(".mi-expand");
+                    _elements.forEach(function(e) {
+                      e.addEventListener("click", function() {
+                        var parent = e.closest(".menu-item-dropdown");
+                        if(parent.classList.contains("active")){
+                          parent.classList.remove('active');
+                        } else {
+                          parent.classList.add('active');
                         }
                       });
-                  }); 
+                    });
+                  })();
                 </script>
               {%- endunless -%}
 
@@ -258,6 +260,9 @@
     }
   ],
   "blocks": [
+    {
+      "type": "@app"
+    },
     {
       "type": "heading-style",
       "limit": 1,

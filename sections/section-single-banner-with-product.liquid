@@ -150,22 +150,23 @@
         </div>
 
         <script type="text/javascript">
-          let tabControls = document.querySelector(".js-nav-controls-{{ section.id }}");
-          let tabContents = document.querySelector(".js-tab-contents-{{ section.id }}");
-
-          [...tabControls.children].forEach((item) => {
-            let target = tabContents.querySelector(item.dataset.target);
-
-            item.addEvent("click", () => {
-              if (item.hasClass("active")) {
-                return;
-              }
-              tabControls.children.removeClass("active");
-              tabContents.children.removeClass("active");
-              item.addClass("active");
-              target.addClass("active");
-            });
-          });
+          (function() {
+            var tabControls = document.querySelector(".js-nav-controls-{{ section.id }}");
+            var tabContents = document.querySelector(".js-tab-contents-{{ section.id }}");
+            var items = tabControls.children;
+            for (var i = 0; i < items.length; i++) {
+              (function(item) {
+                var target = tabContents.querySelector(item.dataset.target);
+                item.addEventListener("click", function() {
+                  if (item.classList.contains("active")) return;
+                  for (var j = 0; j < tabControls.children.length; j++) tabControls.children[j].classList.remove("active");
+                  for (var k = 0; k < tabContents.children.length; k++) tabContents.children[k].classList.remove("active");
+                  item.classList.add("active");
+                  target.classList.add("active");
+                });
+              })(items[i]);
+            }
+          })();
         </script>
 
       </div>
@@ -175,21 +176,11 @@
 
 {%- if enable_slider -%}
 <script>
-  window.theme = window.theme || {};
-  if(!!window.theme.sectionRegister){
-    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
-  }else{
-    window.theme.sectionRegister = ["featured-collection"];
-  }
-</script>
-
-<script>
-  window.theme = window.theme || {};
-  if(!!window.theme.customElementsList){
-    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
-  }else{
-    window.theme.customElementsList = ["slider-component"];
-  }
+  (function() {
+    window.theme = window.theme || {};
+    (window.theme.sectionRegister = window.theme.sectionRegister || []).push("featured-collection");
+    (window.theme.customElementsList = window.theme.customElementsList || []).push("slider-component");
+  })();
 </script>
 {%- endif -%}
 
@@ -510,6 +501,9 @@
     }
   ],
   "blocks":[
+    {
+      "type": "@app"
+    },
     {
       "type" : "block-item",
       "name" : "t:sections.common.block_item",

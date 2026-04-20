@@ -3,16 +3,16 @@
     {% case block.type %}
 
       {%- when 'menu' -%} 
-        {%- include 'sidebar-snippet' type: 'menu' -%}
+        {%- render 'sidebar-snippet', type: 'menu', block: block -%}
 
       {%- when 'banner' -%}
-        {%- include 'sidebar-snippet' type: 'banner' section: section -%}
+        {%- render 'sidebar-snippet', type: 'banner', block: block, section: section -%}
   
       {%- when 'products-listing' -%}
-        {%- include 'sidebar-snippet' type: 'products-listing' section: section -%}
+        {%- render 'sidebar-snippet', type: 'products-listing', block: block, section: section -%}
   
       {%- when 'service' -%}
-        {%- include 'sidebar-snippet' type: 'service' section: section -%}
+        {%- render 'sidebar-snippet', type: 'service', block: block, section: section -%}
 
     {% endcase %}
   {%- endfor -%}

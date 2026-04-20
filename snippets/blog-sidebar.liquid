@@ -54,17 +54,19 @@
           </ul>
 
           <script type="text/javascript">
-            let _elements = document.querySelectorAll(".mi-expand");
-            _elements.forEach((e) => {
-                e.addEvent("click", () => {
-                  if(e.closest(".menu-item-dropdown").classList.contains("active")){
-                    e.closest(".menu-item-dropdown").classList.remove('active');
-                  }
-                  else{
-                    e.closest(".menu-item-dropdown").classList.add('active');
+            (function() {
+              var _elements = document.querySelectorAll(".mi-expand");
+              _elements.forEach(function(e) {
+                e.addEventListener("click", function() {
+                  var parent = e.closest(".menu-item-dropdown");
+                  if(parent.classList.contains("active")){
+                    parent.classList.remove('active');
+                  } else {
+                    parent.classList.add('active');
                   }
                 });
-            }); 
+              });
+            })();
           </script>
         {% comment %} end {% endcomment %}
 

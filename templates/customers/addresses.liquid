@@ -63,7 +63,7 @@
           {% endfor %}
 
       </div>
-      {%- include 'pagination' -%}
+      {%- render 'pagination', paginate: paginate -%}
     {% endpaginate %}
   </div>
   <popup-address class="popup-component popup-address" id="popup-address">

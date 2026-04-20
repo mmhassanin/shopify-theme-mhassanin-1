@@ -10,7 +10,7 @@
   {%- if sidebar_mode != 'none-sidebar' -%}
     {%- capture product_sidebar -%}
       <link rel="stylesheet" href="{{'left-column.css' | asset_url}}" media="all">
-      {%- include 'product-sidebar' section: section -%}
+      {%- render 'product-sidebar', section: section -%}
     {%- endcapture -%}
   {%- endif -%}
 

@@ -82,7 +82,7 @@
           (() => {
             [...document.getElementsByClassName('js-collapse-trigger')].forEach(button => {
                 let target = button.nextElementSibling;
-                button.addEvent('click', function() {
+                button.addEventListener('click', function() {
                 if(this.classList.contains('active')){
                   this.classList.remove('active');
                   target.style.height = "";

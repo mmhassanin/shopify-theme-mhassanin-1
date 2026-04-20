@@ -1295,7 +1295,7 @@
     <script type="text/javascript">
     (() => {
       [...document.getElementsByClassName('third-miw')].forEach(button => {
-        button.addEvent('click', function() {
+        button.addEventListener('click', function() {
           if(this.closest('.menu-item').classList.contains('active')){
             let allbutton = document.getElementsByClassName('third-menu-item');
               for (let i = 0; i < allbutton.length; i++) {
