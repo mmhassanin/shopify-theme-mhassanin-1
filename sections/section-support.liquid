@@ -1,0 +1,181 @@
+<link rel="stylesheet" href="{{'section-support.css' | asset_url}}" media="print" onload="this.media='all'">
+
+{%- liquid
+  assign sectionID  = '#section-' | append: section.id
+
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+-%}
+
+<div class="section-support" id="section-{{section.id}}">
+  <div class="{% if template == 'index' or template contains 'page' %}{{ layout_class }}{% endif %}">
+    <div class="section-wrapper">
+
+      <div class="section-body">
+        <div class="block-support">
+          {%- liquid
+            assign textbox_icon = section.settings.icon
+            assign textbox_title = section.settings.textbox_title
+            assign textbox_subtext = section.settings.textbox_subtext
+          -%}
+
+          <div class="block-support-left">
+            {%- if textbox_icon != blank -%}<div class="support-icon">{{ textbox_icon }}</div>{%- endif -%}
+            <div class="support-textbox">
+              {%- if textbox_title != blank -%}<div class="support-title">{{ textbox_title }}</div>{%- endif -%}
+              {%- if textbox_subtext != blank -%}<div class="support-subtext">{{textbox_subtext}}</div>{%- endif -%}
+            </div>
+          </div>
+
+          {%- if section.blocks.size > 0 -%}
+            <div class="block-support-right">
+              <ul class="support-icons">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'support' -%}
+                    {%- liquid
+                      assign icon = block.settings.icon
+                      assign text = block.settings.text
+                    -%}
+
+                    {%- if icon != blank or text != blank -%}
+                      <li class="type-{{ block.type }}">
+                        {%- if icon != blank -%}<span class="icon">{{ icon }}</span>{%- endif -%}
+                        {%- if text != blank -%}<span class="text">{{ text }}</span>{%- endif -%}
+                      </li>
+                    {%- endif -%}
+
+                  {%- else -%}
+                    {%- liquid
+                      assign text = block.settings.text
+                    -%}
+
+                    {%- if text != blank -%}
+                      <li class="type-{{ block.type }}">
+                        <button class="btn btn-1 btn-chat">{{ text }}</button>
+                      </li>
+                    {%- endif -%}
+
+                  {%- endif -%}
+
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme' type: 'section-style', config: section.settings, preClassID: sectionID -%}
+{%- endcapture -%}
+
+{%- style -%}{{section_css | strip | strip_newlines | remove: '  '}}{%- endstyle -%}
+
+{%- schema -%}
+  {
+    "name" : "t:sections.support-information.name",
+    "tag" : "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings" : [
+      {
+        "type": "header",
+        "content": "t:sections.common.general"
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "t:sections.common.layout_mode",
+        "default": "boxed",
+        "options": [
+          {
+            "value": "boxed",
+            "label": "Boxed"
+          },
+          {
+            "value": "full",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "t:sections.common.background_color"
+      },
+      {
+        "type": "text",
+        "id": "margin",
+        "label": "t:sections.common.section_margin",
+        "info": "t:sections.common.order_info"
+      },
+      {
+        "type": "text",
+        "id": "padding",
+        "label": "t:sections.common.section_padding",
+        "info": "t:sections.common.order_info"
+      },
+      {
+        "type": "textarea",
+        "id": "icon",
+        "label": "t:sections.common.svg"
+      },
+      {
+        "type": "inline_richtext",
+        "id": "textbox_title",
+        "label": "t:sections.common.heading"
+      },
+      {
+        "type": "inline_richtext",
+        "id": "textbox_subtext",
+        "label": "t:sections.common.subtext"
+      }
+    ],
+    "blocks": [
+      {
+        "type" : "support",
+        "name" : "Support",
+        "limit": 3,
+        "settings" : [
+          {
+            "type": "textarea",
+            "id": "icon",
+            "label": "t:sections.common.svg"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "t:sections.common.text"
+          }
+        ]
+      },
+      {
+        "type" : "chat",
+        "name" : "Chat",
+        "limit": 3,
+        "settings" : [
+          {
+            "type": "text",
+            "id": "text",
+            "label": "t:sections.common.text"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name" : "t:sections.support-information.name",
+        "blocks" : [
+        ]
+      }
+    ]
+  }
+{%- endschema -%}

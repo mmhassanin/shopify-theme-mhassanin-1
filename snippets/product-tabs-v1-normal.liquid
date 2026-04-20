@@ -1,0 +1,47 @@
+{%- if _collection != blank -%}
+  <div class="block-slider-component">
+    {%- if enable_slider -%}<slider-component>{%- endif -%}
+      <div class="slider-container js-slider-container">
+        <div class="slider-wrapper">
+
+          {%- if style == 'normal' or style == 'image' -%}
+          <div class="slider-list{% unless enable_slider %} row{% endunless %}" id="slider-{{section.id}}">
+            {%- for product in collection.products limit: limit -%}
+              <div class="slider-item{% unless enable_slider %} {{ gridClass }}{% endunless %}">
+                {%- render 'product-item' product: product, collection: collection -%}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- if enable_slider -%}
+            {%- render 'set-tns-config'
+              loop: loop,
+              dots: dots,
+              padding: items_spacing_slider,
+              classID: sectionID,
+              controls: controls,
+              autoplay: autoplay,
+              slider_id  : slider_id,
+              total_item : limit,
+              items_resp : items_resp,
+              controls_id: controls_id,
+              customControls  : true,
+              autoplay_timeout: autoplay_timeout,
+            -%}
+          {%- endif -%}
+
+          {%- else -%}
+            <div class="slider-list row" id="slider-{{section.id}}">
+              {%- for product in collection.products limit: limit -%}
+                <div class="slider-item {{ gridClass }}">
+                  {%- render 'product-item' product: product, collection: collection -%}
+                </div>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+        </div>
+      </div>
+    {%- if enable_slider -%}</slider-component>{%- endif -%}
+  </div>
+{%- endif -%}

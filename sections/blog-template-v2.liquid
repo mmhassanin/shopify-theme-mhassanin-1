@@ -1,0 +1,200 @@
+{%- liquid
+  assign layout = section.settings.layout
+  assign section_id  = '#section-' | append: section.id
+  assign items_resp = section.settings.items_resp | default: '2,1'
+  assign pagination_type = 'default'
+-%}
+
+{%- paginate blog.articles by section.settings.item_per_page -%}
+  {%- capture blog_grid -%}
+    <div class="blog-grid">
+      <div id="main-blog-grid" class="{%- render 'grid-class' value: items_resp -%}">
+        {%- if pagination_type != 'infinite' -%}
+          {%- for article in blog.articles -%}
+            {%- render 'article-item' article: article -%}
+          {%- else -%}
+            <div class="text-center">
+              <p>{{ 'pages.blog.not_matching' | t}}</p>
+            </div>
+          {%- endfor -%} 
+        {%- endif -%}
+      </div>
+      <div id="pagination-container" {%- if pagination_type == 'infinite' -%} class="d-none" {%- endif -%}>
+        {%- render 'pagination' paginate: paginate, type: pagination_type  -%}
+      </div>
+    </div>
+  {%- endcapture -%}
+
+  {%- if layout != 'none-sidebar' -%}
+    {%- capture blog_sidebar -%}
+      {%- render 'blog-sidebar' section: section -%}
+    {%- endcapture -%}
+  {%- endif -%}
+
+  <div class="section-blog-template" id="section-{{section.id}}" data-section-id="{{section.id}}" data-section-type="blog-template">
+    <div class="section-wrapper">
+        {%- if layout == 'left-sidebar' -%}
+          <div class="section-body row">
+            <div class="col-12 col-lg-3 d-none d-lg-block">{{blog_sidebar}}</div>
+            <div class="col-12 col-lg-9">{{blog_grid}}</div>
+          </div>
+        {%- elsif layout == 'right-sidebar' -%}
+          <div class="section-body row">
+            <div class="col-12 col-lg-9">{{blog_grid}}</div>
+            <div class="col-12 col-lg-3 d-none d-lg-block">{{blog_sidebar}}</div>
+          </div>
+        {%- else -%}
+          <div class="section-body">{{blog_grid}}</div>
+        {%- endif -%}
+    </div>
+
+    <script type="application/json" data-blog-settings>
+      {%- capture array_tag_handle -%}
+        {%- for tag in current_tags -%},"{{tag | handle}}"{%- endfor -%}
+      {%- endcapture -%}
+      {
+        "url": "{{blog.url}}",
+        "paginationType": "{{pagination_type}}",
+        "nextPage": {%- if paginate.next != blank -%}1{%else%}0{%- endif -%},
+        "currentPage": "{{paginate.current_page}}",
+        "currentTags": {%- if array_tag_handle -%} [{{array_tag_handle | remove_first: ','}}] {%else%} []{%- endif -%}
+      }
+    </script>
+  </div>
+
+{%- endpaginate -%}
+
+
+{%- schema -%}
+  {
+    "name" : "t:sections.blog-template.name",
+    "tag" : "section",
+    "settings" : [
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "t:sections.common.layout_mode",
+        "default": "right-sidebar",
+        "options": [
+          {
+            "value": "left-sidebar",
+            "label": "t:sections.common.left_sidebar"
+          },
+          {
+            "value": "right-sidebar",
+            "label": "t:sections.common.right_sidebar"
+          },
+          {
+            "value": "none-sidebar",
+            "label": "t:sections.common.none_sidebar"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "item_per_page",
+        "label": "t:sections.common.items_per_page",
+        "step": 1,
+        "min": 1,
+        "max": 20,
+        "default": 3
+      },
+      {
+        "type": "text",
+        "id": "items_resp",
+        "label": "t:sections.common.items_per_row",
+        "default": "2,1"
+      }
+    ],
+    "blocks": [
+      {
+        "type" : "search",
+        "name" : "t:sections.blog-template.blocks.search.name",
+        "limit": 1,
+        "settings" : [
+          {
+            "type": "text",
+            "id": "placeholder",
+            "label": "t:sections.blog-template.blocks.search.settings.placeholder.label",
+            "default" : "Enter Keywords..."
+          }
+        ]
+      },
+      {
+        "type" : "textbox",
+        "name" : "t:sections.blog-template.blocks.textbox.name",
+        "limit": 1,
+        "settings" : [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.common.heading"
+          },
+          {
+            "type": "textarea",
+            "id": "content",
+            "label": "t:sections.common.content"
+          }
+        ]
+      },
+      {
+        "type" : "menu",
+        "name" : "t:sections.blog-template.blocks.menu.name",
+        "limit": 1,
+        "settings" : [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.common.heading",
+            "default" : "CATEGORIES"
+          },
+          {
+            "type": "link_list",
+            "id": "menu",
+            "label": "t:sections.blog-template.blocks.menu.settings.menu.label"
+          }
+        ]
+      },
+      {
+        "type" : "featured-blogs",
+        "name" : "t:sections.blog-template.blocks.featured-blogs.name",
+        "limit": 1,
+        "settings" : [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.common.heading",
+            "default" : "TOP STORIES"
+          },
+          {
+            "type" : "blog",
+            "id" : "blog",
+            "label" : "t:sections.common.blog_post"
+          },
+          {
+            "type" : "range",
+            "id": "limit",
+            "label": "t:sections.blog-template.blocks.featured-blogs.settings.limit.label",
+            "step": 1,
+            "min" : 1,
+            "max" : 6,
+            "default" : 3
+          }
+        ]
+      },
+      {
+        "type" : "tags",
+        "name" : "t:sections.blog-template.blocks.tags.name",
+        "limit": 1,
+        "settings" : [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.common.heading",
+            "default" : "Tags"
+          }
+        ]
+      }
+    ]
+  }
+{%- endschema -%}

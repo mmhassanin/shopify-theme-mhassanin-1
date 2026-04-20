@@ -1,0 +1,350 @@
+<link rel="stylesheet" href="{{'section-featured-collection-with-image.css' | asset_url}}" media="print" onload="this.media='all'">
+
+{%- liquid
+  assign border_radius = section.settings.border_radius
+  assign image = section.settings.image
+  assign position = section.settings.position
+  assign link = section.settings.link
+  assign limit = section.settings.limit
+  assign enable_slider = true
+  assign dots  = section.settings.dots
+  assign loop  = section.settings.loop
+  assign controls = section.settings.controls
+  assign autoplay = section.settings.autoplay
+  assign collection = collections[section.settings.collection]
+  assign sectionID  = '#section-' | append: section.id
+  assign items_resp = section.settings.items_resp
+  assign controls_id = '#controls-' | append: section.id
+  assign autoplay_timeout = section.settings.autoplay_timeout
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+  assign slider_id = '#slider-' | append: section.id
+  assign items_spacing_slider = '0'
+
+  if border_radius != 'none'
+    assign bg_class = ' .section-wrapper'
+  else
+    assign bg_class = ''
+  endif
+
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+-%}
+
+{%- capture section_heading -%}
+  {%- include 'snippet-heading' type:'render-html' config: section.settings -%}
+{%- endcapture -%}
+
+<div class="section-featured-collection-with-image border-radius-{{ border_radius }}" id="section-{{section.id}}" data-section-id="{{section.id}}"{% if enable_slider %} data-section-type="featured-collection"{% endif %}>
+  <div class="{% if template == 'index' or template contains 'page' %}{{ layout_class }}{% endif %}">
+    <div class="section-wrapper">
+      <div class="row">
+
+        {%- if image and position == 'left' -%}
+          <div class="block-image col-lg-6 col-12">
+            <div class="block-image-inner">
+              <a href="{{ link }}">
+                {%- render 'image-style' image: image, limit: 768 -%}
+              </a>
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div class="section-body {% if image %}col-lg-6{% else %}col-lg-12{% endif %} col-12">
+          {%- if section_heading != blank -%}
+            {%- capture heading_css -%}
+              {%- render 'snippet-heading' type: 'render-css' config: heading_style_block.settings, classID: sectionID -%}
+            {%- endcapture -%}
+            <div class="section-header">
+              {{section_heading}}
+            </div>
+          {%- endif -%}
+
+          <div class="block-slider-component">
+            {%- if enable_slider -%}<slider-component>{%- endif -%}
+              <div class="slider-container js-slider-container">
+                <div class="slider-wrapper">
+                  <div class="slider-list" id="slider-{{section.id}}">
+                    {%- for product in collection.products limit: limit -%}
+                      <div class="slider-item">
+                        {%- render 'product-item' product: product, collection: collection-%}
+                      </div>
+                    {%- endfor -%}
+                  </div>
+
+                  {%- if enable_slider -%}
+                    {%- render 'set-tns-config'
+                      loop: loop,
+                      dots: dots,
+                      padding: items_spacing_slider,
+                      classID: sectionID,
+                      controls: controls,
+                      autoplay: autoplay,
+                      slider_id  : slider_id,
+                      total_item : limit,
+                      items_resp : items_resp,
+                      controls_id: controls_id,
+                      customControls  : true,
+                      autoplay_timeout: autoplay_timeout
+                    -%}
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- if enable_slider -%}</slider-component>{%- endif -%}
+          </div> 
+        </div>
+
+        {%- if image and position == 'right' -%}
+          <div class="block-image col-lg-6 col-12">
+            <div class="block-image-inner">
+              <a href="{{ link }}">
+                {%- render 'image-style' image: image, limit: 768 -%}
+              </a>
+            </div>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- if enable_slider -%}
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.sectionRegister){
+    !window.theme.sectionRegister.includes("featured-collection") && (window.theme.sectionRegister = [...window.theme.sectionRegister, "featured-collection"]);
+  }else{
+    window.theme.sectionRegister = ["featured-collection"];
+  }
+</script>
+
+<script>
+  window.theme = window.theme || {};
+  if(!!window.theme.customElementsList){
+    !window.theme.customElementsList.includes("slider-component") && (window.theme.customElementsList = [...window.theme.customElementsList, "slider-component"]);
+  }else{
+    window.theme.customElementsList = ["slider-component"];
+  }
+</script>
+{%- endif -%}
+
+{%- capture section_css -%}
+  {{-heading_css-}}
+  {%- render 'snippet-theme' type: 'section-style', preClassID: sectionID, classID: bg_class, config: section.settings -%}
+{%- endcapture -%}
+{%- style -%}{{section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+{%- schema -%}
+{
+  "name": "t:sections.featured-collection-with-image.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.common.general"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.common.layout_mode",
+      "default": "boxed",
+      "options": [
+        {
+          "value": "boxed",
+          "label": "Boxed"
+        },
+        {
+          "value": "full",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "select",
+      "id": "border_radius",
+      "label": "t:sections.common.border_radius",
+      "default": "none",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.block_product"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading",
+      "default": "Featured products"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "subheading",
+      "label": "t:sections.common.subtext"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:sections.common.collection"
+    },
+    {
+      "type": "text",
+      "id": "items_resp",
+      "label": "t:sections.common.items_per_row",
+      "default": "3,2"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "t:sections.common.limit",
+      "step": 1,
+      "min": 1,
+      "max": 8,
+      "default": 6
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.block_image"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "t:sections.common.position",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "t:sections.common.left" },
+        { "value": "right", "label": "t:sections.common.right" }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.common.image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:sections.common.link"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.slider_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.common.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "t:sections.common.controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "dots",
+      "label": "t:sections.common.dots",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.common.autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_timeout",
+      "label": "t:sections.common.autoplay_timeout",
+      "step": 0.1,
+      "min": 2,
+      "max": 10,
+      "unit": "s",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "text",
+          "id": "section_heading_margin",
+          "label": "t:sections.common.margin",
+          "info": "t:sections.common.order_info"
+        },
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        },
+        {
+          "type": "text",
+          "id": "section_heading_line_height",
+          "label": "t:sections.common.line_height",
+          "info": "t:sections.common.unit_px"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured-collection-with-image.name"
+    }
+  ]
+}
+{%- endschema -%}

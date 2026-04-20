@@ -1,0 +1,964 @@
+{%- style -%}
+  #brands-bar-{{ section.id }} {
+    padding-top: {{ section.settings.brands_padding_top }}px;
+    padding-bottom: {{ section.settings.brands_padding_bottom }}px;
+  }
+
+  .sections-margin-{{ section.id }} {
+    margin-top: {{ section.settings.overlap_margin }}px;
+    position: relative;
+    z-index: 5;
+  }
+  @media screen and (max-width: 768px) {
+    .sections-margin-{{ section.id }} {
+      margin-top: {{ section.settings.overlap_margin | divided_by: 2 }}px;
+    }
+  }
+
+  .floating-categories-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .floating-section-box {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===================== BRANDS BAR ===================== */
+  .brands-bar {
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ebebeb;
+    position: relative;
+  }
+
+  .brands-label {
+    font-weight: 700;
+    margin-right: 30px;
+    font-size: 1.1rem;
+    color: #222;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .view-all-brands {
+    margin-left: 30px;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    flex-shrink: 0;
+  }
+  .view-all-brands:hover {
+    color: #222;
+  }
+
+  /* ---- Grid Mode (Slider OFF) ---- */
+  .brands-list--grid {
+    display: flex;
+    align-items: center;
+    gap: {{ section.settings.logos_gap }}px;
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  /* ---- Slider Mode (Slider ON) ---- */
+  .brands-slider-wrap {
+    flex-grow: 1;
+    min-width: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .brands-slider-track {
+    display: flex;
+    align-items: center;
+    gap: {{ section.settings.logos_gap }}px;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+  .brands-slide {
+    flex: 0 0 calc((100% - {{ section.settings.logos_gap | times: section.settings.logos_per_view_desktop | minus: section.settings.logos_gap }}px) / {{ section.settings.logos_per_view_desktop }});
+    min-width: 0;
+  }
+  @media screen and (max-width: 768px) {
+    .brands-slide {
+      flex: 0 0 calc((100% - {{ section.settings.logos_gap | times: section.settings.logos_per_view_mobile | minus: section.settings.logos_gap }}px) / {{ section.settings.logos_per_view_mobile }});
+    }
+  }
+
+  /* Brand Logo Item (shared between modes) */
+  .brand-logo-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+    margin:0 auto;
+  }
+  .brand-logo-item:hover {
+    opacity: 0.7;
+  }
+  .brand-logo-item img {
+    height: auto;
+    width: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  {%- if section.settings.enable_grayscale_logos -%}
+  .brand-logo-item:hover {
+    opacity: 1;
+  }
+  .brand-logo-item img {
+    filter: grayscale(100%);
+    opacity: 0.7;
+    transition: filter 0.4s ease, opacity 0.4s ease;
+  }
+  .brand-logo-item:hover img {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
+  {%- endif -%}
+
+  .brand-logo-placeholder {
+    width: 100px;
+    height: 35px;
+    background: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  /* ---- Slider Nav Arrows ---- */
+  {%- if section.settings.show_arrows -%}
+  .brands-slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: {{ section.settings.arrow_color }};
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.3s ease, background 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .brands-bar:hover .brands-slider-arrow {
+    opacity: 1;
+  }
+  .brands-slider-arrow:hover {
+    background: #333;
+  }
+  .brands-slider-arrow svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .brands-slider-arrow--prev {
+    left: 0;
+  }
+  .brands-slider-arrow--next {
+    right: 0;
+  }
+  {%- endif -%}
+
+  /* ---- Slider Pagination Dots ---- */
+  {%- if section.settings.show_dots -%}
+  .brands-slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 0 4px;
+  }
+  .brands-slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d0d0d0;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    padding: 0;
+  }
+  .brands-slider-dot.is-active {
+    background: {{ section.settings.arrow_color }};
+    transform: scale(1.3);
+  }
+  {%- endif -%}
+
+  /* ---- Mobile Grid Fallback (Slider OFF) ---- */
+  @media screen and (max-width: 768px) {
+    .brands-bar {
+      flex-wrap: wrap;
+      padding: 15px 20px;
+    }
+    .brands-label {
+      width: 100%;
+      margin: 0 0 15px;
+    }
+    .brands-list--grid {
+      width: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      gap: 25px;
+    }
+    .brands-list--grid::-webkit-scrollbar {
+      display: none;
+    }
+    .brands-list--grid .brand-logo-item {
+      scroll-snap-align: start;
+    }
+    .view-all-brands {
+      width: 100%;
+      margin: 15px 0 0;
+      text-align: right;
+    }
+  }
+
+  /* ===================== CATEGORIES GRID ===================== */
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #ebebeb;
+  }
+  @media screen and (max-width: 1199px) {
+    .categories-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media screen and (max-width: 991px) {
+    .categories-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media screen and (max-width: 768px) {
+    .categories-grid { grid-template-columns: 1fr; }
+  }
+
+  .category-card {
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
+  }
+  .category-card:hover {
+    background: #fafafa;
+  }
+
+  .card-image-wrapper {
+    width: 100%;
+    background: #f5f5f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .card-image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bbb;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .category-card:hover .card-image {
+    transform: scale(1.08);
+  }
+
+  .card-content {
+    padding: 25px 30px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    line-height: 1.3;
+    position: relative;
+  }
+  .card-title a {
+    color: #222;
+    text-decoration: none;
+  }
+  .card-title a::before {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: 1;
+  }
+  .card-links {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    flex-grow: 1;
+    position: relative;
+    z-index: 2;
+  }
+  .card-links li {
+    margin-bottom: 8px;
+  }
+  .card-links a {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .card-links a:hover {
+    color: #222;
+  }
+  .explore-link {
+    font-size: 1.3rem;
+    color: #0056b3;
+    line-height: 0.8;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+    margin-top: auto;
+  }
+{%- endstyle -%}
+
+<div class="sections-margin-{{ section.id }}">
+  <div class="floating-categories-container">
+    <div class="floating-section-box">
+      {%- assign has_brands = false -%}
+      {%- assign has_categories = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'brand_logo' -%}
+          {%- assign has_brands = true -%}
+        {%- elsif block.type == 'category_card' -%}
+          {%- assign has_categories = true -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if has_brands -%}
+        <div
+          class="brands-bar"
+          id="brands-bar-{{ section.id }}"
+          data-slider-enabled="{{ section.settings.enable_slider }}"
+          data-autoplay="{{ section.settings.autoplay_enabled }}"
+          data-speed="{{ section.settings.autoplay_speed }}"
+          data-infinite="{{ section.settings.infinite_loop }}"
+          data-pause-hover="{{ section.settings.pause_on_hover }}"
+          data-per-view-desktop="{{ section.settings.logos_per_view_desktop }}"
+          data-per-view-mobile="{{ section.settings.logos_per_view_mobile }}"
+          data-direction="{{ section.settings.slider_direction }}"
+          data-show-arrows="{{ section.settings.show_arrows }}"
+          data-show-dots="{{ section.settings.show_dots }}"
+        >
+          <div class="brands-label">{{ section.settings.brands_label }}</div>
+
+          {%- if section.settings.enable_slider -%}
+            {%- comment -%} === SLIDER MODE === {%- endcomment -%}
+            <div class="brands-slider-wrap">
+              <div class="brands-slider-track" id="brands-track-{{ section.id }}">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'brand_logo' -%}
+                    <div class="brands-slide" {{ block.shopify_attributes }}>
+                      <a
+                        href="{{ block.settings.url | default: '#' }}"
+                        class="brand-logo-item"
+                        style="width: {{ block.settings.brand_img_width }}px;"
+                      >
+                        {%- if block.settings.image != blank -%}
+                          {{
+                            block.settings.image
+                            | image_url: width: 200
+                            | image_tag: alt: block.settings.title, loading: 'lazy'
+                          }}
+                        {%- else -%}
+                          <div class="brand-logo-placeholder">Logo</div>
+                        {%- endif -%}
+                      </a>
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+
+              {%- if section.settings.show_arrows -%}
+                <button class="brands-slider-arrow brands-slider-arrow--prev" aria-label="Previous" data-dir="prev">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M15 18l-6-6 6-6"/>
+                  </svg>
+                </button>
+                <button class="brands-slider-arrow brands-slider-arrow--next" aria-label="Next" data-dir="next">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M9 6l6 6-6 6"/>
+                  </svg>
+                </button>
+              {%- endif -%}
+            </div>
+
+            {%- if section.settings.show_dots -%}
+              <div class="brands-slider-dots" id="brands-dots-{{ section.id }}"></div>
+            {%- endif -%}
+
+          {%- else -%}
+            {%- comment -%} === GRID MODE (Original horizontal scroll) === {%- endcomment -%}
+            <div class="brands-list--grid">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'brand_logo' -%}
+                  <a
+                    href="{{ block.settings.url | default: '#' }}"
+                    class="brand-logo-item"
+                    style="width: {{ block.settings.brand_img_width }}px;"
+                    {{ block.shopify_attributes }}
+                  >
+                    {%- if block.settings.image != blank -%}
+                      {{
+                        block.settings.image
+                        | image_url: width: 200
+                        | image_tag: alt: block.settings.title, loading: 'lazy'
+                      }}
+                    {%- else -%}
+                      <div class="brand-logo-placeholder">Logo</div>
+                    {%- endif -%}
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.view_all_brands_text != blank -%}
+            <a href="{{ section.settings.view_all_brands_url | default: '#' }}" class="view-all-brands">
+              {{ section.settings.view_all_brands_text }}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if has_categories -%}
+        <div class="categories-grid">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'category_card' -%}
+              <div class="category-card" {{ block.shopify_attributes }}>
+                <div class="card-image-wrapper" style="height: {{ block.settings.cat_image_height }}px;">
+                  {%- if block.settings.image != blank -%}
+                    {{
+                      block.settings.image
+                      | image_url: width: 400
+                      | image_tag: class: 'card-image', alt: block.settings.title, loading: 'lazy'
+                    }}
+                  {%- else -%}
+                    <div class="card-image-placeholder">Image</div>
+                  {%- endif -%}
+                </div>
+                <div class="card-content">
+                  <h3 class="card-title">
+                    <a href="{{ block.settings.url | default: '#' }}">{{ block.settings.title }}</a>
+                  </h3>
+                  {%- if block.settings.menu != blank -%}
+                    <ul class="card-links">
+                      {%- for link in block.settings.menu.links limit: 6 -%}
+                        <li>
+                          <a href="{{ link.url }}">{{ link.title }}</a>
+                        </li>
+                      {%- endfor -%}
+                      <li><a href="{{ block.settings.url | default: '#' }}">...</a></li>
+                    </ul>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size == 0 -%}
+        <div style="padding: 40px; text-align: center;">
+          <p>No blocks added. Please add Brand Logos or Category Cards from the theme editor.</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- if section.settings.enable_slider -%}
+  <script>
+    (function () {
+      /* ========================================================
+       BrandsSlider — Vanilla JS, zero-dependency slider engine
+       Scoped to section {{ section.id }}
+       ======================================================== */
+      class BrandsSlider {
+        constructor(barEl) {
+          this.bar = barEl;
+          this.track = barEl.querySelector('.brands-slider-track');
+          this.slides = Array.from(this.track.querySelectorAll('.brands-slide'));
+          this.total = this.slides.length;
+          this.current = 0;
+          this.autoTimer = null;
+
+          /* Read data-attributes */
+          this.autoplay = barEl.dataset.autoplay === 'true';
+          this.speed = (parseInt(barEl.dataset.speed, 10) || 3) * 1000;
+          this.infinite = barEl.dataset.infinite === 'true';
+          this.pauseHover = barEl.dataset.pauseHover === 'true';
+          this.direction = barEl.dataset.direction || 'ltr';
+          this.showArrows = barEl.dataset.showArrows === 'true';
+          this.showDots = barEl.dataset.showDots === 'true';
+
+          /* Responsive per-view */
+          this.perViewDesktop = parseInt(barEl.dataset.perViewDesktop, 10) || 6;
+          this.perViewMobile = parseInt(barEl.dataset.perViewMobile, 10) || 2;
+          this.perView = this._getPerView();
+
+          /* Compute max index */
+          this._updateMaxIndex();
+
+          /* Bind controls */
+          this._bindArrows();
+          this._bindDots();
+          this._bindHover();
+          this._bindResize();
+
+          /* Start */
+          this.goTo(0, true);
+          if (this.autoplay) this._startAutoplay();
+        }
+
+        _getPerView() {
+          return window.innerWidth <= 768 ? this.perViewMobile : this.perViewDesktop;
+        }
+
+        _updateMaxIndex() {
+          this.perView = this._getPerView();
+          this.maxIndex = Math.max(0, this.total - this.perView);
+        }
+
+        _bindArrows() {
+          if (!this.showArrows) return;
+          this.bar.querySelectorAll('.brands-slider-arrow').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const dir = btn.dataset.dir;
+              if (dir === 'next') this.next();
+              else this.prev();
+            });
+          });
+        }
+
+        _buildDots() {
+          if (!this.showDots) return;
+          const container = document.getElementById('brands-dots-{{ section.id }}');
+          if (!container) return;
+          container.innerHTML = '';
+          const pages = this.maxIndex + 1;
+          for (let i = 0; i < pages; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'brands-slider-dot' + (i === this.current ? ' is-active' : '');
+            dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+            dot.addEventListener('click', () => this.goTo(i));
+            container.appendChild(dot);
+          }
+        }
+
+        _bindDots() {
+          this._buildDots();
+        }
+
+        _updateDots() {
+          if (!this.showDots) return;
+          const container = document.getElementById('brands-dots-{{ section.id }}');
+          if (!container) return;
+          container.querySelectorAll('.brands-slider-dot').forEach((dot, i) => {
+            dot.classList.toggle('is-active', i === this.current);
+          });
+        }
+
+        _bindHover() {
+          if (!this.pauseHover || !this.autoplay) return;
+          this.bar.addEventListener('mouseenter', () => this._stopAutoplay());
+          this.bar.addEventListener('mouseleave', () => this._startAutoplay());
+        }
+
+        _bindResize() {
+          let resizeTimer;
+          window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+              this._updateMaxIndex();
+              if (this.current > this.maxIndex) this.current = this.maxIndex;
+              this._buildDots();
+              this.goTo(this.current, true);
+            }, 200);
+          });
+        }
+
+        next() {
+          if (this.direction === 'rtl') {
+            this._move(-1);
+          } else {
+            this._move(1);
+          }
+        }
+
+        prev() {
+          if (this.direction === 'rtl') {
+            this._move(1);
+          } else {
+            this._move(-1);
+          }
+        }
+
+        _move(step) {
+          let target = this.current + step;
+          if (this.infinite) {
+            if (target > this.maxIndex) target = 0;
+            if (target < 0) target = this.maxIndex;
+          } else {
+            target = Math.max(0, Math.min(target, this.maxIndex));
+          }
+          this.goTo(target);
+        }
+
+        goTo(index, instant) {
+          this.current = index;
+          const slideEl = this.slides[index];
+          if (!slideEl) return;
+          const offset = slideEl.offsetLeft;
+          this.track.style.transition = instant ? 'none' : '';
+          this.track.style.transform = 'translateX(-' + offset + 'px)';
+          this._updateDots();
+        }
+
+        _startAutoplay() {
+          this._stopAutoplay();
+          this.autoTimer = setInterval(() => this.next(), this.speed);
+        }
+
+        _stopAutoplay() {
+          if (this.autoTimer) {
+            clearInterval(this.autoTimer);
+            this.autoTimer = null;
+          }
+        }
+
+        destroy() {
+          this._stopAutoplay();
+        }
+      }
+
+      /* ---- Initialize ---- */
+      function init() {
+        const bar = document.getElementById('brands-bar-{{ section.id }}');
+        if (!bar || bar.dataset.sliderEnabled !== 'true') return;
+        if (bar._brandsSlider) bar._brandsSlider.destroy();
+        bar._brandsSlider = new BrandsSlider(bar);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+      /* Shopify Theme Editor support */
+      document.addEventListener('shopify:section:load', function (e) {
+        if (e.detail.sectionId === '{{ section.id }}') init();
+      });
+      document.addEventListener('shopify:section:unload', function (e) {
+        if (e.detail.sectionId === '{{ section.id }}') {
+          var bar = document.getElementById('brands-bar-{{ section.id }}');
+          if (bar && bar._brandsSlider) bar._brandsSlider.destroy();
+        }
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Floating Categories",
+  "settings": [
+    {
+      "type": "range",
+      "id": "overlap_margin",
+      "min": -200,
+      "max": 0,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Overlap Margin",
+      "default": -100
+    },
+    {
+      "type": "header",
+      "content": "Brands Bar Settings"
+    },
+    {
+      "type": "range",
+      "id": "brands_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Brands Bar Padding Top (px)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "brands_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Brands Bar Padding Bottom (px)",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_grayscale_logos",
+      "label": "Enable Grayscale Logos (Color on Hover)",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "brands_label",
+      "label": "Brands Label",
+      "default": "Brands:"
+    },
+    {
+      "type": "text",
+      "id": "view_all_brands_text",
+      "label": "View All Text",
+      "default": "+ More Brands"
+    },
+    {
+      "type": "url",
+      "id": "view_all_brands_url",
+      "label": "View All URL"
+    },
+    {
+      "type": "header",
+      "content": "Brands Slider Controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_slider",
+      "label": "Enable Slider Mode",
+      "default": false,
+      "info": "OFF = horizontal scroll grid. ON = sliding carousel."
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay_enabled",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "unit": "s",
+      "label": "Autoplay Speed"
+    },
+    {
+      "type": "checkbox",
+      "id": "infinite_loop",
+      "label": "Infinite Loop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on Hover",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "slider_direction",
+      "label": "Slider Direction",
+      "options": [
+        { "value": "ltr", "label": "Left to Right" },
+        { "value": "rtl", "label": "Right to Left" }
+      ],
+      "default": "ltr"
+    },
+    {
+      "type": "header",
+      "content": "Responsive & Display"
+    },
+    {
+      "type": "range",
+      "id": "logos_per_view_desktop",
+      "min": 3,
+      "max": 8,
+      "step": 1,
+      "default": 6,
+      "label": "Logos per View (Desktop)"
+    },
+    {
+      "type": "range",
+      "id": "logos_per_view_mobile",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 2,
+      "label": "Logos per View (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "logos_gap",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "default": 30,
+      "unit": "px",
+      "label": "Gap between Logos"
+    },
+    {
+      "type": "header",
+      "content": "Navigation & Pagination"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show Navigation Arrows",
+      "default": true,
+      "info": "Arrows appear on hover."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show Pagination Dots",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow / Dot Active Color",
+      "default": "#0056b3"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand_logo",
+      "name": "Brand Logo",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Brand Name (Alt text)",
+          "default": "Brand Name"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo Image"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Brand URL"
+        },
+        {
+          "type": "range",
+          "id": "brand_img_width",
+          "min": 0,
+          "max": 250,
+          "step": 5,
+          "default": 120,
+          "unit": "px",
+          "label": "Logo Width (px)"
+        }
+      ]
+    },
+    {
+      "type": "category_card",
+      "name": "Category Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Category Title",
+          "default": "Category Name"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Category URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category Image"
+        },
+        {
+          "type": "range",
+          "id": "cat_image_height",
+          "min": 100,
+          "max": 500,
+          "step": 10,
+          "default": 200,
+          "unit": "px",
+          "label": "Image Container Height"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Sub-categories Menu"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Floating Categories",
+      "blocks": [
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "brand_logo" },
+        { "type": "category_card" },
+        { "type": "category_card" },
+        { "type": "category_card" },
+        { "type": "category_card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

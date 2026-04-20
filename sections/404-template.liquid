@@ -1,0 +1,55 @@
+{%- liquid
+  assign title      = section.settings.title
+  assign subheading = section.settings.subheading
+  assign btn_label  = section.settings.btn_label
+  assign btn_link   = section.settings.btn_link
+-%}
+
+<div class="section-template-404">
+  <div class="container">
+    <div class="section-body text-center">
+      {%- if title != blank-%}
+        <h2 class="template-404_title">{{title}}</h2>
+      {%- endif -%}
+      {%- if title != blank-%}
+        <div class="template-404_subtitle">{{subheading}}</div>
+      {%- endif -%}
+      <div class="template-404_button">
+        <a href="{{btn_link}}" class="btn btn-1">{{btn_label}}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- schema -%}
+  {
+    "name" : "t:sections.404-template.name",
+    "tag" : "section",
+    "settings" : [
+      {
+        "type": "richtext",
+        "id": "title",
+        "label": "t:sections.common.heading",
+        "default" : "<p>Oops! - Could not Find it</p>"
+      },
+      {
+        "type": "richtext",
+        "id": "subheading",
+        "label": "t:sections.common.subheading",
+        "default" : "<p>Sorry but the page you are looking for doesn't exist.</p>"
+      },
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": "t:sections.common.button_label",
+        "default" : "BACK TO HOME"
+      },
+      {
+        "type" : "url",
+        "id" : "btn_link",
+        "label" : "t:sections.common.button_link",
+        "default" : "/"
+      }
+    ]
+  }
+{%- endschema -%}

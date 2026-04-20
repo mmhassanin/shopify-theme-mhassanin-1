@@ -1,0 +1,330 @@
+<link rel="stylesheet" href="{{'section-image-gallery-v2.css' | asset_url}}" media="print" onload="this.media='all'">
+
+{%- liquid
+  assign bg_class = ''
+  assign sectionID = '#section-' | append: section.id
+  assign items_spacing  = section.settings.items_padding
+
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+
+  if items_spacing == 0
+    assign items_spacing_row = 'no-padding'
+  endif
+-%}
+
+<div class="section-image-gallery-v2" id="section-{{section.id}}">
+  <div class="{{ layout_class }}">
+    <div class="section-wrapper {{ items_spacing_row }}">
+
+      <div class="section-body">
+        <div class="image-gallery row">
+          {% assign _index = forloop.index %}
+
+          {% for block in section.blocks %}  
+            {%- if block.type == 'open-column' -%}
+              {% assign _index  = _index | plus: 1 %}
+
+              {% case block.settings.width %}
+                {% when '25' %}
+                  {%- assign block_column_width = 'col-xl-3 col-lg-3 col-md-12 col-12' -%}
+                {% when '33' %}
+                  {%- assign block_column_width = 'col-xl-4 col-lg-4 col-md-12 col-12' -%}
+                {% when '41' %}
+                  {%- assign block_column_width = 'col-xl-5 col-lg-5 col-md-12 col-12' -%}
+                {% when '50' %}
+                  {%- assign block_column_width = 'col-xl-6 col-lg-6 col-md-12 col-12' -%}
+                {% when '59' %}
+                  {%- assign block_column_width = 'col-xl-7 col-lg-7 col-md-12 col-12' -%}
+                {% when '66' %}
+                  {%- assign block_column_width = 'col-xl-8 col-lg-8 col-md-12 col-12' -%}
+                {% when '75' %}
+                  {%- assign block_column_width = 'col-xl-9 col-lg-9 col-md-12 col-12' -%}
+                {% when '100' %}
+                  {%- assign block_column_width = 'col-xl-12 col-lg-12 col-md-12 col-12' -%}
+              {% endcase %}
+
+              <div class="block-column {{ block_column_width }}">
+                <div class="row">
+                  {% for block in section.blocks offset: _index %}
+                    {%- assign _index  = _index | plus: 1 -%}
+
+                    {%- if block.type == 'block-item' -%}
+                      {%- liquid
+                        assign link = block.settings.link
+                        assign image = block.settings.image
+                      -%}
+
+                      {% case block.settings.width %}
+                        {% when '25' %}
+                          {%- assign block_width = 'col-xl-3 col-lg-3 col-md-6 col-6' -%}
+                        {% when '33' %}
+                          {%- assign block_width = 'col-xl-4 col-lg-4 col-md-6 col-6' -%}
+                        {% when '41' %}
+                          {%- assign block_width = 'col-xl-5 col-lg-5 col-md-6 col-6' -%}
+                        {% when '50' %}
+                          {%- assign block_width = 'col-xl-6 col-lg-6 col-md-6 col-6' -%}
+                        {% when '59' %}
+                          {%- assign block_width = 'col-xl-7 col-lg-7 col-md-6 col-6' -%}
+                        {% when '66' %}
+                          {%- assign block_width = 'col-xl-8 col-lg-8 col-md-6 col-6' -%}
+                        {% when '75' %}
+                          {%- assign block_width = 'col-xl-9 col-lg-9 col-md-6 col-12' -%}
+                        {% when '100' %}
+                          {%- assign block_width = 'col-xl-12 col-lg-12 col-md-12 col-12' -%}
+                      {% endcase %}
+
+                      <div class="image-gallery_item {{ block_width }}">
+                        <a href="{{ link }}" aria-label="Image gallery">
+                          {%- render 'image-style' image: image, limit: 992 -%}
+                        </a>
+                      </div>
+                    {% else %}
+                        {% break %}
+                    {% endif %}
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {% endfor %}
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- unless items_spacing == 0 -%}
+  {%- assign items_spacing = items_spacing | divided_by: 2.0 -%}
+  {%- style -%}
+    .section-image-gallery-v2#section-{{section.id}} .section-wrapper:not(.no-padding) .image-gallery{
+      margin: -{{ items_spacing }}px;
+    }
+    .section-image-gallery-v2#section-{{section.id}} .section-wrapper:not(.no-padding) .image-gallery .block-column {
+      padding: {{ items_spacing }}px;
+    }
+    .section-image-gallery-v2#section-{{section.id}} .section-wrapper:not(.no-padding) .image-gallery .row{
+      margin: -{{ items_spacing }}px; 
+    }
+    .section-image-gallery-v2#section-{{section.id}} .section-wrapper:not(.no-padding) .image-gallery .row .image-gallery_item{
+      padding: {{ items_spacing }}px;
+    }
+  {%- endstyle -%}
+{%- endunless -%}
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme' type: 'section-style', config: section.settings, preClassID: sectionID, classID: bg_class -%}
+{%- endcapture -%}
+
+{%- style -%}{{section_css | strip | strip_newlines | remove: '  '}}{%- endstyle -%} 
+
+{%- schema -%}
+  {
+    "name" : "t:sections.image-gallery-v2.name",
+    "tag" : "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings" : [
+      {
+        "type": "header",
+        "content": "t:sections.common.general"
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "t:sections.common.layout_mode",
+        "default": "boxed",
+        "options": [
+          {
+            "value": "boxed",
+            "label": "Boxed"
+          },
+          {
+            "value": "full",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "margin",
+        "label": "t:sections.common.section_margin",
+        "info": "t:sections.common.order_info"
+      },
+      {
+        "type": "text",
+        "id": "padding",
+        "label": "t:sections.common.section_padding",
+        "info": "t:sections.common.order_info"
+      },
+      {
+        "type": "range",
+        "id": "items_padding",
+        "label": "t:sections.common.items_spacing",
+        "min": 0,
+        "max": 30,
+        "step": 5,
+        "default" : 15,
+        "unit": "px" 
+      }, 
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "t:sections.common.background_color"
+      }
+    ],
+    "blocks": [
+      {
+        "type" : "open-column",
+        "name" : "t:sections.common.open_column",
+        "settings" : [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.common.block_label",
+            "default": "Open column"
+          },
+          {
+            "type": "select",
+            "id": "width",
+            "label": "t:sections.common.width",
+            "default": "50",
+            "options": [
+              {
+                "value": "25",
+                "label": "25%"
+              },
+              {
+                "value": "33",
+                "label": "33%"
+              },
+              {
+                "value": "41",
+                "label": "41%"
+              },
+              {
+                "value": "50",
+                "label": "50%"
+              },
+              {
+                "value": "59",
+                "label": "59%"
+              },
+              {
+                "value": "66",
+                "label": "66%"
+              },
+              {
+                "value": "75",
+                "label": "75%"
+              },
+              {
+                "value": "100",
+                "label": "100%"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type" : "block-item",
+        "name" : "t:sections.common.block_item",
+        "settings" : [
+          {
+            "type": "select",
+            "id": "width",
+            "label": "t:sections.common.width",
+            "default": "50",
+            "options": [
+              {
+                "value": "25",
+                "label": "25%"
+              },
+              {
+                "value": "33",
+                "label": "33%"
+              },
+              {
+                "value": "41",
+                "label": "41%"
+              },
+              {
+                "value": "50",
+                "label": "50%"
+              },
+              {
+                "value": "59",
+                "label": "59%"
+              },
+              {
+                "value": "66",
+                "label": "66%"
+              },
+              {
+                "value": "75",
+                "label": "75%"
+              },
+              {
+                "value": "100",
+                "label": "100%"
+              }
+            ]
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.common.image"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "t:sections.common.link"
+          }
+        ]
+      },
+      {
+        "type" : "close-column",
+        "name" : "t:sections.common.close_column",
+        "settings" : [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.common.block_label",
+            "default": "Close column"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name" : "t:sections.image-gallery-v2.name",
+        "blocks" : [
+          {
+            "type" : "open-column"
+          },
+          {
+            "type" : "block-item"
+          },
+          {
+            "type" : "close-column"
+          },
+          {
+            "type" : "open-column"
+          },
+          {
+            "type" : "block-item"
+          },
+          {
+            "type" : "close-column"
+          }
+        ]
+      }
+    ]
+  }
+{%- endschema -%}

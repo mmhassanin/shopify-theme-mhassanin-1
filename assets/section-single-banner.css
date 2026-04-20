@@ -1,0 +1,45 @@
+.section-single-banner, .section-single-banner .single-banner-link {
+  position: relative;
+}
+
+.section-single-banner .single-banner-link:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 100%;
+  height: 0;
+  z-index: 1;
+  transition: all .35s ease-in-out;
+}
+
+@media (hover: hover) {
+  .section-single-banner .single-banner-link:hover:after {
+    height: 100%;
+  }
+}
+
+.section-single-banner .section-body, .section-single-banner .section-single-banner-inner > div, .section-single-banner .section-wrapper {
+  height: 100%;
+}
+
+.section-single-banner .textbox {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.section-single-banner .single-banner-heading {
+  margin: 0 auto 23px;
+  color: var(--body-color);
+}
+
+.section-single-banner .single-banner-subtext {
+  margin: 0 auto;
+  color: var(--body-color);
+}

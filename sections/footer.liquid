@@ -1,0 +1,114 @@
+{%- liquid
+  assign default_color = 'rgba(0,0,0,0)'
+  assign sectionID = '#section-' | append: section.id
+  assign copyright_color = section.settings.copyright_color
+  assign section_padding = section.settings.section_padding
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+-%}
+
+{%- assign bg_class = '' -%}
+
+<div class="section-footer" id="section-{{section.id}}">
+  <div class="{{ layout_class }}">
+    <div class="section-wrapper d-flex align-items-center">
+      <div class="copyright" style="color: {{copyright_color}};">&copy; {{ 'now' | date: "%Y" }} <strong>{{ shop.name | link_to: routes.root_url }}</strong>. All Rights Reserved</div>
+      {%- if section.settings.payment_enable -%}
+        <div class="footer__payment">
+          <ul class="list list-payment">
+            {%- for type in shop.enabled_payment_types -%}
+              <li class="list-payment__item">
+                {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% comment %} compress {% endcomment %}
+
+{%- style -%}
+  {%- render 'snippet-theme' type: 'section-style', preClassID: sectionID, classID: bg_class, config: section.settings -%}
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "tag": "section",
+  "presets": [
+    {
+      "name": "t:sections.footer.name"
+    }
+  ],
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.common.general"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.common.layout_mode",
+      "default": "boxed",
+      "options": [
+        {
+          "value": "boxed",
+          "label": "Boxed"
+        },
+        {
+          "value": "full",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    }, 
+    {
+      "type": "header",
+      "content": "t:sections.common.color_settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color",
+      "default": "#eaeaea"
+    },
+    {
+      "type": "color",
+      "id": "copyright_color",
+      "label": "t:sections.common.text_color",
+      "default": "#333e48"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.footer.settings.header__1.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "payment_enable",
+      "default": true,
+      "label": "t:sections.common.enable_widget"
+    }
+  ]
+}
+{% endschema %}

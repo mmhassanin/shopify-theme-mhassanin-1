@@ -1,0 +1,19 @@
+<aside class="sidebar" id="product-sidebar">
+  {%- for block in section.blocks -%}
+    {% case block.type %}
+
+      {%- when 'menu' -%} 
+        {%- include 'sidebar-snippet' type: 'menu' -%}
+
+      {%- when 'banner' -%}
+        {%- include 'sidebar-snippet' type: 'banner' section: section -%}
+  
+      {%- when 'products-listing' -%}
+        {%- include 'sidebar-snippet' type: 'products-listing' section: section -%}
+  
+      {%- when 'service' -%}
+        {%- include 'sidebar-snippet' type: 'service' section: section -%}
+
+    {% endcase %}
+  {%- endfor -%}
+</aside>

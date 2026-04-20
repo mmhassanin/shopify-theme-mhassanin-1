@@ -1,0 +1,87 @@
+{%- if device == 'mobile' -%}
+  <div class="drawer drawer-left drawer-sub-menu menu-mobile-list--lv1">
+    <div class="drawer-wrapper">
+      <label for="[menu-panel-id]" class="btn-back">
+        {%- render 'svg' type: 'angle-left' -%}
+        {{ 'sections.header.back' | t}}
+      </label>
+      <ul class="menu-list menu-list--lv1">
+        {%- for link_lv_2 in link.links -%}
+          <li class="menu-item menu-mobile-item-2">
+            {%- if link_lv_2.links != blank -%}
+              <div class="menu-item_wrap">
+                <a href="{{link_lv_2.url}}">{{link_lv_2.title}}</a>
+                <label for="dropdown-menu-{{link_lv_2.title | handle}}-{{forloop.index}}">
+                  {%- render 'svg' type: 'angle-right' -%}
+                </label>
+              </div>
+              <input type="checkbox" class="d-none menu-checkbox-mobile-2" id="dropdown-menu-{{link_lv_2.title | handle}}-{{forloop.index}}">
+              <div class="drawer-wrapper drawer-sub-menu">
+                <label for="dropdown-menu-{{link_lv_2.title | handle}}-{{forloop.index}}" class="btn-back">
+                  {%- render 'svg' type: 'angle-left' -%}
+                  {{ 'sections.header.back' | t}}
+                </label>
+                <ul class="menu-list collapse-menu">
+                  {%- for link_lv_3 in link_lv_2.links -%}
+                    <li class="menu-item">
+                      <a href="{{link_lv_3.url}}">{{link_lv_3.title}}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- else -%}
+              <a href="{{link_lv_2.url}}">{{link_lv_2.title}}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+
+{%- else -%}
+  <div class="dropdown-menu dropdown-menu--sublinks">
+    <ul class="menu-list">
+      {%- for link_lv_2 in link.links -%}
+        {%- capture _flyout -%}{{ 'flyout-left' }}{%- endcapture -%}
+        {%- assign _flyout_class = _flyout -%}
+        {%- assign _flyout_handles = section.settings.menu_flyout_left | split: ';' | uniq -%}
+        {%- assign _flyout_work_handles = "" -%}
+        
+        {%- for _handle in _flyout_handles -%}
+          {%- capture _striped_flyout_handle -%}{{ _handle }}{%- endcapture -%}
+          {%- if _flyout_work_handles == blank -%}
+              {%- assign _flyout_work_handles = _striped_flyout_handle -%}
+          {%- else -%}
+              {%- assign _flyout_work_handles = _flyout_work_handles | append: '[|||]' | append: _striped_flyout_handle -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- assign _flyout_handles = _flyout_work_handles | split: '[|||]' -%}
+
+        {%- capture _flyout_position -%}
+        {%- if _flyout_handles contains link_lv_2.title %}{{_flyout_class}}{%- endif -%}
+        {%- endcapture -%}
+
+        <li class="menu-item{% if link_lv_2.links != blank %} dropdown{% if _flyout_position != blank %} {{ _flyout_position }}{% endif %}{% endif %}">
+          {%- if link_lv_2.links != blank -%}
+            <div class="menu-item_wrapper">
+              <a href="{{link_lv_2.url}}">{{link_lv_2.title}}</a>
+              {%- render 'svg' type: 'angle-right' -%}
+            </div>
+            <div class="dropdown-menu dropdown-menu--child-sublinks">
+              <ul class="menu-list">
+                {%- for link_lv_3 in link_lv_2.links -%}
+                  <li class="menu-item">
+                    <a href="{{link_lv_3.url}}">{{link_lv_3.title}}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- else -%}
+            <a href="{{link_lv_2.url}}">{{link_lv_2.title}}</a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}

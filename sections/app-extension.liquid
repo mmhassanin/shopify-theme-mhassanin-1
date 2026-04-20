@@ -1,0 +1,20 @@
+{%- for block in section.blocks -%}
+  {%- render block -%}
+{%- endfor -%}
+
+{%- schema -%}
+  {
+    "name" : "t:sections.app-extension.name",
+    "tag" : "section",
+    "blocks": [
+      {
+        "type" : "@app"
+      }
+    ],
+    "presets": [
+      {
+        "name" : "t:sections.app-extension.name"
+      }
+    ]
+  }
+{%- endschema -%}

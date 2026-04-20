@@ -1,0 +1,965 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "slideshow_MAHRrc": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_H7wtma": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/A_photorealistic__high-end_202604171014.jpg",
+            "heading": "Unified Communications",
+            "subheading": "Empowering your business with cutting-edge VoIP and Collaboration technology.",
+            "button_label": "Discover Solutions",
+            "button_link": "",
+            "text_position": "middle-left",
+            "text_alignment": "left",
+            "animation_style": "slide-in-left",
+            "button_style": "solid",
+            "heading_color": "#ffffff",
+            "subheading_color": "#ffffff",
+            "caption_bg_color": "#000000",
+            "caption_bg_opacity": 0,
+            "button_bg_color": "#222428",
+            "button_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "slide_KxnK3d": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/A_high-end__photorealistic_202604171031.jpg",
+            "heading": "Enterprise IP Telephony",
+            "subheading": "Crystal-clear audio and intuitive touchscreen control for the modern executive.",
+            "button_label": "Explore IP Phones",
+            "button_link": "",
+            "text_position": "middle-left",
+            "text_alignment": "left",
+            "animation_style": "fade-up",
+            "button_style": "solid",
+            "heading_color": "#ffffff",
+            "subheading_color": "#f1f1f1",
+            "caption_bg_color": "#000000",
+            "caption_bg_opacity": 0,
+            "button_bg_color": "#222428",
+            "button_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "slide_wYDapX": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/A_high-end__photorealistic_202604180909.jpg",
+            "heading": "Smart PBX. Seamless Connectivity.",
+            "subheading": "Discover industry-leading IP PBX gateways and P-Series systems designed to connect your entire workforce.",
+            "button_label": "Shop IP PBX",
+            "button_link": "",
+            "text_position": "middle-left",
+            "text_alignment": "left",
+            "animation_style": "fade-up",
+            "button_style": "solid",
+            "heading_color": "#ffffff",
+            "subheading_color": "#f1f1f1",
+            "caption_bg_color": "#000000",
+            "caption_bg_opacity": 0,
+            "button_bg_color": "#222428",
+            "button_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "slide_H7wtma",
+        "slide_KxnK3d",
+        "slide_wYDapX"
+      ],
+      "name": "Slideshow (Modern)",
+      "settings": {
+        "layout": "full",
+        "transition": "fade",
+        "slide_height": "full",
+        "mobile_slide_height": "adapt",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "show_controls": false,
+        "show_pagination": true,
+        "autoplay": true,
+        "autoplay_speed": 5,
+        "bullets_bottom_offset": 90
+      }
+    },
+    "section_categories_floating_banner_H6bwrz": {
+      "type": "section-categories-floating-banner",
+      "blocks": {
+        "brand_logo_nL7gUd": {
+          "type": "brand_logo",
+          "settings": {
+            "title": "Brand Name",
+            "image": "shopify://shop_images/Logo_enhancement_to_202604182211.jpg",
+            "url": "",
+            "brand_img_width": 85
+          }
+        },
+        "brand_logo_fRNUeQ": {
+          "type": "brand_logo",
+          "settings": {
+            "title": "Brand Name",
+            "image": "shopify://shop_images/Logo_enhancement_to_202604182243.jpg",
+            "url": "",
+            "brand_img_width": 120
+          }
+        },
+        "brand_logo_ghczx7": {
+          "type": "brand_logo",
+          "settings": {
+            "title": "Brand Name",
+            "image": "shopify://shop_images/Logo_enhancement_to_202604182216.jpg",
+            "url": "",
+            "brand_img_width": 110
+          }
+        },
+        "brand_logo_6peTmF": {
+          "type": "brand_logo",
+          "settings": {
+            "title": "Brand Name",
+            "image": "shopify://shop_images/Logo_enhancement_to_202604182231.jpg",
+            "url": "",
+            "brand_img_width": 90
+          }
+        },
+        "brand_logo_9ykfEr": {
+          "type": "brand_logo",
+          "settings": {
+            "title": "Brand Name",
+            "image": "shopify://shop_images/Logo_enhancement_to_202604182243_1.jpg",
+            "url": "",
+            "brand_img_width": 105
+          }
+        },
+        "brand_logo_Ax4WhP": {
+          "type": "brand_logo",
+          "settings": {
+            "title": "Brand Name",
+            "image": "shopify://shop_images/Logo_enhancement_to_202604182235.jpg",
+            "url": "",
+            "brand_img_width": 80
+          }
+        },
+        "brand_logo_mQhyKN": {
+          "type": "brand_logo",
+          "settings": {
+            "title": "Brand Name",
+            "image": "shopify://shop_images/Logo_enhancement_to_202604182238.jpg",
+            "url": "",
+            "brand_img_width": 110
+          }
+        },
+        "brand_logo_WjMBVz": {
+          "type": "brand_logo",
+          "settings": {
+            "title": "Brand Name",
+            "image": "shopify://shop_images/Logo_enhancement_to_202604182226.jpg",
+            "url": "",
+            "brand_img_width": 120
+          }
+        },
+        "category_card_9UriJK": {
+          "type": "category_card",
+          "settings": {
+            "title": "IP Phones",
+            "url": "shopify://collections/ip-phones",
+            "image": "shopify://shop_images/Three_modern_IP_202604182141.jpg",
+            "cat_image_height": 180,
+            "menu": "ip-phones"
+          }
+        },
+        "category_card_TrkTq9": {
+          "type": "category_card",
+          "settings": {
+            "title": "IP PBX",
+            "url": "",
+            "image": "shopify://shop_images/Stacked_VoIP_IP_202604182143.jpg",
+            "cat_image_height": 180,
+            "menu": "ip-pbx"
+          }
+        },
+        "category_card_xLL3Hr": {
+          "type": "category_card",
+          "settings": {
+            "title": "IP Gateways",
+            "url": "shopify://collections/ip-gateways",
+            "image": "shopify://shop_images/Industrial_VoIP_Gateway_202604182154.jpg",
+            "cat_image_height": 180,
+            "menu": "ip-gateways"
+          }
+        },
+        "category_card_6FQRHP": {
+          "type": "category_card",
+          "settings": {
+            "title": "Video Conference",
+            "url": "shopify://collections/video-conference",
+            "image": "shopify://shop_images/Video_conferencing_hardware_202604182136.jpg",
+            "cat_image_height": 180,
+            "menu": "video-conference"
+          }
+        },
+        "category_card_6dKUzy": {
+          "type": "category_card",
+          "settings": {
+            "title": "Interactive Screen",
+            "url": "shopify://collections/interactive-screens",
+            "image": "shopify://shop_images/Smart_Interactive_Screen_202604201507.jpg",
+            "cat_image_height": 180,
+            "menu": "interactive-screens"
+          }
+        },
+        "category_card_kHcmcQ": {
+          "type": "category_card",
+          "settings": {
+            "title": "Smart access control solutions",
+            "url": "shopify://collections/smart-access-control-solutions",
+            "image": "shopify://shop_images/Smart_IP_intercom_202604182317.jpg",
+            "cat_image_height": 180,
+            "menu": "smart-access-control-solutions"
+          }
+        },
+        "category_card_PrHQhB": {
+          "type": "category_card",
+          "settings": {
+            "title": "Paging System",
+            "url": "shopify://collections/paging-system",
+            "image": "shopify://shop_images/Enterprise_IP_Paging_202604201518.jpg",
+            "cat_image_height": 180,
+            "menu": "paging-system"
+          }
+        },
+        "category_card_FtVim3": {
+          "type": "category_card",
+          "settings": {
+            "title": "Business Headsets",
+            "url": "shopify://collections/business-headsets",
+            "image": "shopify://shop_images/Business_headsets_on_202604201533.jpg",
+            "cat_image_height": 180,
+            "menu": "business-headsets"
+          }
+        }
+      },
+      "block_order": [
+        "brand_logo_nL7gUd",
+        "brand_logo_fRNUeQ",
+        "brand_logo_ghczx7",
+        "brand_logo_6peTmF",
+        "brand_logo_9ykfEr",
+        "brand_logo_Ax4WhP",
+        "brand_logo_mQhyKN",
+        "brand_logo_WjMBVz",
+        "category_card_9UriJK",
+        "category_card_TrkTq9",
+        "category_card_xLL3Hr",
+        "category_card_6FQRHP",
+        "category_card_6dKUzy",
+        "category_card_kHcmcQ",
+        "category_card_PrHQhB",
+        "category_card_FtVim3"
+      ],
+      "name": "Floating Categories Banner",
+      "settings": {
+        "overlap_margin": -70,
+        "brands_padding_top": 0,
+        "brands_padding_bottom": 0,
+        "enable_grayscale_logos": true,
+        "brands_label": "Brands:",
+        "view_all_brands_text": "+ More Brands",
+        "view_all_brands_url": "",
+        "enable_slider": true,
+        "autoplay_enabled": true,
+        "autoplay_speed": 3,
+        "infinite_loop": true,
+        "pause_on_hover": true,
+        "slider_direction": "ltr",
+        "logos_per_view_desktop": 6,
+        "logos_per_view_mobile": 2,
+        "logos_gap": 30,
+        "show_arrows": true,
+        "show_dots": false,
+        "arrow_color": "#dddddd"
+      }
+    },
+    "section_single_banner_with_product_6M9GYV": {
+      "type": "section-single-banner-with-product",
+      "blocks": {
+        "block_item_4dgC7d": {
+          "type": "block-item",
+          "settings": {
+            "tab_heading": "",
+            "heading": "dfsdf",
+            "subtext": "sdfsdf",
+            "button_label": "adsfsdf",
+            "link": "#"
+          }
+        },
+        "style_paragraph_TfC3Kz": {
+          "type": "style_paragraph",
+          "settings": {
+            "title": "dfgedrfg",
+            "text_fs_1": "24px",
+            "text_cl_1": "",
+            "text_fw_1": 0,
+            "text_1_margin": "",
+            "text_lh_1": "21px",
+            "text_fs_2": "24px",
+            "text_cl_2": "",
+            "text_fw_2": 0,
+            "text_2_margin": "",
+            "text_lh_2": "21px"
+          }
+        }
+      },
+      "block_order": [
+        "block_item_4dgC7d",
+        "style_paragraph_TfC3Kz"
+      ],
+      "name": "t:sections.single-banner-with-product.name",
+      "settings": {
+        "section_height": "450px",
+        "layout": "full",
+        "margin": "-35px 0 0 0",
+        "padding": "20px 0 0 0",
+        "bg_image_desk": "shopify://shop_images/imgi_1_background-1.png",
+        "bg_size_desk": "cover",
+        "bg_position_desk": "center center",
+        "bg_repeat_desk": "no-repeat",
+        "bg_size_mobi": "auto",
+        "bg_position_mobi": "center center",
+        "bg_repeat_mobi": "no-repeat",
+        "collection": "ip-pbx",
+        "items_resp": "4,5,3,2",
+        "items_spacing": true,
+        "limit": 10,
+        "loop": true,
+        "controls": true,
+        "dots": true,
+        "autoplay": true,
+        "autoplay_timeout": 4
+      }
+    },
+    "164983532526a9abea": {
+      "type": "section-image-gallery",
+      "blocks": {
+        "16498353253bc59926-0": {
+          "type": "block-item",
+          "settings": {
+            "heading": "",
+            "subtext": "",
+            "link": "shopify://collections/cameras"
+          }
+        },
+        "16498353253bc59926-1": {
+          "type": "block-item",
+          "settings": {
+            "heading": "",
+            "subtext": "",
+            "link": "shopify://collections/laptops-computer"
+          }
+        },
+        "16498353253bc59926-2": {
+          "type": "block-item",
+          "settings": {
+            "heading": "",
+            "subtext": "",
+            "link": "shopify://collections/pc-computers"
+          }
+        },
+        "block_item_NTrJYT": {
+          "type": "block-item",
+          "settings": {
+            "heading": "",
+            "subtext": "",
+            "link": "shopify://collections/gadgets"
+          }
+        }
+      },
+      "block_order": [
+        "16498353253bc59926-0",
+        "16498353253bc59926-1",
+        "16498353253bc59926-2",
+        "block_item_NTrJYT"
+      ],
+      "settings": {
+        "layout": "full",
+        "border_top": "border-top-none",
+        "round_image": false,
+        "margin": "30px 0 0 0, 30px 0 0 0, 40px 0 0 0",
+        "padding": "",
+        "bg_color": "",
+        "items_resp": "3,2,1",
+        "items_spacing": true,
+        "enable_slider": true,
+        "loop": false,
+        "controls": false,
+        "dots": true,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "section_policy_HWMT7r": {
+      "type": "section-policy",
+      "blocks": {
+        "image_AfhVpa": {
+          "type": "image",
+          "settings": {
+            "svg": "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"45\" height=\"45\" viewbox=\"0 0 101 64\"> <path fill=\"#333e48\" d=\"M0 0h66.304c0 3.904 0 7.744 0 11.648 9.216 0 18.368 0 27.584 0 2.112 5.824 4.224 11.712 6.528 17.536 0.512 1.344 0.768 2.816 0.896 4.288v3.968c-0.448 5.888-0.192 11.84-0.256 17.792-3.264 0.064-6.528 0-9.792 0-1.728 4.672-5.952 8.32-11.008 8.768h-2.048c-5.056-0.384-9.856-3.776-11.328-8.768-8.704 0-17.408 0-26.176 0-1.28 3.072-3.264 6.016-6.336 7.424-6.592 3.264-16.064 0-18.048-7.424-3.264 0-6.592 0-9.92 0 0-6.72 0-13.504 0-20.288 2.112 0 4.16 0 6.272 0 0 4.864 0 9.664 0 14.528 1.216 0 2.432 0 3.584-0.064 1.088-3.328 3.456-6.336 6.912-7.552 6.528-2.688 15.744 0.256 17.6 7.616 6.336 0 12.736 0 19.136 0 0.384-14.528 0.064-29.12 0.192-43.712-20.032 0-40.064 0-60.096 0v-5.76M66.496 49.472c1.024-1.216 1.408-2.816 2.432-4.032 1.664-2.176 4.16-3.712 6.784-4.288 6.272-1.664 13.824 1.92 15.552 8.32 1.152 0 2.368 0 3.52 0-0.832-6.72 1.664-13.76-0.832-20.224-1.6-3.968-3.072-7.936-4.672-11.84-7.616 0-15.296-0.064-22.912 0 0.064 10.688-0.256 21.376 0.128 32.064M26.88 46.72c-1.856 0.448-3.648 1.664-4.352 3.456-1.28 2.944 0.448 6.784 3.52 7.616 3.904 1.28 9.28-1.536 8.768-6.016-0.192-3.776-4.48-5.952-7.936-5.056M77.568 46.72c-1.92 0.384-3.712 1.6-4.48 3.456-1.216 2.624 0.064 6.144 2.816 7.296 3.776 1.792 9.536-0.64 9.536-5.248 0.064-3.904-4.352-6.464-7.872-5.504zM3.328 17.408c0-1.92-0.256-3.904 0.192-5.76 9.344 0.064 18.688 0 28.096 0 0 1.92 0 3.84 0 5.696-9.472 0.064-18.88 0.064-28.288 0.064zM6.528 23.296c6.272 0 12.544 0 18.816 0 0 1.92 0 3.84 0 5.76-6.272 0-12.608 0-18.88 0-0.064-1.92-0.128-3.84 0.064-5.76z\"></path> </svg>",
+            "heading": "Free Delivery",
+            "subheading": "from $50"
+          }
+        },
+        "image_8BRiRa": {
+          "type": "image",
+          "settings": {
+            "svg": "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"45\" height=\"45\" viewbox=\"0 0 83 64\"> <path fill=\"#333e48\" d=\"M29.568 0h0.512c3.648 0.256 6.4 3.712 6.784 7.168 0.704 6.144-5.056 10.944-4.288 17.088 1.536 0.448 3.136 0.576 4.736 0.256 5.248-0.896 10.816-2.368 16.128-0.896 2.752 0.704 4.416 3.712 3.712 6.464-1.024 0.064-1.984 0.064-2.944 0.064-0.064-1.408-0.256-3.2-1.792-3.776-2.624-0.96-5.504-0.32-8.192-0.064-3.776 0.448-7.552 1.856-11.392 1.28-1.984-0.256-3.52-1.984-3.52-4.032-0.448-3.904 2.112-7.168 3.52-10.56 1.024-2.432 1.664-5.376 0.192-7.68-0.704-1.088-1.664-2.368-3.072-2.304-1.088 0-1.216 1.28-1.344 2.048-0.512 3.648-1.792 7.296-3.968 10.304-2.752 3.712-7.104 5.76-10.112 9.28-2.24 2.624-2.944 6.336-5.504 8.832-2.368 2.112-5.76 2.496-8.832 2.688-0.064-0.64-0.128-1.344-0.192-1.984v-1.024c2.304-0.32 5.056-0.128 6.912-1.856 2.752-2.624 3.392-6.72 6.080-9.472 3.008-3.008 6.784-5.312 9.408-8.768 1.6-2.048 2.56-4.544 3.008-7.168 0.32-1.472 0.448-3.072 1.28-4.48 0.576-1.024 1.792-1.344 2.88-1.408zM31.36 35.456c3.008-1.344 7.040-0.768 9.088 1.984 1.92 2.688 1.856 6.208 1.472 9.344-0.384 2.88-1.6 5.888-4.224 7.296-2.56 1.536-5.568 1.472-8.384 1.216 0-1.152-0.064-2.304-0.064-3.456 2.24 0.384 4.736 0.512 6.72-0.768 1.792-1.152 2.112-3.456 2.304-5.44-0.832 0.96-1.6 2.048-2.88 2.304-1.92 0.384-4.096 0.256-5.632-1.088-1.536-1.408-1.984-3.584-1.856-5.632 0-2.368 1.28-4.736 3.456-5.76M33.792 38.336c-1.856 0.768-2.048 3.2-1.6 4.864 0.576 2.048 3.456 2.112 4.736 0.896 2.432-2.048 0-6.976-3.136-5.76zM47.36 35.456c3.008-1.344 7.040-0.768 9.024 1.984 1.984 2.688 1.92 6.208 1.536 9.408-0.384 2.816-1.6 5.824-4.224 7.232-2.496 1.536-5.568 1.472-8.384 1.216 0-1.152-0.064-2.304-0.064-3.456 2.24 0.384 4.736 0.512 6.72-0.768 1.792-1.152 2.112-3.456 2.304-5.44-0.832 0.96-1.6 2.048-2.88 2.304-1.792 0.384-3.904 0.32-5.376-0.896-1.6-1.28-2.24-3.392-2.112-5.376-0.128-2.496 1.152-5.12 3.456-6.208M49.792 38.336c-1.856 0.768-2.048 3.2-1.536 4.864 0.512 1.984 3.328 2.112 4.672 0.896 2.432-1.984 0-6.976-3.136-5.76zM62.016 35.136c1.152-0.512 2.432-0.512 3.648-0.256 1.856 0.512 2.944 2.432 3.2 4.224 0.32 2.368 0.256 4.992-1.28 6.976-1.984 1.984-5.824 1.728-7.232-0.768-1.088-1.984-1.152-4.352-0.768-6.528 0.256-1.472 1.024-3.008 2.432-3.648M62.976 42.496c0 0.96 0.512 2.432 1.728 1.984 0.96-1.088 0.768-2.688 0.768-4.032 0.064-1.216-0.192-2.624-1.472-3.072-1.472 1.28-1.152 3.456-1.024 5.12zM75.2 35.072c1.088 0 2.176 0 3.264 0-3.712 6.72-7.424 13.376-11.136 20.096-1.152 0-2.24 0-3.328 0 3.776-6.72 7.424-13.44 11.2-20.096zM76.736 43.008c1.792-0.576 4.032-0.128 5.184 1.408 1.344 1.856 1.344 4.288 1.152 6.464-0.192 1.792-1.216 3.776-3.072 4.288-1.536 0.384-3.456 0.384-4.672-0.832-1.792-1.728-1.856-4.48-1.664-6.784 0.128-1.92 1.088-4.032 3.072-4.544M77.632 46.016c-0.832 1.664-0.704 3.776-0.32 5.568 0.128 0.832 1.088 1.28 1.792 0.704 0.832-1.792 0.768-3.904 0.256-5.76-0.128-0.832-1.28-1.216-1.728-0.512zM0.192 55.040c9.472-0.576 17.856 4.864 27.136 5.568 6.336 0.576 12.672 0.512 19.008-0.064 2.944-0.32 6.72-0.896 7.872-4.032 1.024-0.064 2.112 0 3.136 0-0.32 1.984-1.408 3.84-3.2 4.8-3.968 2.24-8.64 2.368-13.056 2.688h-5.632c-3.008-0.128-6.016-0.256-9.024-0.576-9.024-0.768-17.216-5.696-26.432-5.376v-0.832c0.128-0.704 0.128-1.472 0.192-2.176z\"></path> </svg>",
+            "heading": "99% Customers",
+            "subheading": "Feedbacks"
+          }
+        },
+        "image_j9Ubdc": {
+          "type": "image",
+          "settings": {
+            "svg": "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"35\" height=\"35\" viewbox=\"0 0 71 64\"> <path fill=\"#333e48\" d=\"M33.6 0h4.608c0.192 0.192 0.512 0.512 0.64 0.704-0.064 0.896-0.192 1.792-0.32 2.688-6.016-0.832-12.288 0.32-17.472 3.456-10.048 6.016-15.872 18.304-13.888 29.888 0.512 2.944 1.536 5.888 3.008 8.512 0.576 1.024 0.832 2.368 1.856 3.072 1.088-2.496 0.256-5.504 1.344-8.064 0.32-0.832 1.6-1.28 2.304-0.576 0.64 0.896 0.576 1.984 0.576 3.008-0.256 4.096-1.472 8-2.048 12.096-3.648-1.408-7.488-2.048-11.136-3.264-1.28-0.448-2.56-1.28-3.072-2.56v-0.192c0.576-0.64 1.344-1.088 2.24-0.96 2.24 0.256 4.16 1.6 6.4 1.92-0.576-1.92-1.792-3.52-2.56-5.312-2.624-6.336-3.328-13.44-1.664-20.032 1.792-7.36 6.336-13.952 12.48-18.368 4.864-3.52 10.752-5.632 16.704-6.016zM42.304 0.768c1.024 0.128 2.048 0.576 3.136 0.768-0.32 1.024-0.576 2.048-0.896 3.008-0.96-0.256-1.92-0.512-2.88-0.832 0.192-0.96 0.384-1.92 0.64-2.944zM47.424 5.696c0.384-0.96 0.768-1.92 1.152-2.88 1.024 0.448 1.984 0.96 2.944 1.536-0.448 0.896-0.896 1.728-1.344 2.56-1.024-0.256-1.92-0.704-2.752-1.216zM56.576 9.216c4.16 1.664 8.704 1.92 12.8 3.84 0.704 0.256 1.28 0.768 1.728 1.408v0.576c-0.192 0.704-0.768 1.216-1.472 1.152-2.496-0.128-4.672-1.408-7.104-1.984 1.792 4.288 4.096 8.448 4.736 13.056 0.832 6.656 0 13.632-3.072 19.648-2.88 5.76-7.744 10.368-13.504 13.12-5.696 2.816-12.16 3.84-18.496 3.648 0.128-1.088 0.256-2.112 0.448-3.136 4.16 0.64 8.512 0.256 12.544-1.152 10.304-3.52 17.536-13.568 18.88-24.256 0.96-6.912-0.832-14.272-5.248-19.776-0.512 2.432-0.064 5.056-0.832 7.424-0.256 1.088-1.28 1.6-2.304 1.856-0.448-1.28-0.768-2.688-0.64-4.096 0.192-3.776 1.536-7.488 1.536-11.328zM19.584 59.584c0.448-0.832 1.024-1.664 1.408-2.56 1.024 0.256 1.92 0.768 2.752 1.28-0.384 0.896-0.832 1.856-1.216 2.752-0.96-0.512-1.92-0.96-2.944-1.472zM26.624 59.392c0.96 0.192 1.92 0.512 2.816 0.832-0.192 0.96-0.384 1.92-0.576 2.944-1.088-0.192-2.112-0.576-3.2-0.768 0.256-1.024 0.576-2.048 0.96-3.008z\"></path> </svg>",
+            "heading": "365 Days",
+            "subheading": "For Free Return"
+          }
+        },
+        "image_pPkEDM": {
+          "type": "image",
+          "settings": {
+            "svg": "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"40\" height=\"40\" viewbox=\"0 0 64 64\"> <path fill=\"#333e48\" d=\"M15.168 0h38.912c0.832 0.128 1.664 0.704 1.92 1.536 0.704 1.984 0.384 4.096 0.384 6.144 0 4.992 0 10.048 0 15.040 0 2.176 0.448 4.352-0.256 6.464-0.448 1.344-2.112 1.6-3.328 1.6-11.008-0.128-21.952-0.064-32.96-0.064-1.792-0.064-3.648 0.32-5.44-0.128-1.216-0.384-1.472-1.92-1.472-3.072-0.064-6.528 0-12.992 0-19.52 0-2.048-0.384-4.16 0.128-6.144 0.256-0.96 1.088-1.728 2.112-1.856M15.424 2.56c0 8.576 0 17.152 0 25.664 12.8 0 25.6 0 38.4 0 0-8.512 0-17.088 0-25.664-12.8 0-25.6 0-38.4 0zM28.032 5.376c2.88-0.576 5.824-0.064 8.768-0.256 1.792-0.064 3.84-0.384 5.44 0.64 1.984 1.344 1.536 4.928-0.768 5.632-2.496 0.64-5.056 0-7.552 0.128-2.304-0.064-4.864 0.384-6.976-0.704-2.176-1.216-1.408-5.056 1.088-5.44M28.48 7.744c-0.128 0.32-0.192 0.64-0.256 1.024 1.216 0.256 2.496 0.32 3.776 0.32 2.56-0.064 5.12-0.064 7.68-0.064 0.512 0 1.28 0 1.408-0.704-0.128-0.64-0.896-0.64-1.408-0.64-3.712 0.064-7.488 0-11.2 0.064zM14.592 36.096c3.456-0.512 7.232-0.192 10.304 1.728 1.088 0.704 1.856 1.728 2.816 2.688 0.832 0.832 1.984 1.28 3.072 1.728 0.704 0.192 1.536 0.448 2.112-0.064 1.408-0.96 2.816-1.92 4.288-2.752 2.56-1.664 5.312-3.584 8.576-3.392 1.344 0 2.752 0.64 3.136 2.048 1.792-0.896 4.032-1.216 5.888-0.32 0.832 0.32 1.28 1.152 1.536 1.984 1.856-1.024 4.224-1.152 6.080-0.064 0.896 0.512 1.408 1.472 1.6 2.432v1.088c-0.384 2.112-2.048 3.712-3.776 4.864-5.952 3.84-11.776 7.872-17.728 11.712-2.752 1.728-5.44 3.904-8.768 4.224h-1.152c-2.24-0.192-4.352-1.152-6.336-2.24-2.624-1.408-5.376-2.752-8-4.224-1.472-0.768-3.072-1.92-4.8-1.408-1.92 0.768-3.328 2.624-5.44 3.072-0.896 0.192-1.344-0.896-1.024-1.6 0.384-0.896 1.344-1.344 2.112-1.856 1.408-0.768 2.688-1.856 4.352-2.24 1.344-0.256 2.752 0.192 3.904 0.832 3.776 1.92 7.424 3.904 11.2 5.76 1.664 0.896 3.456 1.664 5.376 1.408 1.728-0.192 3.136-1.344 4.544-2.24 7.232-4.416 14.336-9.024 21.184-14.016 0.832-0.704 1.984-1.472 1.856-2.688-0.128-0.96-1.216-1.216-1.984-1.088-2.752 0.192-4.992 1.984-7.168 3.52-2.624 1.984-5.44 3.712-8.128 5.632-1.152 0.832-2.432 1.6-3.84 1.792-2.368 0.32-4.736 0.256-7.104 0.192-3.072-0.128-6.144-0.256-9.152-1.024-0.64-0.128-1.408-0.32-1.92-0.832-0.576-0.448-0.512-1.536 0.192-1.792s1.408 0 2.048 0.128c4.48 1.088 9.088 0.832 13.632 0.832 1.152 0 2.304 0.064 3.392-0.448 0.896-0.384 1.152-1.728 0.448-2.432-0.512-0.512-1.28-0.64-1.984-0.768-4.16-0.576-8.512-0.64-12.288-2.56-2.24-1.088-3.264-3.712-5.696-4.544-3.264-1.024-6.912-1.088-10.048 0.256-2.56 1.024-4.992 2.304-7.488 3.392-1.152 0.512-2.176 1.216-3.456 1.28-0.448 0.064-0.704-0.32-0.96-0.64v-0.64c0.448-1.152 1.664-1.536 2.688-2.048 3.904-1.664 7.68-3.84 11.904-4.672M43.776 38.72c-3.008 0.768-5.12 3.2-7.872 4.608 1.728-0.064 3.84 1.152 5.312-0.192 1.792-1.472 3.904-2.432 5.568-4.096-0.832-0.768-1.984-0.576-3.008-0.32M49.088 40.768c-1.984 1.28-3.968 2.624-5.824 4.096 0.704 0.512 1.152 1.344 1.472 2.176 2.432-1.344 4.608-3.136 6.976-4.608 0.896-0.576 2.112-0.96 2.24-2.176-1.536-0.96-3.456-0.384-4.864 0.512z\"></path> </svg>",
+            "heading": "Payment",
+            "subheading": "Secure System"
+          }
+        },
+        "image_XFyKeC": {
+          "type": "image",
+          "settings": {
+            "svg": "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"35\" height=\"35\" viewbox=\"0 0 64 64\"> <path fill=\"#333e48\" d=\"M35.84 0h23.68c2.432 0.32 4.416 2.304 4.48 4.8v22.784c-0.256 0.96-0.32 2.048-0.896 2.88-0.96 1.536-2.496 2.624-3.712 3.968-8.576 8.512-17.088 17.088-25.6 25.664-1.472 1.536-2.816 3.328-4.992 3.904h-1.088c-1.216-0.192-2.176-0.96-3.008-1.792-7.232-7.232-14.464-14.528-21.76-21.76-1.216-1.152-2.624-2.368-2.944-4.16v-0.832c0.64-2.56 2.88-4.096 4.672-5.888 8.32-8.256 16.576-16.64 24.896-24.96 1.856-1.856 3.52-4.224 6.272-4.608M37.12 2.816c-2.624-0.064-4.16 2.304-5.76 3.968-9.024 8.96-17.984 17.984-26.944 26.944-0.64 0.64-1.664 1.28-1.6 2.304 0.512 1.344 1.792 2.176 2.752 3.2 6.336 6.272 12.608 12.544 18.88 18.88 1.088 1.024 1.92 2.368 3.264 3.072 1.216 0.512 1.92-0.832 2.688-1.536 8.768-8.832 17.6-17.6 26.368-26.432 1.216-1.216 2.56-2.304 3.584-3.584 0.768-0.96 0.96-2.176 0.96-3.328-0.128-6.912-0.128-13.76 0-20.608-0.064-0.96-0.192-2.432-1.408-2.752-2.304-0.448-4.672-0.064-7.040-0.128-5.248 0.128-10.496-0.32-15.744 0zM49.664 7.36c1.856-0.576 3.968-0.32 5.44 0.896 2.176 1.792 2.56 5.376 0.896 7.616-1.6 2.176-4.8 2.88-7.168 1.6-2.176-1.088-3.264-3.712-2.816-6.016 0.256-1.92 1.792-3.584 3.648-4.096M50.88 9.856c-1.6 0.256-2.688 2.048-2.112 3.584 0.768 2.496 5.12 2.368 5.504-0.32 0.512-1.984-1.472-3.776-3.392-3.264z\"></path> </svg>",
+            "heading": "Only Best",
+            "subheading": "Brands"
+          }
+        }
+      },
+      "block_order": [
+        "image_AfhVpa",
+        "image_8BRiRa",
+        "image_j9Ubdc",
+        "image_pPkEDM",
+        "image_XFyKeC"
+      ],
+      "settings": {
+        "layout": "boxed",
+        "margin": "30px 0px 0px 0px",
+        "padding": "",
+        "border": false,
+        "bg_color": "",
+        "items_resp": "5,3,2",
+        "loop": false,
+        "controls": true,
+        "dots": true,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "featured_collection_with_image_iqTBLr": {
+      "type": "featured-collection-with-image",
+      "settings": {
+        "layout": "boxed",
+        "bg_color": "#ffffff",
+        "border_radius": "top",
+        "margin": "60px 0px 0px 0px",
+        "padding": "50px 50px 25px 50px, 30px 30px 20px 30px, 30px 30px 20px 30px",
+        "heading": "Electric Mobility",
+        "subheading": "<a href=\"/collections/audio-sound\" title=\"Audio & Sound\">View All Product ></a>",
+        "collection": "all-in-one",
+        "items_resp": "3,2",
+        "limit": 6,
+        "position": "left",
+        "link": "shopify://collections/accessories",
+        "loop": false,
+        "controls": true,
+        "dots": false,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "featured_collection_with_image_PVgBnG": {
+      "type": "featured-collection-with-image",
+      "settings": {
+        "layout": "boxed",
+        "bg_color": "#ffffff",
+        "border_radius": "bottom",
+        "margin": "",
+        "padding": "25px 50px 50px 50px, 20px 30px 30px 30px, 20px 30px 30px 30px",
+        "heading": "Earphones",
+        "subheading": "View All Earphones",
+        "collection": "headphone",
+        "items_resp": "3,2",
+        "limit": 6,
+        "position": "right",
+        "link": "shopify://collections/all",
+        "loop": false,
+        "controls": true,
+        "dots": false,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "product_tabs_v1_wr4c7L": {
+      "type": "product-tabs-v1",
+      "blocks": {
+        "special_product_PqqLFy": {
+          "type": "special-product",
+          "settings": {
+            "heading": "Featured",
+            "style": "normal",
+            "collection": "accessories",
+            "special_product_position": "middle",
+            "product": "",
+            "product_text": "",
+            "image_special_style": 1,
+            "link": ""
+          }
+        },
+        "link_ymjQDf": {
+          "type": "link",
+          "settings": {
+            "heading": "On Sale",
+            "collection": "eyewear"
+          }
+        },
+        "link_Atw6PB": {
+          "type": "link",
+          "settings": {
+            "heading": "Top Rated",
+            "collection": "keyboard"
+          }
+        }
+      },
+      "block_order": [
+        "special_product_PqqLFy",
+        "link_ymjQDf",
+        "link_Atw6PB"
+      ],
+      "settings": {
+        "layout": "boxed",
+        "bg_color": "#ffffff",
+        "border_radius": true,
+        "margin": "50px 0px 0px 0px, 40px 0px 0px 0px, 40px 0px 0px 0px",
+        "padding": "30px 50px 30px 50px",
+        "heading": "",
+        "subheading": "",
+        "items_resp": "7,3,2",
+        "items_spacing": false,
+        "limit": 14,
+        "tab_heading_vertical": false,
+        "alignment_tab_title": "left",
+        "tab_title_style": "1",
+        "enable_slider": true,
+        "loop": false,
+        "controls": true,
+        "controls_position": "2",
+        "dots": true,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "section_image_gallery_h6Ci6H": {
+      "type": "section-image-gallery",
+      "blocks": {
+        "block_style_LehThX": {
+          "type": "block-style",
+          "settings": {
+            "title_color": "",
+            "title_font_size": "",
+            "title_font_weight": 600,
+            "title_line_height": "",
+            "subtext_color": "",
+            "subtext_font_size": "",
+            "subtext_font_weight": 400,
+            "subtext_line_height": ""
+          }
+        },
+        "block_item_wR49mD": {
+          "type": "block-item",
+          "settings": {
+            "heading": "Super Deal",
+            "subtext": "",
+            "link": "shopify://collections/all"
+          }
+        },
+        "block_item_44wiU8": {
+          "type": "block-item",
+          "settings": {
+            "heading": "Gaming",
+            "subtext": "",
+            "link": "shopify://collections/gaming"
+          }
+        },
+        "block_item_9BBTF8": {
+          "type": "block-item",
+          "settings": {
+            "heading": "Laptops",
+            "subtext": "",
+            "link": "shopify://collections/laptops-computer"
+          }
+        },
+        "block_item_haDaAq": {
+          "type": "block-item",
+          "settings": {
+            "heading": "Drones",
+            "subtext": "",
+            "link": "shopify://collections/headphone"
+          }
+        },
+        "block_item_wyE3RR": {
+          "type": "block-item",
+          "settings": {
+            "heading": "Action Cameras",
+            "subtext": "",
+            "link": "shopify://collections/cameras"
+          }
+        },
+        "block_item_gXHUKw": {
+          "type": "block-item",
+          "settings": {
+            "heading": "Earphonts",
+            "subtext": "",
+            "link": "shopify://collections/headphone"
+          }
+        },
+        "block_item_9LgAxF": {
+          "type": "block-item",
+          "settings": {
+            "heading": "Smarthome",
+            "subtext": "",
+            "link": "shopify://collections/photography"
+          }
+        },
+        "block_item_FT4Ktj": {
+          "type": "block-item",
+          "settings": {
+            "heading": "Wearable",
+            "subtext": "",
+            "link": "shopify://collections/watches"
+          }
+        }
+      },
+      "block_order": [
+        "block_style_LehThX",
+        "block_item_wR49mD",
+        "block_item_44wiU8",
+        "block_item_9BBTF8",
+        "block_item_haDaAq",
+        "block_item_wyE3RR",
+        "block_item_gXHUKw",
+        "block_item_9LgAxF",
+        "block_item_FT4Ktj"
+      ],
+      "settings": {
+        "layout": "boxed",
+        "border_top": "border-top-none",
+        "round_image": false,
+        "margin": "50px 0px 0px 0px",
+        "padding": "",
+        "bg_color": "",
+        "items_resp": "8,6,4,3,2",
+        "items_spacing": true,
+        "enable_slider": true,
+        "loop": false,
+        "controls": false,
+        "dots": false,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "section_image_gallery_v2_43Dt6g": {
+      "type": "section-image-gallery-v2",
+      "blocks": {
+        "open_column_PDjCwm": {
+          "type": "open-column",
+          "settings": {
+            "title": "Open column",
+            "width": "41"
+          }
+        },
+        "block_item_rDtwbr": {
+          "type": "block-item",
+          "settings": {
+            "width": "100",
+            "link": "shopify://collections/gadgets"
+          }
+        },
+        "close_column_kBUGYt": {
+          "type": "close-column",
+          "settings": {
+            "title": "Close column"
+          }
+        },
+        "open_column_ieRqcf": {
+          "type": "open-column",
+          "settings": {
+            "title": "Open column",
+            "width": "59"
+          }
+        },
+        "block_item_78Kkkt": {
+          "type": "block-item",
+          "settings": {
+            "width": "33",
+            "link": "shopify://collections/accessories"
+          }
+        },
+        "block_item_U8yFA4": {
+          "type": "block-item",
+          "settings": {
+            "width": "33",
+            "link": "shopify://collections/all-in-one"
+          }
+        },
+        "block_item_HyQKA4": {
+          "type": "block-item",
+          "settings": {
+            "width": "33",
+            "link": "shopify://collections/eyewear"
+          }
+        },
+        "block_item_HHGqJj": {
+          "type": "block-item",
+          "settings": {
+            "width": "33",
+            "link": "shopify://collections/all-in-one"
+          }
+        },
+        "block_item_jPUzgT": {
+          "type": "block-item",
+          "settings": {
+            "width": "33",
+            "link": "shopify://collections/keyboard"
+          }
+        },
+        "block_item_dbtAnp": {
+          "type": "block-item",
+          "settings": {
+            "width": "33",
+            "link": "shopify://collections/keyboard"
+          }
+        },
+        "close_column_FJgbFH": {
+          "type": "close-column",
+          "settings": {
+            "title": "Close column"
+          }
+        }
+      },
+      "block_order": [
+        "open_column_PDjCwm",
+        "block_item_rDtwbr",
+        "close_column_kBUGYt",
+        "open_column_ieRqcf",
+        "block_item_78Kkkt",
+        "block_item_U8yFA4",
+        "block_item_HyQKA4",
+        "block_item_HHGqJj",
+        "block_item_jPUzgT",
+        "block_item_dbtAnp",
+        "close_column_FJgbFH"
+      ],
+      "settings": {
+        "layout": "boxed",
+        "margin": "50px 0px 0px 0px",
+        "padding": "",
+        "items_padding": 15,
+        "bg_color": ""
+      }
+    },
+    "featured_collection_C7qghn": {
+      "type": "featured-collection",
+      "settings": {
+        "style": "normal",
+        "layout": "boxed",
+        "bg_color": "#ffffff",
+        "border_radius": true,
+        "margin": "40px 0px 0px 0px",
+        "padding": "40px",
+        "heading": "Trending Products This Week",
+        "subheading": "<a href=\"/collections/audio-sound\" title=\"Audio & Sound\">View All Products</a>",
+        "collection": "cameras",
+        "items_resp": "6,5,3,2",
+        "items_spacing": false,
+        "limit": 10,
+        "link": "",
+        "position": "2",
+        "text_1": "",
+        "text_2": "",
+        "expire": "",
+        "textbox_1": "",
+        "textbox_2": "",
+        "button_label": "",
+        "button_link": "",
+        "enable_slider": true,
+        "loop": false,
+        "controls": true,
+        "controls_position": "2",
+        "dots": true,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "search_box_with_menu_E7cbL3": {
+      "type": "search-box-with-menu",
+      "settings": {
+        "bg_color": "rgba(0,0,0,0)",
+        "margin": "50px 0px 0px 0px",
+        "padding": "",
+        "search_box_heading": "Looking for something else",
+        "search_box_menu": ""
+      }
+    },
+    "section_featured_blog_YCwJay": {
+      "type": "section-featured-blog",
+      "settings": {
+        "layout": "boxed",
+        "bg_color": "",
+        "margin": "60px 0px 0px 0px, 40px 0px 0px 0px, 40px 0px 0px 0px",
+        "padding": "",
+        "heading": "News From Our Blog",
+        "blog": "news",
+        "items_resp": "3,2,2",
+        "visibility_date": false,
+        "show_excerpt": true,
+        "read_more_btn": true,
+        "blog_post_heading_fs": 16,
+        "blog_post_heading_fw": 600,
+        "items_spacing": false,
+        "limit": 6,
+        "enable_slider": true,
+        "loop": false,
+        "controls": false,
+        "dots": false,
+        "autoplay": false,
+        "autoplay_timeout": 4
+      }
+    },
+    "section_support_ndCJif": {
+      "type": "section-support",
+      "blocks": {
+        "support_tt9jRh": {
+          "type": "support",
+          "settings": {
+            "icon": "<svg width=\"25px\" height=\"25px\" viewbox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M20.9995 19.1864V16.4767C21.0105 16.0337 20.858 15.6021 20.5709 15.264C19.7615 14.3106 16.9855 13.7008 15.8851 13.935C15.0274 14.1176 14.4272 14.9788 13.8405 15.5644C11.5747 14.2785 9.69864 12.4062 8.41026 10.1448C8.99696 9.55929 9.85994 8.96036 10.0429 8.10428C10.2772 7.00777 9.66819 4.24949 8.72138 3.43684C8.38835 3.151 7.96253 2.99577 7.52331 3.00009H4.80817C3.77364 3.00106 2.91294 3.92895 3.00713 4.96919C3.00006 13.935 10.0001 21 19.0265 20.9929C20.0723 21.0873 21.0037 20.2223 20.9995 19.1864Z\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>",
+            "text": "<h4><a href=\"tel:+06 (800) 801 - 858\" title=\"tel:+06 (800) 801 - 858\">+06 (800) 801 - 858</a></h4><p>Mon - Fri : 8AM - 6PM</p>"
+          }
+        },
+        "support_p73fYx": {
+          "type": "support",
+          "settings": {
+            "icon": "<svg fill=\"currentColor\" width=\"25px\" height=\"25px\" viewbox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m16.484 11.976 6.151-5.344v10.627zm-7.926.905 2.16 1.875c.339.288.781.462 1.264.462h.017-.001.014c.484 0 .926-.175 1.269-.465l-.003.002 2.16-1.875 6.566 5.639h-20.009zm-6.572-7.516h20.03l-9.621 8.356c-.104.082-.236.132-.38.132-.005 0-.009 0-.014 0h.001c-.004 0-.009 0-.014 0-.144 0-.277-.05-.381-.133l.001.001zm-.621 1.266 6.15 5.344-6.15 5.28zm21.6-2.441c-.24-.12-.522-.19-.821-.19h-20.285c-.3.001-.584.071-.835.197l.011-.005c-.618.309-1.035.937-1.035 1.663v.004 12.168c.001 1.026.833 1.857 1.858 1.858h20.283c1.026-.001 1.857-.833 1.858-1.858v-12.168c0-.001 0-.002 0-.004 0-.727-.419-1.357-1.029-1.66l-.011-.005z\"></path></svg>",
+            "text": "<h6><strong>info@electro.com</strong></h6><p>Mail to us directly</p>"
+          }
+        },
+        "chat_3aikgM": {
+          "type": "chat",
+          "settings": {
+            "text": "START NEW CHAT"
+          }
+        }
+      },
+      "block_order": [
+        "support_tt9jRh",
+        "support_p73fYx",
+        "chat_3aikgM"
+      ],
+      "settings": {
+        "layout": "boxed",
+        "bg_color": "",
+        "margin": "40px 0px 0px 0px",
+        "padding": "",
+        "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"50px\" height=\"50px\" viewbox=\"0 0 256 256\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xml:space=\"preserve\">\n\n<defs>\n</defs>\n<g style=\"stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;\" transform=\"translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)\">\n\t<path d=\"M 44.449 1.944 c 11.266 0 21.858 4.387 29.824 12.353 c 6.529 6.529 10.657 14.799 11.937 23.916 c 1.239 8.821 -0.381 17.981 -4.56 25.793 l -0.373 0.697 l 0.205 0.764 l 5.981 22.323 l -22.734 -6.092 l -0.733 -0.197 l -0.679 0.34 c -5.816 2.91 -12.346 4.448 -18.885 4.448 c -11.26 0 -21.846 -4.384 -29.807 -12.345 c -16.445 -16.445 -16.445 -43.203 0 -59.648 C 22.592 6.331 33.183 1.944 44.449 1.944 M 60.427 73.352 c 3.192 0 5.899 -0.944 8.048 -2.807 c 0.529 -0.459 0.937 -1.047 1.212 -1.749 c 0.673 -1.717 2.382 -5.633 3.341 -7.815 c 0.776 -1.766 0.109 -3.842 -1.553 -4.828 l -11.136 -6.608 c -0.591 -0.351 -1.266 -0.536 -1.954 -0.536 c -0.63 0 -1.256 0.157 -1.81 0.455 l -7.52 4.037 l -6.278 -6.278 l -6.278 -6.278 l 4.037 -7.52 c 0.631 -1.175 0.6 -2.617 -0.081 -3.764 l -6.608 -11.136 c -0.687 -1.157 -1.948 -1.876 -3.291 -1.876 c -0.532 0 -1.049 0.109 -1.537 0.323 c -2.182 0.959 -6.098 2.668 -7.815 3.341 c -0.702 0.275 -1.29 0.683 -1.749 1.212 c -7.509 8.662 1.021 24.431 12.805 36.215 C 39.808 65.287 51.171 73.352 60.427 73.352 M 44.449 -0.056 c -11.306 0 -22.612 4.313 -31.238 12.939 c -17.252 17.252 -17.252 45.224 0 62.476 c 8.622 8.622 19.922 12.931 31.221 12.931 c 6.787 0 13.571 -1.553 19.779 -4.659 l 23.799 6.377 c 0.122 0.033 0.242 0.048 0.359 0.048 c 0.86 0 1.55 -0.825 1.311 -1.718 L 83.413 64.95 c 8.943 -16.715 6.372 -37.969 -7.726 -52.067 C 67.061 4.257 55.755 -0.056 44.449 -0.056 L 44.449 -0.056 z M 60.427 71.352 c -7.818 0 -18.262 -6.535 -26.753 -15.026 C 22.372 45.023 14.533 30.256 20.966 22.835 c 0.26 -0.3 0.598 -0.515 0.968 -0.66 c 1.755 -0.688 5.724 -2.42 7.89 -3.372 c 0.238 -0.105 0.487 -0.154 0.732 -0.154 c 0.627 0 1.232 0.326 1.571 0.897 l 6.608 11.136 c 0.327 0.551 0.342 1.233 0.039 1.797 l -4.097 7.632 c -0.381 0.711 -0.252 1.587 0.318 2.157 l 6.369 6.369 l 6.369 6.369 c 0.351 0.352 0.819 0.535 1.293 0.535 c 0.295 0 0.592 -0.071 0.864 -0.217 l 7.632 -4.097 c 0.27 -0.145 0.568 -0.217 0.865 -0.217 c 0.323 0 0.646 0.086 0.933 0.256 l 11.136 6.608 c 0.795 0.472 1.114 1.458 0.742 2.303 c -0.952 2.165 -2.684 6.135 -3.372 7.89 c -0.145 0.369 -0.36 0.708 -0.66 0.968 C 65.319 70.634 63.017 71.352 60.427 71.352 L 60.427 71.352 z\" style=\"stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: currentColor; fill-rule: nonzero; opacity: 1;\" transform=\" matrix(1 0 0 1 0 0) \" stroke-linecap=\"round\"></path>\n</g>\n</svg>",
+        "textbox_title": "<strong>YOU NEED HELP?</strong>",
+        "textbox_subtext": "Do not hastitate to ask, our specialists will help you choose proper products"
+      }
+    },
+    "section_newsletter_BPPBLE": {
+      "type": "section-newsletter",
+      "blocks": {
+        "support_fegirb": {
+          "type": "support",
+          "settings": {
+            "icon": "<svg width=\"30px\" height=\"30px\" viewbox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M20.9995 19.1864V16.4767C21.0105 16.0337 20.858 15.6021 20.5709 15.264C19.7615 14.3106 16.9855 13.7008 15.8851 13.935C15.0274 14.1176 14.4272 14.9788 13.8405 15.5644C11.5747 14.2785 9.69864 12.4062 8.41026 10.1448C8.99696 9.55929 9.85994 8.96036 10.0429 8.10428C10.2772 7.00777 9.66819 4.24949 8.72138 3.43684C8.38835 3.151 7.96253 2.99577 7.52331 3.00009H4.80817C3.77364 3.00106 2.91294 3.92895 3.00713 4.96919C3.00006 13.935 10.0001 21 19.0265 20.9929C20.0723 21.0873 21.0037 20.2223 20.9995 19.1864Z\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>",
+            "text": "<a href=\"/pages/contact-us\" target=\"_blank\" title=\"Contact us\">Call Us</a>"
+          }
+        },
+        "support_Q7RTTR": {
+          "type": "support",
+          "settings": {
+            "icon": "<svg fill=\"currentColor\" width=\"30px\" height=\"30px\" viewbox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"m16.484 11.976 6.151-5.344v10.627zm-7.926.905 2.16 1.875c.339.288.781.462 1.264.462h.017-.001.014c.484 0 .926-.175 1.269-.465l-.003.002 2.16-1.875 6.566 5.639h-20.009zm-6.572-7.516h20.03l-9.621 8.356c-.104.082-.236.132-.38.132-.005 0-.009 0-.014 0h.001c-.004 0-.009 0-.014 0-.144 0-.277-.05-.381-.133l.001.001zm-.621 1.266 6.15 5.344-6.15 5.28zm21.6-2.441c-.24-.12-.522-.19-.821-.19h-20.285c-.3.001-.584.071-.835.197l.011-.005c-.618.309-1.035.937-1.035 1.663v.004 12.168c.001 1.026.833 1.857 1.858 1.858h20.283c1.026-.001 1.857-.833 1.858-1.858v-12.168c0-.001 0-.002 0-.004 0-.727-.419-1.357-1.029-1.66l-.011-.005z\"></path></svg>",
+            "text": "<a href=\"/pages/contact-us\" target=\"_blank\" title=\"Contact us\">E-mail</a>"
+          }
+        },
+        "support_c7a33w": {
+          "type": "support",
+          "settings": {
+            "icon": "<svg width=\"30px\" height=\"30px\" viewbox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M9 12C9 12.5523 8.55228 13 8 13C7.44772 13 7 12.5523 7 12C7 11.4477 7.44772 11 8 11C8.55228 11 9 11.4477 9 12Z\" fill=\"currentColor\"></path>\n<path d=\"M13 12C13 12.5523 12.5523 13 12 13C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11C12.5523 11 13 11.4477 13 12Z\" fill=\"currentColor\"></path>\n<path d=\"M17 12C17 12.5523 16.5523 13 16 13C15.4477 13 15 12.5523 15 12C15 11.4477 15.4477 11 16 11C16.5523 11 17 11.4477 17 12Z\" fill=\"currentColor\"></path>\n<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M22.75 12C22.75 6.06294 17.9371 1.25 12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 13.7183 1.65371 15.3445 2.37213 16.7869C2.47933 17.0021 2.50208 17.2219 2.4526 17.4068L1.857 19.6328C1.44927 21.1566 2.84337 22.5507 4.3672 22.143L6.59324 21.5474C6.77814 21.4979 6.99791 21.5207 7.21315 21.6279C8.65553 22.3463 10.2817 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12ZM12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C10.5189 21.25 9.12121 20.9025 7.88191 20.2852C7.38451 20.0375 6.78973 19.9421 6.20553 20.0984L3.97949 20.694C3.57066 20.8034 3.19663 20.4293 3.30602 20.0205L3.90163 17.7945C4.05794 17.2103 3.96254 16.6155 3.7148 16.1181C3.09752 14.8788 2.75 13.4811 2.75 12C2.75 6.89137 6.89137 2.75 12 2.75Z\" fill=\"currentColor\"></path>\n</svg>",
+            "text": "<a href=\"/pages/contact-us\" target=\"_blank\" title=\"Contact us\">Chat Online</a>"
+          }
+        }
+      },
+      "block_order": [
+        "support_fegirb",
+        "support_Q7RTTR",
+        "support_c7a33w"
+      ],
+      "settings": {
+        "layout": "boxed",
+        "bg_color": "#ffffff",
+        "margin": "40px 0px 0px 0px",
+        "padding": "50px 0px 0px 0px,",
+        "enable_newsletter": true,
+        "title": "<strong>NEWSLETTER </strong>",
+        "subtext": "<p>Subscribe to get the latest deals, promotions and offering.</p>",
+        "subtext_2": "",
+        "newsletter_placholder": "Enter your email",
+        "newsletter_success": "Thanks for subscribing",
+        "background": "rgba(0,0,0,0)",
+        "show_textbox": false,
+        "textbox_title": "<strong>You Need Help?</strong>",
+        "textbox_subtext": "Do not hastitate to ask, our specialists will help you choose proper products"
+      }
+    }
+  },
+  "order": [
+    "slideshow_MAHRrc",
+    "section_categories_floating_banner_H6bwrz",
+    "section_single_banner_with_product_6M9GYV",
+    "164983532526a9abea",
+    "section_policy_HWMT7r",
+    "featured_collection_with_image_iqTBLr",
+    "featured_collection_with_image_PVgBnG",
+    "product_tabs_v1_wr4c7L",
+    "section_image_gallery_h6Ci6H",
+    "section_image_gallery_v2_43Dt6g",
+    "featured_collection_C7qghn",
+    "search_box_with_menu_E7cbL3",
+    "section_featured_blog_YCwJay",
+    "section_support_ndCJif",
+    "section_newsletter_BPPBLE"
+  ]
+}

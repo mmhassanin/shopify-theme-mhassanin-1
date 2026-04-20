@@ -1,0 +1,151 @@
+<link rel="stylesheet" href="{{'section-image-with-textbox.css' | asset_url}}" media="print" onload="this.media='all'">
+
+{%- liquid
+  assign bg_class = ''
+  assign sectionID  = '#section-' | append: section.id
+
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+-%}
+
+<div class="section-image-with-textbox" id="section-{{section.id}}">
+  <div class="{% if template == 'index' or template contains 'page' %}{{ layout_class }}{% endif %}">
+    <div class="section-wrapper">
+
+      <div class="section-body row">
+        {%- for block in section.blocks -%}
+          <div class="block-widget widget-type-{{ block.type }} col-md-6 col-12">
+            {%- if block.type == 'textbox' -%}
+              <div class="block-widget-inner">
+                {%- if block.settings.title != blank -%}
+                  <div class="block-widget_title">{{ block.settings.title }}</div>
+                {%- endif -%}
+
+                {%- if block.settings.textbox != blank -%}
+                  <div class="block-widget_text">{{ block.settings.textbox }}</div>
+                {%- endif -%}
+              </div>
+
+            {%- else -%}
+              {%- unless block.settings.image == blank -%}
+                <div class="block-widget-inner">
+                  <a href="{{  block.settings.link }}">
+                      {%- render 'image-style' image:  block.settings.image, limit: 767 -%}
+                  </a>
+                </div>
+              {%- endunless -%}
+
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme' type: 'section-style', config: section.settings, preClassID: sectionID, classID: bg_class -%}
+{%- endcapture -%}
+
+{%- style -%}{{section_css | strip | strip_newlines | remove: '  '}}{%- endstyle -%}
+
+{%- schema -%}
+  {
+    "name" : "t:sections.image-with-textbox.name",
+    "tag" : "section",
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings" : [
+      {
+        "type": "header",
+        "content": "t:sections.common.general"
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "t:sections.common.layout_mode",
+        "default": "boxed",
+        "options": [
+          {
+            "value": "boxed",
+            "label": "Boxed"
+          },
+          {
+            "value": "full",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "margin",
+        "label": "t:sections.common.section_margin",
+        "info": "t:sections.common.order_info"
+      },
+      {
+        "type": "text",
+        "id": "padding",
+        "label": "t:sections.common.section_padding",
+        "info": "t:sections.common.order_info"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "t:sections.common.background_color"
+      }
+    ],
+    "blocks": [
+      {
+        "type" : "textbox",
+        "name" : "t:sections.common.textbox",
+        "settings" : [
+          {
+            "type": "inline_richtext",
+            "id": "title",
+            "label": "t:sections.common.heading"
+          },
+          {
+            "type": "richtext",
+            "id": "textbox",
+            "label": "t:sections.common.textbox"
+          }
+        ]
+      },
+      {
+        "type" : "image",
+        "name" : "t:sections.common.image",
+        "settings" : [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.common.image"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "t:sections.common.link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name" : "t:sections.image-with-textbox.name",
+        "blocks" : [
+          {
+            "type" : "textbox"
+          },
+          {
+            "type" : "image"
+          }
+        ]
+      }
+    ]
+  }
+{%- endschema -%}

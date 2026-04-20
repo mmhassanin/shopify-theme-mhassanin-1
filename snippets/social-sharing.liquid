@@ -1,0 +1,38 @@
+{% if template contains 'article' or template contains 'blog' %}
+{% capture permalinkURL %}{{ shop.url }}{{ article.url }}{% endcapture %}
+{% capture shareTitle %}{{ article.title }}{% endcapture %}
+{% capture shareHandle %}{{ article.handle }}{% endcapture %}
+
+{% elsif template contains 'product' %}
+{% capture permalinkURL %}{{ shop.url }}{{ product.url }}{% endcapture %}
+{% capture shareTitle %}{{ product.title }}{% endcapture %}
+{% capture shareHandle %}{{ product.handle }}{% endcapture %}
+
+{% elsif template == 'password' %}
+{% capture permalinkURL %}{{ shop.url }}{% endcapture %}
+{% capture shareTitle %}{% unless shop.description == blank %}{{ shop.description | url_param_escape }}{% else %}{{ shop.name | url_param_escape }}{% endunless %}{% endcapture %}
+{% endif %}
+
+<div class="share-links social-sharing" data-permalink="{{ permalinkURL }}">
+  <ul class="list-inline">
+    
+    {% if settings.share_facebook %}
+      <li>
+        <a class="facebook" target="_blank" rel="noopener" href="//www.facebook.com/sharer.php?u={{ permalinkURL }}" title="Facebook">
+          {%- render 'svg', type: 'facebook' -%}
+          <span>Share</span>
+        </a>
+      </li>
+    {% endif %} 
+    
+    {% if settings.share_twitter %}
+    <li>
+      <a class="twitter" target="_blank" rel="noopener" href="//twitter.com/share?url={{ permalinkURL }}&amp;text={{ shareHandle }}" title="Twitter">
+        {%- render 'svg', type: 'twitter' -%}
+        <span>Tweet</span>
+      </a>
+    </li>
+    {% endif %}  
+
+  </ul>
+</div>

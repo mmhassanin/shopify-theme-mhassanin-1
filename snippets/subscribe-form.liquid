@@ -1,0 +1,58 @@
+{%- liquid
+  assign frmHolder = 'general.form.email_placeholder' | t
+  assign button_style  = button_style | default: 1
+  assign _btnLabel = 'contact.form.subscribe' | t
+  assign btnLabel  = btnLabel | default: _btnLabel
+-%}
+
+{%- case type -%}
+  {%- when 'mailchimp' -%}
+    {%- liquid
+      unless url contains '-json'
+        assign url = url | replace: '?', '-json?'
+      endunless
+    -%}
+    <form action="{{ url }}" data-type="mailchimp" method="post" class="form-subscribe" name="mc-embedded-subscribe-form" target="_blank" rel="noopener">
+      <input class="form-control" type="email" placeholder="{{ frmHolder }}" name="EMAIL" required/>
+      <button type="submit" class="btn btn-custom" name="subscribe">
+        <span class="btn-text">{{ 'general.button.subscribe' | t }}</span>
+      </button>
+    </form>
+  {% comment %} end {% endcomment %}
+
+  {%- when 'klaviyo' -%}
+    {%- assign klaviyo_id  = url | split: 'g=' | last -%}
+
+    <form action="{{url}}" class="form-subscribe klaviyo_styling" target="_blank" data-type="klaviyo" novalidate="novalidate"{% if isPopup %} data-ajax-submit="//manage.kmail-lists.com/ajax/subscriptions/subscribe" method="GET"{% else %} method="post"{% endif %}>
+      <input type="hidden" name="g" value="{{klaviyo_id}}">
+      <input type="email" class="form-control" value="" name="email" class="contact_email" placeholder="{{ frmHolder }}" required>
+      <button type="submit" class="btn btn-custom" name="subscribe">
+        <span class="btn-text">{{ 'general.button.subscribe' | t }}</span>
+      </button>
+    </form>
+    {%- if isPopup -%}
+      <script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+    {%- endif -%}
+  {% comment %} end {% endcomment %}
+
+  {%- when 'shopify' -%}
+    {% form 'customer', id: 'ContactFooter',class: 'subscribe-form' %}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <div class="newsletter-form__field-wrapper">
+        <div class="field{% if form.posted_successfully? %} d-none{% endif %}">
+          <input type="email" name="contact[email]" placeholder="{{ placeholder }}" aria-label="{{ placeholder }}" aria-required="true" autocorrect="off" autocapitalize="off" required>
+          <button type="submit" class="btn btn-{{button_style}}" name="subscribe">
+            <span class="btn-text">{{ 'general.button.subscribe' | t }}</span>
+          </button>
+        </div>
+
+        {%- if form.posted_successfully? -%}
+          <div class="field newsletter-form__message newsletter-form__message--success form__message" id="ContactFooter-success">
+            <span>{{ success }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+  
+    {% endform %}
+  {% comment %} end {% endcomment %}
+{%- endcase -%}

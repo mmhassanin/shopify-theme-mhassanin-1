@@ -1,0 +1,186 @@
+{%- liquid
+  assign info_heading    = section.settings.heading
+  assign faqs_heading = section.settings.faqs_heading
+-%}
+
+{%- capture heading_section -%}
+  {%- if heading != blank -%} <h1 class="page-title">{{heading}}</h1> {%- endif -%}
+{%- endcapture -%}
+
+<div class="section-faqs">
+  <div class="container">
+    <div class="section-header text-center"><h1 class="page-title">{{page.title}}</h1></div>
+
+    <div class="section-body">
+
+      {%- if section.settings.show_shipping_info -%}
+        <div class="shipping-info-container">
+
+          {%- if info_heading != blank -%}<h2 class="shipping-info-title">{{ info_heading }}</h2>{%- endif -%}
+
+          <div class="shipping-info-content row">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'info-item' -%}
+                {%- liquid
+                  assign question = block.settings.question
+                  assign answer   = block.settings.answer
+
+                  if question == blank or answer == blank
+                    continue
+                  endif
+                -%}
+
+                <div class="item col-sm-6 col-12">
+                  <div class="item-question">
+                    <h6>{{question}}</h6>
+                  </div>
+                  <div class="item-answer">
+                    {{answer}}
+                  </div>
+                </div>
+              {%- endif -%}
+              
+            {%- endfor -%}
+          </div>
+
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_faqs_item -%}
+        <div class="faqs-container">
+          {%- if faqs_heading != blank -%}<h2 class="faqs-items-heading">{{ faqs_heading }}</h2>{%- endif -%}
+
+          <div class="faqs-items-content">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'faq-item' -%}
+                {%- liquid
+                  assign question = block.settings.question
+                  assign answer   = block.settings.answer
+
+                  if question == blank or answer == blank
+                    continue
+                  endif
+                -%}
+
+                <div class="faq">
+                  <div class="question js-collapse-trigger">
+                    <h3>{{question}}</h3>
+                    {%- render 'svg' type: 'angle-down' -%}
+                  </div>
+                  <div class="answer collapse">
+                    <div class="collapse-wrapper">{{answer}}</div>
+                  </div>
+                </div>
+              {%- endif -%}
+
+            {%- endfor -%}
+          </div>
+
+        </div>
+
+        <script>
+          (() => {
+            [...document.getElementsByClassName('js-collapse-trigger')].forEach(button => {
+                let target = button.nextElementSibling;
+                button.addEvent('click', function() {
+                if(this.classList.contains('active')){
+                  this.classList.remove('active');
+                  target.style.height = "";
+                  target.classList.remove('is-open');
+                }else{
+                  let alltab = document.getElementsByClassName('js-collapse-trigger');
+                  for (let i = 0; i < alltab.length; i++) {
+                    alltab[i].classList.remove('active');
+                    alltab[i].nextElementSibling.style.height = "";
+                    alltab[i].nextElementSibling.classList.remove('is-open');
+                  }
+      
+                  this.classList.add('active');
+                  target.style.height = target.firstElementChild.offsetHeight + "px";
+                  target.classList.add('is-open');
+                }
+                })
+            })
+          })()
+        </script>
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+
+{%- schema -%}
+  {
+    "name" : "t:sections.faqs-template.name",
+    "tag" : "section",
+    "settings" : [
+      {
+        "type": "header",
+        "content": "t:sections.faqs-template.settings.shipping_information.header"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_shipping_info",
+        "label": "t:sections.faqs-template.settings.shipping_information.show_shipping_information",
+        "default" : true
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "t:sections.common.heading",
+        "default" : "Shipping Information"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.faqs-template.settings.faq.header"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_faqs_item",
+        "label": "t:sections.faqs-template.settings.faq.show_faq",
+        "default" : true
+      },
+      {
+        "type": "text",
+        "id": "faqs_heading",
+        "label": "t:sections.common.heading",
+        "default" : "FAQ Second Version"
+      }
+    ],
+    "blocks": [
+      {
+        "type" : "info-item",
+        "name" : "t:sections.faqs-template.blocks.shipping_information.name",
+        "settings" : [
+          {
+            "type" : "textarea",
+            "id" : "question",
+            "label" : "t:sections.faqs-template.blocks.shipping_information.settings.question.label"
+          },
+          {
+            "type" : "richtext",
+            "id" : "answer",
+            "label" : "t:sections.faqs-template.blocks.shipping_information.settings.answer.label"
+          }
+        ]
+      },
+      {
+        "type" : "faq-item",
+        "name" : "t:sections.faqs-template.blocks.faq_item.name",
+        "settings" : [
+          {
+            "type" : "textarea",
+            "id" : "question",
+            "label" : "t:sections.faqs-template.blocks.faq_item.settings.question.label"
+          },
+          {
+            "type" : "richtext",
+            "id" : "answer",
+            "label" : "t:sections.faqs-template.blocks.faq_item.settings.answer.label"
+          }
+        ]
+      }
+    ]
+  }
+{%- endschema -%}

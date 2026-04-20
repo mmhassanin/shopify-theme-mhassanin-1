@@ -1,0 +1,373 @@
+{%- liquid
+  assign block_size = section.blocks | size
+  assign visible_on_desktop = section.settings.visible_on_desktop
+  assign visible_on_tablet = section.settings.visible_on_tablet
+  assign visible_on_mobile = section.settings.visible_on_mobile
+  assign hidden_device_number = 0
+
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+-%}
+
+{%- capture visible_class -%}
+  {%- unless visible_on_mobile %} d-none
+    {%- assign hidden_device_number = hidden_device_number | plus: 1 -%}
+  {%- endunless -%}
+  {%- if visible_on_tablet %} d-md-block
+  {%- else %} d-md-none
+    {%- assign hidden_device_number = hidden_device_number | plus: 1 -%}
+  {%- endif -%}
+  {%- if visible_on_desktop %} d-lg-block
+  {%- else %} d-lg-none
+    {%- assign hidden_device_number = hidden_device_number | plus: 1 -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if block_size > 0 and hidden_device_number != 3 -%}
+  {%- liquid
+    assign default_color = 'rgba(0,0,0,0)'
+    assign content_color = section.settings.content_color | default: default_color
+    assign loop  = section.settings.loop
+    assign autoplay = section.settings.autoplay
+    assign bg_image = section.settings.bg_image
+    assign bg_full  = section.settings.bg_full
+    assign section_id = '#section-' | append: section.id
+    assign slider_id = '#slider-' | append: section.id
+    assign autoplay_timeout = section.settings.autoplay_timeout
+    assign content_style_block = section.blocks | where: 'type' , 'content-style' | first
+    assign announcement_blocks = section.blocks | where: 'type', 'block-item'
+  -%}
+
+  {%- if bg_full -%}
+    {%- assign bg_class = '' -%}
+    {%- capture bg_wide -%}{%- render 'bgset' image: bg_image -%}{%- endcapture-%}
+  {%- else -%}
+    {%- assign bg_class = '' -%}
+    {%- capture bg_boxed -%}{%- render 'bgset' image: bg_image -%}{%- endcapture-%}
+  {%- endif -%}
+
+  <div class="announcement-bar {{bg_wide}} {{visible_class}}" id="section-{{section.id}}" data-section-id="{{section.id}}" data-section-type="announcement-bar">
+    <div class="{{layout_class}}">
+      <div class="section-wrapper {{bg_boxed}}">
+        <div class="section-body">
+          <slider-component>
+            <div class="slider-container js-slider-container">
+              <div class="slider-wrapper">
+                <div class="slider-list d-block" id="slider-{{section.id}}">
+                  {%- for block in announcement_blocks -%}
+                    {%- capture attributes -%}{%- if request.design_mode -%}data-block-id="{{block.id}}" data-index="{{forloop.index0}}"{{block.shopify_attributes}}{%- endif -%}{%- endcapture -%}
+                    <div class="slider-item w-100 text-center" {{attributes}}>
+                      <div class="announcement-item">{{block.settings.content}}</div>
+                    </div>
+                  {%- endfor -%}
+                </div>
+                {%- if block_size > 1 -%}
+                  {%- render 'set-tns-config'
+                    slider_id: slider_id,
+                    loop     : loop,
+                    autoplay : autoplay,
+                    total_item: announcement_blocks.size,
+                    responsive: false,
+                    autoplay_timeout: autoplay_timeout -%}
+                {%- endif -%}
+              </div>
+            </div>
+          </slider-component>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%- capture section_css -%}
+    {%- if content_style_block != blank -%}
+      {%- liquid
+        assign cl = content_style_block.settings.cl
+        assign fs = content_style_block.settings.fs
+        assign fw = content_style_block.settings.fw
+        assign lh = content_style_block.settings.lh
+      -%}
+      {{section_id}} .announcement-item a {color: inherit;}
+      {%- render 'css-responsive' preClassID: section_id, classID: ' .announcement-item',
+        value_1: fs, property_1:'font-size'
+        value_2: fw, property_2: 'font-weight'
+        value_3: lh, property_3: 'line-height'
+        value_4: cl, property_4: 'color'
+        -%}
+    {%- endif -%}
+    {%- render 'snippet-theme' type: 'section-style', preClassID: section_id, classID: bg_class, config: section.settings -%}
+  {%- endcapture -%}
+  {%- style -%}{{section_css | strip | strip_newlines | remove: '  '}}{%- endstyle -%}
+
+  <script>window.theme.customElementsList = [...window.theme.customElementsList,"slider-component"];window.theme.sectionRegister = [...window.theme.sectionRegister,"announcement-bar"];</script>
+
+  {%- if request.design_mode -%}
+    <script>
+      (() => {
+
+        document.addEvent('shopify:block:select', ({detail: {blockId,sectionId,load}}) => {
+          let sectionElm = document.getElementById('section-{{section.id}}');
+          let sliderElm = sectionElm.querySelector('slider-component');
+          let blockElm = sectionElm.querySelector(`[data-block-id='${blockId}']`);
+          sliderElm.pause();
+          sliderElm.goTo(blockElm.dataset.index);
+        });
+
+        document.addEvent('shopify:section:deselect', () => {
+          let sectionElm = document.getElementById('section-{{section.id}}');
+          let sliderElm = sectionElm.querySelector('slider-component');
+          sliderElm.play();
+        });
+      })();
+
+    </script>
+  {%- endif -%}
+
+{%- endif -%}
+
+{%- schema -%}
+{
+  "name": "t:sections.announcement-bar.name",
+  "tag": "section",
+  "presets": [
+    {
+      "name": "t:sections.announcement-bar.name"
+    }
+  ],
+  "limit": 1,
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.common.layout_mode",
+      "default": "boxed",
+      "options": [
+        {
+          "value": "boxed",
+          "label": "Boxed"
+        },
+        {
+          "value": "full",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type" : "checkbox",
+      "id" : "visible_on_desktop",
+      "label" : "t:sections.common.visible_on_desktop",
+      "default": true
+    },
+    {
+      "type" : "checkbox",
+      "id" : "visible_on_tablet",
+      "label" : "t:sections.common.visible_on_tablet",
+      "default": true
+    },
+    {
+      "type" : "checkbox",
+      "id" : "visible_on_mobile",
+      "label" : "t:sections.common.visible_on_mobile",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.background_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "bg_full",
+      "label": "t:sections.common.full_background",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "t:sections.common.background_image"
+    },
+    {
+      "type": "select",
+      "id": "bg_size",
+      "label": "t:sections.common.background_size",
+      "options": [
+        {
+          "value": "auto",
+          "label": "t:sections.common.auto"
+        },
+        {
+          "value": "cover",
+          "label": "t:sections.common.cover"
+        },
+        {
+          "value": "contain",
+          "label": "t:sections.common.contain"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "bg_position",
+      "label": "t:sections.common.background_position",
+      "options": [
+        {
+          "value": "left top",
+          "label": "t:sections.common.left_top"
+        },
+        {
+          "value": "left center",
+          "label": "t:sections.common.left_center"
+        },
+        {
+          "value": "left bottom",
+          "label": "t:sections.common.left_bottom"
+        },
+        {
+          "value": "right top",
+          "label": "t:sections.common.right_top"
+        },
+        {
+          "value": "right center",
+          "label": "t:sections.common.right_center"
+        },
+        {
+          "value": "right bottom",
+          "label": "t:sections.common.right_bottom"
+        },
+        {
+          "value": "center top",
+          "label": "t:sections.common.center_top"
+        },
+        {
+          "value": "center center",
+          "label": "t:sections.common.center_center"
+        },
+        {
+          "value": "center bottom",
+          "label": "t:sections.common.center_bottom"
+        }
+      ],
+      "default": "center center"
+    },
+    {
+      "type": "select",
+      "id": "bg_repeat",
+      "label": "t:sections.common.background_repeat",
+      "options": [
+        {
+          "value": "no-repeat",
+          "label": "t:sections.common.no_repeat"
+        },
+        {
+          "value": "repeat",
+          "label": "t:sections.common.repeat"
+        },
+        {
+          "value": "repeat-x",
+          "label": "t:sections.common.repeat_x"
+        },
+        {
+          "value": "repeat-y",
+          "label": "t:sections.common.repeat_y"
+        }
+      ],
+      "default": "no-repeat"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.slider_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "t:sections.common.loop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.common.autoplay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_timeout",
+      "label": "t:sections.common.autoplay_timeout",
+      "step": 0.1,
+      "min": 2,
+      "max": 10,
+      "unit": "s",
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "block-item",
+      "name": "t:sections.common.block_item",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.common.textbox",
+          "default": "<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+        }
+      ]
+    },
+    {
+      "type": "content-style",
+      "limit": 1,
+      "name": "t:sections.announcement-bar.blocks.content_style.name",
+      "settings": [
+        {
+          "type": "color",
+          "id": "cl",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "fs",
+          "label": "t:sections.common.font_size"
+        },
+        {
+          "type": "range",
+          "id": "fw",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 400
+        },
+        {
+          "type": "text",
+          "id": "lh",
+          "label": "t:sections.common.line_height"
+        }
+      ]
+    }
+  ]
+}
+{%- endschema -%}

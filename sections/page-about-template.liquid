@@ -1,0 +1,83 @@
+{%- if section.blocks.size > 0 -%}
+  <div class="section-about-us" id="section-{{section.id}}"> 
+    <div class="section-wrapper container">
+      <div class="section-header text-center">
+      </div>
+
+      <div class="section-body">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-12 col-left">
+            {%- for block in section.blocks -%} 
+              {%- if block.type == 'textbox' -%}
+                <div class="text-box-left">
+                  <div class="tbl-item">
+                    {%- assign heading = block.settings.heading -%}
+                    {%- assign subtext = block.settings.subtext -%}
+
+                    {%- unless heading == blank -%}<h4>{{heading}}</h4>{%- endunless -%}
+                    {%- unless subtext == blank -%}<p>{{subtext}}</p>{%- endunless -%}
+                    
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          
+          <div class="col-lg-4 col-md-5 col-sm-12 col-right">
+            {%- for block in section.blocks -%} 
+              {%- if block.type == 'policy' -%}
+                <div class="text-box-right">
+                  <div class="item">
+                    {%- assign text = block.settings.text -%} 
+                    <span class="icon">{%- render 'svg' type: 'plus' -%}</span>
+                    {%- unless text == blank -%}<h5>{{text}}</h5>{%- endunless -%} 
+                  </div>   
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          
+        </div>
+      </div>
+
+    </div>
+  </div>
+{%- endif -%}
+
+{%- schema -%}
+  {
+    "name" : "t:sections.about-us.name",
+    "tag" : "section",
+    "settings" : [
+    ],
+    "blocks": [
+      {
+        "type" : "textbox",
+        "name" : "t:sections.common.textbox",
+        "settings" : [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "t:sections.common.heading"
+          },
+          {
+            "type": "textarea",
+            "id": "subtext",
+            "label": "t:sections.common.subtext"
+          }
+        ]
+      },
+      {
+        "type" : "policy",
+        "name" : "Policy",
+        "settings" : [
+          {
+            "type": "text",
+            "id": "text",
+            "label": "t:sections.common.text"
+          }
+        ]
+      }
+    ]
+  }
+{%- endschema -%}

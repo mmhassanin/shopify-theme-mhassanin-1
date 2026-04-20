@@ -1,0 +1,121 @@
+<link rel="stylesheet" href="{{'section-list-collections-v3.css' | asset_url}}" media="print" onload="this.media='all'">
+
+{%- liquid
+  assign bg_class = ''
+  assign sectionID  = '#section-' | append: section.id
+
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+-%}
+
+<div class="section-list-collections-v3" id="section-{{section.id}}">
+  <div class="{% if template == 'index' or template contains 'page' %}{{ layout_class }}{% endif %}">
+    <div class="section-wrapper">
+
+      <div class="section-body">
+        <div class="list-collections-v3-inner">
+          {%- if section.settings.menu != blank -%}
+            {%- for link in linklists[section.settings.menu].links -%}
+              {%- capture icon_menu -%}
+                {%- liquid
+                  assign link_title = link.title | downcase
+                  assign metafield_shop = shop.metafields.c_f
+                  assign number_metafield_shop = metafield_shop.icon_code.size | minus: 1
+                -%}
+
+                {%- for i in (0..number_metafield_shop) -%}
+                  {%- assign icon_handle = metafield_shop.icon_handle[i] | downcase -%}
+                  {%- if icon_handle == link_title -%}
+                    {{- metafield_shop.icon_code[i] -}} 
+                    {%- break -%}
+                  {%- endif -%} 
+                {%- endfor -%}
+              {%- endcapture -%}
+
+              <div class="menu-item">
+                <div class="menu-item_wrapper">
+                  <a href="{{link.url}}">
+                    <span class="icon-menu">{{icon_menu}}</span>
+                    <span>{{link.title}}</span>
+                  </a>
+                </div>
+              </div>
+            {%- endfor -%}
+
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme' type: 'section-style', config: section.settings, preClassID: sectionID, classID: bg_class -%}
+{%- endcapture -%}
+
+{%- style -%}{{section_css | strip | strip_newlines | remove: '  '}}{%- endstyle -%}
+
+{%- schema -%}
+  {
+    "name" : "t:sections.list-collections-v3.name",
+    "tag" : "section",
+    "limit": 1,
+    "disabled_on": {
+      "groups": ["header", "footer"]
+    },
+    "settings" : [
+      {
+        "type": "header",
+        "content": "t:sections.common.general"
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "t:sections.common.layout_mode",
+        "default": "boxed",
+        "options": [
+          {
+            "value": "boxed",
+            "label": "Boxed"
+          },
+          {
+            "value": "full",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "margin",
+        "label": "t:sections.common.section_margin",
+        "info": "t:sections.common.order_info"
+      },
+      {
+        "type": "text",
+        "id": "padding",
+        "label": "t:sections.common.section_padding",
+        "info": "t:sections.common.order_info"
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "t:sections.common.background_color"
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "t:sections.common.menu_item"
+      }
+    ],
+    "presets": [
+      {
+        "name" : "t:sections.list-collections-v3.name"
+      }
+    ]
+  }
+{%- endschema -%}

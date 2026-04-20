@@ -1,0 +1,43 @@
+<link rel="preload" href="{{'header.css' | asset_url}}" as="style">
+<link rel="stylesheet" href="{{'header.css' | asset_url}}" media="all">
+
+<link rel="preload" href="{{'themes.min.css' | asset_url}}" as="style">
+<link rel="stylesheet" href="{{'themes.min.css' | asset_url}}" media="all">
+
+{% if settings.direction == 'RTL' %}
+  <link rel="stylesheet" href="{{ 'themes-rtl.css' | asset_url }}" media="all">
+{% endif %}
+
+<link rel="stylesheet" href="{{ 'product-items.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'product-items.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- if template contains 'product' -%}
+  <link rel="stylesheet" href="{{'product-page.css' | asset_url}}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{'fancybox.css' | asset_url}}" media="print" onload="this.media='all'">
+  <noscript>{{ 'product-page.css' | asset_url | stylesheet_tag }}</noscript>
+  <noscript>{{ 'fancybox.css' | asset_url | stylesheet_tag }}</noscript>
+{%- endif -%}
+
+{%- if template contains 'collection' -%}
+  <link rel="stylesheet" href="{{'collection.css' | asset_url}}" media="print" onload="this.media='all'">
+  <noscript>{{ 'collection.css' | asset_url | stylesheet_tag }}</noscript>
+{%- endif -%}
+
+{%- if template contains 'blog' or template contains 'article' -%}
+  <link rel="stylesheet" href="{{'blog.css' | asset_url}}" media="print" onload="this.media='all'">
+  <noscript>{{ 'blog.css' | asset_url | stylesheet_tag }}</noscript>
+{%- endif -%}
+
+{%- if template contains 'page' or template contains '404' or template contains 'customer' -%}
+  <link rel="stylesheet" href="{{'pages.css' | asset_url}}" media="print" onload="this.media='all'">
+  <noscript>{{ 'pages.css' | asset_url | stylesheet_tag }}</noscript>
+{%- endif -%}
+
+<link rel="stylesheet" href="{{'cart.css' | asset_url}}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{'popup-style.css' | asset_url}}" media="print" onload="this.media='all'">
+<noscript>{{ 'cart.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'popup-style.css' | asset_url | stylesheet_tag }}</noscript>
+
+{% render 'css_variables' %}
+
+{% comment %} compress {% endcomment %}

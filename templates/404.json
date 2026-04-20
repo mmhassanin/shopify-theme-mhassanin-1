@@ -1,0 +1,33 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "404-template",
+      "settings": {
+        "title": "<p>404</p>",
+        "subheading": "<p>We are sorry, the page you've requested is not available.</p>",
+        "btn_label": "Back to Homepage",
+        "btn_link": "/"
+      }
+    },
+    "16484755244f58c3e4": {
+      "type": "slideshow",
+      "settings": {
+        "layout": "boxed",
+        "autoplay": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "16484755244f58c3e4"
+  ]
+}

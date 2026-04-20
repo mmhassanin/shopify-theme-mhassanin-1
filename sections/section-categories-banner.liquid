@@ -1,0 +1,262 @@
+<link rel="stylesheet" href="{{'section-categories-banner.css' | asset_url}}" media="print" onload="this.media='all'">
+
+{%- liquid
+  assign bg_class = ''
+  assign menu = section.settings.menu
+  assign sectionID  = '#section-' | append: section.id
+  assign heading_style_block = section.blocks | where: 'type' , 'heading-style' | first
+
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+-%}
+
+{%- capture section_heading -%}
+  {%- render 'snippet-heading' type:'render-html' config: section.settings -%}
+{%- endcapture -%}
+
+{%- capture gridClass -%}{%- render 'set-item-per-row', value: items_resp -%}{%- endcapture -%}
+
+<div class="section-categories-banner" id="section-{{section.id}}" data-section-id="{{section.id}}">
+  <div class="{% if template == 'index' or template contains 'page' %}{{ layout_class }}{% endif %}">
+    <div class="section-wrapper">
+
+      {%- if section_heading != blank -%}
+        {%- capture heading_css -%}
+          {%- render 'snippet-heading' type: 'render-css' config: heading_style_block.settings, classID: sectionID -%}
+        {%- endcapture -%}
+        <div class="section-header">{{section_heading}}</div>
+      {%- endif -%}
+
+      <div class="section-body">
+        {%- unless menu == blank -%}
+          <div class="box-menu">
+            <ul class="box-menu-list">
+              {%- for _menu_link in linklists[menu].links -%}
+                {%- assign submenu = _menu_link.title | handleize -%}
+
+                {%- if linklists[submenu].links.size > 0 -%}
+                  <li class="item">
+                    <a href="{{ _menu_link.url }}">
+                      <span>{{ _menu_link.title }}</span>
+                    </a>
+                    <ul class="child-list">
+                      {%- for l in linklists[submenu].links -%}
+                        <li class="child-item"><a href="{{ l.url }}"><span>{{ l.title }}</span></a></li>
+                      {%- endfor -%}
+                    </ul>
+                  </li>
+                {%- else -%}
+                  <li class="item">
+                    <a href="{{ _menu_link.url }}">
+                      <span>{{ _menu_link.title }}</span>
+                    </a>
+                  </li>
+                {%- endif -%}
+
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endunless -%}
+
+        <div class="tab-heading-container">
+          <ul class="tab-heading">
+            {%- for block in section.blocks -%}
+              {%- if block.type != 'heading-style' -%}
+                {%- liquid
+                  assign heading= block.settings.heading
+                  assign link = block.settings.link
+                -%}
+
+                {%- if heading != blank -%}
+                  <li>
+                    <a href="{{ link }}"{%- if block.type == 'block-item' -%} class="active"{% endif %}>{{heading}}</a>
+                  </li>
+                {%- endif -%}
+
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </div>
+
+        <div class="tab-content">
+          {%- for block in section.blocks -%}
+
+            {%- if block.type == 'block-item' -%}
+              {%- liquid
+                assign image= block.settings.image
+                assign link = block.settings.link
+              -%}
+
+              <div class="tab-content-inner">
+                <div class="tab-items-row">
+
+                  {%- unless image == blank -%}
+                    <div class="block-image">
+                      <a href="{{ link }}">
+                        {%- render 'image-style' image: image, limit: 992 -%}
+                      </a>
+                    </div>
+                  {%- endunless -%}
+
+                </div>
+              </div>
+            {%- break -%}
+            {%- endif -%}
+
+          {%- endfor -%} 
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {{-heading_css-}}
+  {%- render 'snippet-theme' type: 'section-style', preClassID: sectionID, classID: bg_class, config: section.settings -%}
+{%- endcapture -%}
+{%- style -%}{{section_css | strip | strip_newlines | remove: '  ' }}{%- endstyle -%}
+{%- schema -%}
+{
+  "name": "t:sections.categories-banner.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.common.general"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.common.layout_mode",
+      "default": "boxed",
+      "options": [
+        {
+          "value": "boxed",
+          "label": "Boxed"
+        },
+        {
+          "value": "full",
+          "label": "Wide"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "t:sections.common.background_color"
+    },
+    {
+      "type": "text",
+      "id": "margin",
+      "label": "t:sections.common.section_margin",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "t:sections.common.section_padding",
+      "info": "t:sections.common.order_info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.common.layout_settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.common.heading"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:sections.common.menu_item"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading-style",
+      "limit": 1,
+      "name": "t:sections.common.heading_style",
+      "settings": [
+        {
+          "type": "color",
+          "id": "section_heading_color",
+          "label": "t:sections.common.text_color"
+        },
+        {
+          "type": "text",
+          "id": "section_heading_font_size",
+          "label": "t:sections.common.font_size",
+          "info": "t:sections.common.unit_px"
+        },
+        {
+          "type": "range",
+          "id": "section_heading_font_weight",
+          "label": "t:sections.common.font_weight",
+          "step": 100,
+          "min": 100,
+          "max": 900,
+          "default": 600
+        },
+        {
+          "type": "text",
+          "id": "section_heading_line_height",
+          "label": "t:sections.common.line_height",
+          "info": "t:sections.common.unit_px"
+        }
+      ]
+    },
+    {
+      "type": "block-item",
+      "name": "t:sections.common.block_item",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.common.image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "t:sections.common.block_link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.common.heading"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.common.link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.categories-banner.name"
+    }
+  ]
+}
+{%- endschema -%}

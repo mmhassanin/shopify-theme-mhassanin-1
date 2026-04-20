@@ -1,0 +1,67 @@
+{%- assign _subcategory_type = section.settings.sub_collections_type -%}
+{%- assign _subcategory_metafield = collection.metafields.c_f.sub_collection -%}
+{%- assign _subcategory_menu = section.settings.subcategory_menu -%}
+
+{%- unless _subcategory_metafield == blank and _subcategory_menu == blank -%}
+  {%- if _subcategory_type == 'metafield' -%}
+    {%- unless _subcategory_metafield == blank -%}
+      {%- assign _collection_sub = _subcategory_metafield | split: "|" -%}
+      <h2 class="subcategory">{{ collection.title }} {{ section.settings.subcategory_title }}</h2>
+
+      <div class="subcategory-list row">
+        {%- for _sub_col in _collection_sub -%}
+
+          <div class="category col-lg-3 col-md-3 col-sm-4 col-6">
+            <div class="category-image">
+                <a href="{{ collections[_sub_col].url }}">   
+                  {%- if collections[_sub_col].image -%}
+                    {%- render 'image-style' image: collections[_sub_col].image.src, limit: 767 -%} 
+                  {%- else -%}
+                    {%- render 'image-style' image: collections[_sub_col].products.first.images[1], limit: 767 -%} 
+                  {%- endif %}  
+                </a>
+            </div>
+            <a class="category-name" href="{{ collections[_sub_col].url }}" title="{{ collections[_sub_col].title | escape }}">{{ collections[_sub_col].title }}</a>
+          </div>
+
+        {%- endfor -%}
+      </div>
+    {%- endunless -%}
+
+  {%- else -%}
+    {%- assign _collectionurl = '/collections/' | append: collection.handle -%}
+    {%- for _link in linklists[_subcategory_menu].links -%} 
+      {%- assign _submenu = _link.title | handleize -%}
+      {%- assign _url = _link.url -%}
+
+      {%- if linklists[_submenu].links.size > 0 and _url == _collectionurl -%}
+        <h2 class="subcategory">{{ collection.title }} {{ section.settings.subcategory_title }}</h2>
+        <div class="subcategory-list row">
+
+          {%- for link in linklists[_submenu].links -%}
+            {%- if link.type == 'collection_link' -%}
+              {%- assign _collection = link.object -%}
+
+              <div class="category col-lg-3 col-md-3 col-sm-4 col-6">
+                <div class="category-image">
+                    <a href="{{ link.url }}">   
+                      {%- if _collection.image -%}
+                        {%- render 'image-style' image: _collection.image, limit: 767 -%} 
+                      {%- else -%}
+                        {%- render 'image-style' image: _collection.products.first.images[1], limit: 767 -%} 
+                      {%- endif -%}  
+                    </a>
+                </div>
+                <a class="category-name" href="{{ link.url }}" title="{{ link.title | escape }}">{{ link.title }}</a>
+              </div>
+
+            {%- endif -%}
+          {%- endfor -%}
+
+        </div>
+      {%- endif -%}
+
+    {%- endfor -%}
+  {%- endif -%}
+
+{% endunless %}

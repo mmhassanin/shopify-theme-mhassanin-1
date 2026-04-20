@@ -1,0 +1,33 @@
+.section-image-gallery-v2 .image-gallery_item > a {
+  display: block;
+  position: relative;
+}
+
+.section-image-gallery-v2 .image-gallery_item > a:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 100%;
+  height: 0;
+  z-index: 1;
+  transition: all .35s ease-in-out;
+}
+
+@media (hover: hover) {
+  .section-image-gallery-v2 .image-gallery_item > a:hover:after {
+    height: 100%;
+  }
+}
+
+.section-image-gallery-v2 .image-gallery_title {
+  display: block;
+  margin-top: var(--gutter-xs);
+}
+
+.section-image-gallery-v2 .image-gallery_subtext {
+  display: block;
+  margin-top: var(--gutter-xxs);
+}

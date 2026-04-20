@@ -1,0 +1,146 @@
+<link rel="stylesheet" href="{{'section-header-department.css' | asset_url}}" media="all">
+{%- liquid
+  assign bg_class = ''
+  assign visibility = section.settings.visibility
+  assign sectionID = '#section-' | append: section.id
+  assign box_shadow = section.settings.box_shadow
+
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+-%}
+
+{%- if visibility != 'disable' -%}
+  {%- if visibility == 'mobile' -%}
+    {%- assign _visibility_class = 'd-lg-none' -%}
+  {%- elsif visibility == 'desktop' -%}
+    {%- assign _visibility_class = 'd-none d-lg-block' -%}
+  {%- else -%}
+    {%- assign _visibility_class = 'show-both' -%}
+  {%- endif -%}
+
+  <div class="section-header-department{% if box_shadow %} box-shadow{% endif %} {{ _visibility_class }}" id="section-{{section.id}}" data-section-id="{{section.id}}">
+    <div class="{{ layout_class }}">
+      <div class="section-wrapper">
+         
+        <div class="header-department-inner">
+          <ul class="hd-list">
+            {%- for block in section.blocks -%}
+              {%- liquid
+                assign svg = block.settings.svg
+                assign text = block.settings.text
+                assign link = block.settings.link
+              -%}
+
+              <li class="item">
+                <a href="{{ link }}">
+                  {%- if svg != blank -%}{{ svg }}{%- endif -%}
+                  {%- if text != blank -%}<span class="text">{{ text }}</span>{%- endif -%}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- schema -%}
+  {
+    "name" : "t:sections.header-department.name",
+    "tag" : "section",
+    "presets": [
+      {
+        "name": "t:sections.announcement-bar.name"
+      }
+    ],
+    "limit": 1,
+    "enabled_on": {
+      "groups": ["header"]
+    },
+    "settings" : [
+      {
+        "type": "header",
+        "content": "t:sections.common.general"
+      },
+      {
+        "type": "select",
+        "id": "visibility",
+        "label": "Visibility",
+        "default": "both",
+        "options": [
+          { "label": "Mobile", "value": "mobile" },
+          { "label": "Desktop", "value": "desktop" },
+          { "label": "Both",  "value": "both" },
+          { "label": "Disable",  "value": "disable" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "t:sections.common.layout_mode",
+        "default": "boxed",
+        "options": [
+          {
+            "value": "boxed",
+            "label": "Boxed"
+          },
+          {
+            "value": "full",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "box_shadow",
+        "label": "t:sections.common.box_shadow",
+        "default": true
+      }
+    ],
+    "blocks": [
+      {
+        "type" : "block-item",
+        "name" : "t:sections.common.block_item.",
+        "settings" : [
+          {
+            "type": "textarea",
+            "id": "svg",
+            "label": "t:sections.common.svg"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "t:sections.common.text"
+          }, 
+          {
+            "type": "url",
+            "id": "link",
+            "label": "t:sections.common.link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name" : "t:sections.header-department.name",
+        "blocks" : [
+          {
+            "type" : "block-item"
+          },
+           {
+            "type" : "block-item"
+          },
+           {
+            "type" : "block-item"
+          }
+        ]
+      }
+    ]
+  }
+{%- endschema -%}

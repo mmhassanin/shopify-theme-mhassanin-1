@@ -1,0 +1,186 @@
+<link rel="stylesheet" href="{{'section-bottom-products.css' | asset_url}}" media="print" onload="this.media='all'">
+
+{%- liquid
+  assign bg_class = ''
+  assign sectionID = '#section-' | append: section.id
+  assign items_resp = section.settings.items_resp
+
+  assign layout = section.settings.layout
+  if layout == 'boxed'
+    assign layout_class = 'container'
+  else
+    assign layout_class = 'container-fluid'
+  endif
+-%}
+
+{%- capture gridClass -%}{%- render 'set-item-per-row', value: items_resp -%}{%- endcapture -%}
+
+<div class="section-bottom-widget" id="section-{{section.id}}">
+  <div class="{{ layout_class }}">
+
+    <div class="section-wrapper">
+      <div class="section-body row">
+
+          {%- for block in section.blocks -%}
+            <div class="block-widget block-{{block.type}} {{ gridClass }}">
+              <div class="block-wrapper"> 
+
+                  {%- if block.type == 'product-listing' -%}
+                    {%- liquid
+                      assign heading = block.settings.heading
+                      assign collection = collections[block.settings.collection]
+                    -%}
+
+                    <div class="bw-item">
+                      {%- unless heading == blank -%}
+                        <h4><a href="{{ collection.url }}">{{ heading }}</a></h4>
+                      {%- endunless -%}
+
+                      {%- unless block.settings.collection == blank -%}
+                        <div class="product-listing-items">
+                          {%- for product in collection.products limit: 3 -%}
+                              {%- render 'product-listing-item' product: product, collection: collection -%}
+                          {%- endfor -%}
+                        </div>
+                      {%- endunless -%}
+                    </div>
+
+                  {%- else -%}
+                    {%- liquid
+                      assign image = block.settings.image
+                      assign link = block.settings.link
+                    -%}
+
+                    <div class="bw-item">
+                      {%- if link == blank -%}
+                        {%- render 'image-style' image: image -%}
+                      {%- else -%}
+                        <a href="{{ link }}" aria-label="Image">{%- render 'image-style' image: image -%}</a>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+              </div>
+            </div>
+          {%- endfor -%}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{%- capture section_css -%}
+  {%- render 'snippet-theme' type: 'section-style', config: section.settings, preClassID: sectionID, classID: bg_class -%}
+{%- endcapture -%}
+
+{%- style -%}{{section_css | strip | strip_newlines | remove: '  '}}{%- endstyle -%}
+
+{%- schema -%}
+  {
+    "name" : "t:sections.bottom-products.name",
+    "tag" : "section",
+    "limit": 1,
+    "enabled_on": {
+      "groups": ["footer"]
+    },
+    "settings" : [
+      {
+        "type": "header",
+        "content": "t:sections.common.general"
+      },
+      {
+        "type": "select",
+        "id": "layout",
+        "label": "t:sections.common.layout_mode",
+        "default": "boxed",
+        "options": [
+          {
+            "value": "boxed",
+            "label": "Boxed"
+          },
+          {
+            "value": "full",
+            "label": "Wide"
+          }
+        ]
+      },
+      {
+        "type": "color",
+        "id": "bg_color",
+        "label": "t:sections.common.background_color"
+      },
+      {
+        "type": "text",
+        "id": "margin",
+        "label": "t:sections.common.section_margin",
+        "info": "t:sections.common.order_info"
+      },
+      {
+        "type": "text",
+        "id": "padding",
+        "label": "t:sections.common.section_padding",
+        "info": "t:sections.common.order_info"
+      }, 
+      {
+        "type": "text",
+        "id": "items_resp",
+        "label": "t:sections.common.items_per_row",
+        "default": "4,2,1"
+      }
+    ],
+    "blocks": [
+      {
+        "type" : "product-listing",
+        "name" : "t:sections.bottom-products.blocks.product_listing.name",
+        "settings" : [
+          {
+            "type": "text",
+            "id": "heading",
+            "label": "t:sections.common.heading"
+          },
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "t:sections.common.collection"
+          }
+        ]
+      },
+      {
+        "type" : "image",
+        "name" : "t:sections.common.image",
+        "settings" : [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:sections.common.image"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "t:sections.common.link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name" : "t:sections.bottom-products.name",
+        "blocks" : [
+          {
+            "type" : "product-listing"
+          },
+           {
+            "type" : "product-listing"
+          },
+          {
+            "type" : "product-listing"
+          },
+          {
+            "type" : "image"
+          }
+        ]
+      }
+    ]
+  }
+{%- endschema -%}

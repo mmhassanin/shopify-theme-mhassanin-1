@@ -1,0 +1,4 @@
+{%- case type -%}
+	{%- when 'image' -%}
+		{{- 'image' | placeholder_svg_tag | replace: '<svg', '<svg class="placeholder-svg"'-}}
+{%- endcase -%}

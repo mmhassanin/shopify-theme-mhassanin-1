@@ -1,0 +1,174 @@
+{%- unless blockID contains sectionID -%}
+    {%- assign blockID = blockID | prepend: ' ' | prepend: sectionID -%}
+{%- endunless -%}
+
+{%- case type -%}
+    {%- when 'style'            -%}{%- comment -%}  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *{%- endcomment-%}
+        {%- capture block_css -%}
+            {%- liquid
+                assign __pos        = block.settings.position
+                assign __hor_align  = block.settings.align | default: 'center' | replace: 'left', 'flex-start' | replace: 'right', 'flex-end'
+                assign __ver_align  = block.settings.align
+            -%}
+
+            {%- comment -%}
+                **
+                * Slide CSS
+                *
+            {%- endcomment-%}
+            {%- render 'css-resp', classID: blockID, nextClassID: ' .slide-content-inner', css_value: __pos, type: 'position' -%}
+            {%- render 'css-resp', classID: blockID, nextClassID: ' .slide-content-wrapper', css_value: __ver_align, css_property: 'text-align' -%}
+            {%- render 'css-resp', classID: blockID, nextClassID: ' .slide-content-inner.content_direction-horizontal', css_value: __hor_align, css_property: 'justify-content' -%}
+
+            {%- render 'snippet-slideshow-style', blockID: blockID, block: block, type: 'paragraph' -%}
+            {%- render 'snippet-slideshow-style', blockID: blockID, block: block, type: 'button' -%}
+            {%- render 'snippet-slideshow-style', blockID: blockID, block: block, type: 'image_layout' -%}
+
+        {%- endcapture -%}{%- assign section_css = section_css | append: block_css -%}
+
+    {%- when 'content_wrapper'  -%}{%- comment -%}  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *{%- endcomment-%}
+        {%- liquid
+            assign __pos        = block.settings.position
+            assign __hor_align  = block.settings.align
+            assign __ver_align  = block.settings.align
+        -%}
+
+        {%- comment -%}
+            **
+            * Slide CSS
+            *
+        {%- endcomment-%}
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .slide-content-inner', css_value: __pos, type: 'position' -%}
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .slide-content-wrapper', css_value: __ver_align, css_property: 'text-align' -%}
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .slide-content-inner.content_direction-horizontal', css_value: __hor_align, css_property: 'justify-content' -%}
+
+    {%- when 'paragraph'    -%}{%- comment -%}  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *{%- endcomment-%}
+        {%- for i in (1..3) -%}
+            {%- liquid              
+                assign __text_fs        = 'text_fs_' | append: i
+                assign __text_lh        = 'text_lh_' | append: i
+                assign __text_cl        = 'text_cl_' | append: i
+                assign __text_fw        = 'text_fw_' | append: i
+                assign __text_margin    = 'text_' | append: i | append: '_margin'
+                
+                assign __text_fs        = block.settings[__text_fs]
+                assign __text_lh        = block.settings[__text_lh]
+                assign __text_cl        = block.settings[__text_cl] | default: 'rgba(0,0,0,0)'
+                assign __text_fw        = block.settings[__text_fw]
+                assign __text_margin    = block.settings[__text_margin]
+            -%}
+            {%- capture textID -%}{{blockID}} .content-text-{{i}}{%- endcapture -%}
+
+            {%- capture blockCSS -%}
+                {%- if __text_fw > 0 -%}font-weight: {{__text_fw}};{%- endif -%}
+                {%- unless __text_cl == 'rgba(0,0,0,0)' -%}color: {{__text_cl}};{%- endunless -%}
+                {%- render 'css-resp', type: 'value', showFirst: true, css_value: __text_fs, css_property: 'font-size' -%}
+                {%- render 'css-resp', type: 'value', showFirst: true, css_value: __text_margin, css_property: 'margin' -%}
+                {%- render 'css-resp', type: 'value', showFirst: true, css_value: __text_lh, css_property: 'line-height' -%}
+            {%- endcapture -%}
+
+            {%- render 'css-resp', classID: textID, css_values: blockCSS -%}
+            {%- render 'css-resp', classID: textID, showLast: true, css_value: __text_fs, css_property: 'font-size' -%}
+            {%- render 'css-resp', classID: textID, showLast: true, css_value: __text_margin, css_property: 'margin' -%}
+            {%- render 'css-resp', classID: textID, showLast: true, css_value: __text_lh, css_property: 'line-height' -%}
+
+            {%- comment -%}
+                **********
+                *
+                * ANIMATION
+                *
+                *****
+            {%- endcomment-%}
+            {%- liquid
+                assign __anim_name      = 'text_anim_' | append: i
+                assign __anim_time      = 'text_anim_timeset_' | append: i
+                assign __anim_name      = block.settings[__anim_name] | default: 'none'
+                assign __anim_time      = block.settings[__anim_time] | split: '|'
+            -%}
+            {%- if __anim_name != 'none' -%}
+                {%- capture animID -%}{{blockID}}.tns-slide-active .lazyloaded + .slide-content-wrapper .content-text-{{i}}{%- endcapture -%}
+                {%- capture blockCSS -%}
+                    animation-name: {{      __anim_name | strip }};
+                    animation-delay:    {{  __anim_time[0] | strip | default: 1000 | append: 'ms' }};
+                    animation-duration: {{  __anim_time[1] | strip | default: 1000 | append: 'ms' }};
+                {%- endcapture -%}
+                {%- render 'css-resp', classID: animID, css_values: blockCSS -%}
+            {%- endif -%}
+
+        {%- endfor -%}
+
+    {%- when 'button'       -%}{%- comment -%}  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *{%- endcomment-%}
+        {%- liquid
+            assign __btn_cl                 = block.settings.btn_cl | default: 'rgba(0,0,0,0)'
+            assign __btn_bg_cl              = block.settings.btn_bg_cl | default: 'rgba(0,0,0,0)'
+            assign __btn_border_cl          = block.settings.btn_border_cl | default: 'rgba(0,0,0,0)'
+            assign __btn_hover_cl           = block.settings.btn_hover_cl | default: 'rgba(0,0,0,0)'
+            assign __btn_hover_bg_cl        = block.settings.btn_hover_bg_cl | default: 'rgba(0,0,0,0)'
+            assign __btn_hover_border_cl    = block.settings.btn_hover_border_cl | default: 'rgba(0,0,0,0)'
+            assign __btn_fw                 = block.settings.btn_fw
+            assign __btn_padding            = block.settings.btn_padding
+            assign __btn_fs                 = block.settings.btn_fs
+            assign __btn_radius             = block.settings.btn_radius
+        -%}
+
+        {%- capture blockCSS -%}
+            {%- unless __btn_cl         == 'rgba(0,0,0,0)'  -%}color: {{__btn_cl}};{%- endunless -%}
+            {%- unless __btn_bg_cl      == 'rgba(0,0,0,0)'  -%}background-color: {{__btn_bg_cl}};{%- endunless -%}
+            {%- unless __btn_border_cl  == 'rgba(0,0,0,0)'  -%}border-color: {{__btn_border_cl}};{%- endunless -%}
+            {%- if __btn_fw > 0                             -%}font-weight: {{__btn_fw}};{%- endif -%}
+            {%- render 'css-resp', type: 'value', showFirst: true, css_value: __btn_padding, css_property: 'padding' -%}
+            {%- render 'css-resp', type: 'value', showFirst: true, css_value: __btn_fs, css_property: 'font-size' -%}
+            {%- render 'css-resp', type: 'value', showFirst: true, css_value: __btn_radius, css_property: 'border-radius' -%}
+        {%- endcapture -%}
+
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .btn-slide', css_values: blockCSS -%}
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .btn-slide', showLast: true, css_value: __btn_padding -%}
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .btn-slide', showLast: true, css_value: __btn_fs, css_property: 'font-size' -%}
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .btn-slide', showLast: true, css_value: __btn_radius, css_property: 'border-radius' -%}
+
+        {%- comment -%}
+            **********
+            *
+            * ANIMATION
+            *
+            *****
+        {%- endcomment-%}
+        {%- assign __anim_name = block.settings.btn_anim | default: 'none' -%}
+        {%- assign __anim_time  = block.settings.btn_anim_timeset | split: '|' -%}
+
+        {%- if __anim_name != 'none' -%}
+            {%- capture animID -%}{{blockID}}.tns-slide-active .lazyloaded + .slide-content-wrapper .content-button{%- endcapture -%}
+            {%- capture blockCSS -%}
+                animation-name: {{      __anim_name | strip }};
+                animation-delay:    {{  __anim_time[0] | strip | default: 1000 | append: 'ms' }};
+                animation-duration: {{  __anim_time[1] | strip | default: 1000 | append: 'ms' }};
+            {%- endcapture -%}
+            {%- render 'css-resp', classID: animID, css_values: blockCSS -%}
+        {%- endif -%}
+
+        {%- comment -%}
+          **
+          * Button Hover
+          *
+        {%- endcomment-%}
+        {%- capture firstValues -%}
+          {%- unless __btn_hover_cl         == 'rgba(0,0,0,0)' -%}color: {{__btn_hover_cl}};{%- endunless -%}
+          {%- unless __btn_hover_bg_cl      == 'rgba(0,0,0,0)' -%}background-color: {{__btn_hover_bg_cl}};{%- endunless -%}
+          {%- unless __btn_hover_border_cl  == 'rgba(0,0,0,0)' -%}border-color: {{__btn_hover_border_cl}};{%- endunless -%}
+        {%- endcapture -%}
+
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .btn-slide:hover', css_values: firstValues -%}
+
+    {%- when 'image_layout'    -%}{%- comment -%}  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *{%- endcomment-%}
+        {%- liquid
+            assign __pos        = block.settings.position
+            if block.settings.image_max_w == blank
+            assign max_width    = '520px'
+            else
+            assign max_width    = block.settings.image_max_w
+            endif
+        -%}
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .image-layer-box', css_value: max_width, css_property: 'max-width' -%}
+        {%- render 'css-resp', classID: blockID, nextClassID: ' .image-layer-box', css_value: __pos, type: 'position' -%}
+
+{%- endcase -%}
