@@ -107,15 +107,15 @@
     <script>
       (() => {
 
-        document.addEvent('shopify:block:select', ({detail: {blockId,sectionId,load}}) => {
-          let sectionElm = document.getElementById('section-{{section.id}}');
-          let sliderElm = sectionElm.querySelector('slider-component');
-          let blockElm = sectionElm.querySelector(`[data-block-id='${blockId}']`);
+        document.addEventListener('shopify:block:select', function ({ detail: { blockId, sectionId, load } }) {
+          var sectionElm = document.getElementById('section-{{section.id}}');
+          var sliderElm = sectionElm.querySelector('slider-component');
+          var blockElm = sectionElm.querySelector('[data-block-id="' + blockId + '"]');
           sliderElm.pause();
           sliderElm.goTo(blockElm.dataset.index);
         });
 
-        document.addEvent('shopify:section:deselect', () => {
+        document.addEventListener('shopify:section:deselect', function () {
           let sectionElm = document.getElementById('section-{{section.id}}');
           let sliderElm = sectionElm.querySelector('slider-component');
           sliderElm.play();

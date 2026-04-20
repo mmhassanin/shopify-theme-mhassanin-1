@@ -27,13 +27,13 @@
       {%- for block in section.blocks -%}
         {% case block.type %}
           {%- when 'menu' -%} 
-            {%- include 'sidebar-snippet' type: 'menu' -%}
+            {%- render 'sidebar-snippet', type: 'menu', section: section -%}
         {% endcase %}
       {%- endfor -%}
     </aside>
   {%- endcapture -%}
   {%- capture collection_sidebar -%}
-    {%- include 'collection-sidebar' section: section -%}
+    {%- render 'collection-sidebar', section: section -%}
   {%- endcapture -%}
 {%- endif -%}
 
@@ -306,6 +306,9 @@
       }
     ],
     "blocks": [
+      {
+        "type": "@app"
+      },
       {
         "type": "menu",
         "name": "t:sections.product-template.settings.sidebar.sidebar_menu",

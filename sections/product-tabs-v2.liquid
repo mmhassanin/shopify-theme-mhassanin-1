@@ -64,7 +64,7 @@
                 {%- if _product != blank -%}
                   <div class="tab-special-item">
                     <div class="special-item">
-                      {% include 'special-product-item-v2' %}
+                      {%- render 'special-product-item-v2', product: product, block: block, produc_text: produc_text -%}
                     </div>
                   </div>
                 {%- endif -%}
@@ -170,6 +170,9 @@
     }
   ],
   "blocks": [
+    {
+      "type": "@app"
+    },
     {
       "type": "product",
       "name": "t:sections.common.block_product",
