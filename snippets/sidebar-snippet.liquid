@@ -99,15 +99,26 @@
 
           {%- unless _listing_title == blank -%}<h5 class="sb-title">{{ _listing_title }}</h5>{%- endunless -%}
 
-          <slider-component>
-            <div class="slider-container js-slider-container">
+          <style>
+            .sb-widget native-slider { display: block; position: relative; }
+            .sb-widget .slider-prev-button, .sb-widget .slider-next-button {
+              position: absolute; top: -38px; width: 24px; height: 24px; background: none; border: none; font-size: 24px; line-height: 1; cursor: pointer; color: #999; display: flex; align-items: center; justify-content: center;
+            }
+            .sb-widget .slider-prev-button:hover, .sb-widget .slider-next-button:hover { color: #fed700; }
+            .sb-widget .slider-prev-button { right: 30px; }
+            .sb-widget .slider-next-button { right: 0; }
+            .sb-widget .slider-list { scroll-snap-type: x mandatory; }
+          </style>
+
+          <native-slider>
+            <div class="slider-container position-relative">
               <div class="slider-wrapper">
-                <div class="slider-list" id="slider-sb-products-listing">
+                <div class="slider-list d-flex" id="slider-sb-products-listing">
                   {%- for product in _listing_collection.products limit: limit -%}
                   {%- capture mod -%}{{ forloop.index | modulo: 4 }}{%- endcapture -%}
 
                   {%- if mod == '1' -%}
-                  <div class="latest-product-item">
+                  <div class="latest-product-item slider-item" style="flex: 0 0 100%; scroll-snap-align: start; min-width: 100%;">
                     {%- endif -%}
 
                     {%- render 'product-listing-item', product: product -%}
@@ -118,31 +129,15 @@
 
                   {%- endfor -%}
                 </div>
-
-                {%- render 'set-tns-config'
-                  loop: loop,
-                  dots: dots,
-                  controls: true,
-                  classID: sectionID,
-                  slider_id  : slider_id,
-                  total_item : limit,
-                  controls_id: controls_id,
-                  items_resp : items_resp
-                -%}
+                
+                <button class="slider-prev-button" aria-label="Previous">&lsaquo;</button>
+                <button class="slider-next-button" aria-label="Next">&rsaquo;</button>
               </div>
             </div>
-          </slider-component>
+          </native-slider>
 
         </div>
       </div>
-
-      <script>
-        (function() {
-          window.theme = window.theme || {};
-          (window.theme.sectionRegister = window.theme.sectionRegister || []).push("featured-collection");
-          (window.theme.customElementsList = window.theme.customElementsList || []).push("slider-component");
-        })();
-      </script>
     {%- endunless -%}
 
   {%- when 'service' -%}
@@ -197,28 +192,22 @@
 
           {%- unless _grid_title == blank -%}<h5 class="sb-title">{{ _grid_title }}</h5>{%- endunless -%}
 
-          <slider-component>
-            <div class="slider-container js-slider-container">
+          <native-slider>
+            <div class="slider-container position-relative">
               <div class="slider-wrapper">
-                <div class="slider-list" id="slider-sb-products-grid">
+                <div class="slider-list d-flex" id="slider-sb-products-grid">
                   {%- for product in _grid_collection.products limit: limit -%}
-                    {%- render 'product-item' product: product -%}
+                    <div class="slider-item" style="flex: 0 0 100%; scroll-snap-align: start; min-width: 100%;">
+                      {%- render 'product-item' product: product -%}
+                    </div>
                   {%- endfor -%}
                 </div>
-
-                {%- render 'set-tns-config'
-                  loop: loop,
-                  dots: dots,
-                  controls: true,
-                  classID: sectionID,
-                  slider_id  : slider_id,
-                  total_item : limit,
-                  controls_id: controls_id,
-                  items_resp : items_resp
-                -%}
+                
+                <button class="slider-prev-button" aria-label="Previous">&lsaquo;</button>
+                <button class="slider-next-button" aria-label="Next">&rsaquo;</button>
               </div>
             </div>
-          </slider-component>
+          </native-slider>
         </div>
       </div>
     {%- endunless -%}
@@ -243,13 +232,12 @@
 
           {%- unless _blog_title == blank -%}<h5 class="sb-title">{{ _blog_title }}</h5>{%- endunless -%}
 
-          <slider-component>
-            <div class="slider-container js-slider-container">
+          <native-slider>
+            <div class="slider-container position-relative">
               <div class="slider-wrapper">
-                <div class="slider-list" id="slider-sb-blog">
+                <div class="slider-list d-flex" id="slider-sb-blog">
                   {%- for article in _blog.articles limit: _limit -%}
-
-                    <div class="post-item">
+                    <div class="post-item slider-item" style="flex: 0 0 100%; scroll-snap-align: start; min-width: 100%;">
                       <div class="post-item-inner">
                         {%- if article.image -%}
                           <div class="post-image">
@@ -270,23 +258,14 @@
                         </div>
                       </div>         
                     </div>
-
                   {%- endfor -%}
                 </div>
 
-                {%- render 'set-tns-config'
-                  loop: loop,
-                  dots: dots,
-                  controls: true,
-                  classID: sectionID,
-                  slider_id  : slider_id,
-                  total_item : limit,
-                  controls_id: controls_id,
-                  items_resp : items_resp
-                -%}
+                <button class="slider-prev-button" aria-label="Previous">&lsaquo;</button>
+                <button class="slider-next-button" aria-label="Next">&rsaquo;</button>
               </div>
             </div>
-          </slider-component>
+          </native-slider>
 
         </div>
       </div>

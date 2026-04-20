@@ -48,29 +48,28 @@
     {%- endif -%}
 
     <div class="section-body">
-      <slider-component>
-        <div class="slider-container js-slider-container">
-          <div class="slider-wrapper">
-            <div class="slider-list" id="slider-{{section.id}}">
+      <native-slider class="d-block position-relative" data-autoplay="{{ section.settings.autoplay }}" data-autoplay-timeout="{{ section.settings.autoplay_timeout | times: 1000 }}">
+        <div class="slider-container">
+          <div class="slider-wrapper position-relative">
+            <div class="slider-list d-flex" id="slider-{{section.id}}">
               {{items_list}}
             </div>
 
-            {%- render 'set-tns-config'
-              slider_id: slider_id,
-              controls_id: controls_id,
-              controls: controls,
-              loop: loop,
-              dots: dots,
-              autoplay: autoplay,
-              items_resp: items_resp,
-              padding: items_spacing,
-              autoplay_timeout: autoplay_timeout,
-              classID: section_id,
-              total_item: total_item
-             -%}
+            {%- if controls -%}
+              <button class="slider-prev-button" aria-label="Previous">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="slider-next-button" aria-label="Next">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            {%- endif -%}
+
+            {%- if dots -%}
+              <div class="slider-dots"></div>
+            {%- endif -%}
           </div>
         </div>
-      </slider-component>
+      </native-slider>
     </div>
   </div>
 
@@ -83,71 +82,114 @@
   })();
 </script>
 
+{%- liquid
+  assign grid_arr = items_resp | split: ','
+  assign grid_desk = grid_arr[0] | default: 4
+  assign grid_tab = grid_arr[1] | default: 3
+  assign grid_mob = grid_arr[2] | default: 2
+-%}
 {%- style -%}
+  #section-{{section.id}} {
+    --items-per-row-desk: {{ grid_desk }};
+    --items-per-row-tab: {{ grid_tab }};
+    --items-per-row-mob: {{ grid_mob }};
+    --gap: {{ items_spacing | default: '30px' }};
+  }
+  #section-{{section.id}} .slider-list {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: var(--gap);
+    margin: 0;
+    padding: 10px 5px;
+  }
+  #section-{{section.id}} .slider-item {
+    flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+    scroll-snap-align: start;
+    min-width: calc((100% - (var(--gap) * (var(--items-per-row-desk) - 1))) / var(--items-per-row-desk));
+  }
+  @media (max-width: 991px) {
+    #section-{{section.id}} .slider-item {
+      flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-tab) - 1))) / var(--items-per-row-tab));
+      min-width: calc((100% - (var(--gap) * (var(--items-per-row-tab) - 1))) / var(--items-per-row-tab));
+    }
+  }
+  @media (max-width: 767px) {
+    #section-{{section.id}} .slider-item {
+      flex: 0 0 calc((100% - (var(--gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+      min-width: calc((100% - (var(--gap) * (var(--items-per-row-mob) - 1))) / var(--items-per-row-mob));
+    }
+  }
+
   {{heading_css}}
   {%- render 'snippet-theme' type: 'section-style', preClassID: section_id, classID: bg_class, config: section.settings -%}
 {%- endstyle -%}
 
 {%- schema -%}
 {
-  "name": "t:sections.related-products.name",
+  "name": "Related Products",
   "tag": "section",
   "settings": [
     {
       "type": "header",
-      "content": "t:sections.common.general"
+      "content": "General Settings"
     },
     {
       "type": "color",
       "id": "bg_color",
-      "label": "t:sections.common.background_color"
+      "label": "Background Color"
     }, 
     {
       "type": "text",
       "id": "margin",
-      "label": "t:sections.common.section_margin",
-      "info": "t:sections.common.order_info"
+      "label": "Section Margin",
+      "info": "Order: Top Right Bottom Left (e.g. 10px 0 20px 0)"
     },
     {
       "type": "text",
       "id": "padding",
-      "label": "t:sections.common.section_padding",
-      "info": "t:sections.common.order_info"
+      "label": "Section Padding",
+      "info": "Order: Top Right Bottom Left"
+    },
+    {
+      "type": "header",
+      "content": "Grid Settings"
     },
     {
       "type": "text",
       "id": "items_resp",
-      "label": "t:sections.common.items_per_row",
-      "default": "4,3,2,1"
+      "label": "Items Per Row (Responsive)",
+      "default": "4,3,2",
+      "info": "Values for Desktop, Tablet, Mobile separated by commas."
     },
     {
       "type": "text",
       "id": "items_spacing",
-      "label": "t:sections.common.items_spacing",
+      "label": "Items Spacing (Gap)",
       "default": "30px"
     },
     {
       "type": "header",
-      "content": "t:sections.related-products.settings.header_3.content"
+      "content": "Content Settings"
     },
     {
       "type": "text",
       "id": "heading",
-      "label": "t:sections.common.heading",
+      "label": "Heading",
       "default" : "Related products"
     },
     {
       "type": "select",
       "id": "source_from",
-      "label": "t:sections.related-products.settings.source_from.label",
+      "label": "Source From",
       "options": [
         {
           "value": "current-collection",
-          "label": "t:sections.related-products.settings.source_from.option_2.label"
+          "label": "Current Collection"
         },
         {
           "value": "static-collection",
-          "label": "t:sections.related-products.settings.source_from.option_1.label"
+          "label": "Static Collection"
         }
       ],
       "default" : "current-collection"
@@ -155,12 +197,12 @@
     {
       "type": "collection",
       "id": "static_collection",
-      "label": "t:sections.related-products.settings.static_collection.label"
+      "label": "Static Collection (Select)"
     },
     {
       "type" : "range",
       "id": "limit",
-      "label": "t:sections.common.limit",
+      "label": "Limit Products",
       "step": 1,
       "min" : 4,
       "max" : 20,
@@ -168,40 +210,39 @@
     },
     {
       "type": "header",
-      "content": "t:sections.common.slider_settings"
+      "content": "Slider Settings"
     },
     {
       "type": "checkbox",
       "id": "loop",
-      "label": "t:sections.common.loop",
+      "label": "Infinite Loop",
       "default": false
     },
     {
       "type": "checkbox",
       "id": "controls",
-      "label": "t:sections.common.controls",
+      "label": "Show Navigation Arrows",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "dots",
-      "label": "t:sections.common.dots",
+      "label": "Show Navigation Dots",
       "default": true
     },
     {
       "type": "checkbox",
       "id": "autoplay",
-      "label": "t:sections.common.autoplay",
+      "label": "Enable Autoplay",
       "default": false
     },
     {
       "type": "range",
       "id": "autoplay_timeout",
-      "label": "t:sections.common.autoplay_timeout",
+      "label": "Autoplay Timeout (Seconds)",
       "step": 0.1,
       "min": 2,
       "max": 10,
-      "unit": "s",
       "default": 4
     }
   ],
@@ -212,52 +253,52 @@
     {
       "type": "heading-style",
       "limit": 1,
-      "name": "t:sections.common.heading_style",
+      "name": "Heading Style",
       "settings": [
         {
           "type": "select",
           "id": "section_heading_container_align",
-          "label": "t:sections.common.alignment",
+          "label": "Text Alignment",
           "options": [
             {
               "value": "auto",
-              "label": "t:sections.common.auto"
+              "label": "Auto"
             },
             {
               "value": "left",
-              "label": "t:sections.common.left"
+              "label": "Left"
             },
             {
               "value": "center",
-              "label": "t:sections.common.center"
+              "label": "Center"
             },
             {
               "value": "right",
-              "label": "t:sections.common.right"
+              "label": "Right"
             }
           ]
         },
         {
           "type": "text",
           "id": "section_heading_margin",
-          "label": "t:sections.common.margin",
-          "info": "t:sections.common.order_info"
+          "label": "Margin",
+          "info": "Order: Top Right Bottom Left"
         },
         {
           "type": "color",
           "id": "section_heading_color",
-          "label": "t:sections.common.text_color"
+          "label": "Text Color"
         },
         {
           "type": "text",
           "id": "section_heading_font_size",
-          "label": "t:sections.common.font_size",
-          "info": "t:sections.common.unit_px"
+          "label": "Font Size",
+          "info": "E.g. 24px"
         },
         {
           "type": "range",
           "id": "section_heading_font_weight",
-          "label": "t:sections.common.font_weight",
+          "label": "Font Weight",
           "step": 100,
           "min": 100,
           "max": 900,
@@ -266,8 +307,8 @@
         {
           "type": "text",
           "id": "section_heading_line_height",
-          "label": "t:sections.common.line_height",
-          "info": "t:sections.common.unit_px"
+          "label": "Line Height",
+          "info": "E.g. 1.5 or 30px"
         }
       ]
     }
