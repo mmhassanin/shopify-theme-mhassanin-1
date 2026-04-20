@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}" class="no-js"{% if settings.direction == 'RTL' %} dir="rtl{% endif %}">
+<html lang="{{ request.locale.iso_code }}" class="no-js"{% if settings.direction == 'RTL' %} dir="rtl"{% endif %}>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,11 +29,12 @@
     {%- endif -%}
 
     {%- render 'meta-tags' -%}
-    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
-    
-    {%- include 'js-resources' -%}
 
-    {{content_for_header }}
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+
+    {%- render 'js-resources' -%}
+
+    {{ content_for_header }}
 
     {%- liquid
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
@@ -62,7 +63,7 @@
       <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
     {%- endunless -%}
 
-    {%- include 'style-resources' -%}
+    {%- render 'style-resources' -%}
 
     {%- style -%}
       content-visibility: auto;
@@ -72,8 +73,9 @@
         -%}
         {%- for color in custom_color -%}
           {%- if color != blank -%}
-            .custom-color[data-custom-color="{{color | split: ":" | first | strip }}"],.custom-color[data-custom-color="{{color | split: ":" | first | strip }}"] a{
-              background: {{color | split: ':' | last | strip}} !important;
+            .custom-color[data-custom-color="{{ color | split: ':' | first | strip }}"],
+            .custom-color[data-custom-color="{{ color | split: ':' | first | strip }}"] a {
+              background: {{ color | split: ':' | last | strip }} !important;
             }
           {%- endif -%}
         {%- endfor -%}
@@ -82,50 +84,49 @@
 
   </head>
 
-  <body class="template-{{template.name}} template-{{template.name}}--{{template.suffix | default: 'default'}}{% if settings.page_layout == 'fix-boxed' %} fix-container{% endif %} cart-type-{{ settings.cart_type }}{% if settings.catalog_mode %} catalog-mode{% endif %}">
+  <body class="template-{{ template.name }} template-{{ template.name }}--{{ template.suffix | default: 'default' }}{% if settings.page_layout == 'fix-boxed' %} fix-container{% endif %} cart-type-{{ settings.cart_type }}{% if settings.catalog_mode %} catalog-mode{% endif %}">
     <div class="body-main-content">
-      {%- assign header_overlay = settings.header_overlay -%}
 
+      {%- assign header_overlay = settings.header_overlay -%}
       <div class="header-group{% if header_overlay %} header-overlay{% endif %}">
-        <header class="header{% if header_overlay %} header-overlay{% endif %}" id="header" data-sticky="{{settings.header_sticky}}" data-section-id="header-container" data-section-type="header">
+        <header class="header{% if header_overlay %} header-overlay{% endif %}" id="header" data-sticky="{{ settings.header_sticky }}" data-section-id="header-container" data-section-type="header">
           {%- sections 'group-header' -%}
 
           <script type="application/javascript">
-            function insertHeader(){
-              let deskTemplate = document.getElementById("desk-header-template");
-              if(!deskTemplate){
-                return;
-              }
-              if(window.innerWidth >= 992){
-                deskTemplate.insertAdjacentElement('beforebegin', deskTemplate.content.firstElementChild);
-                deskTemplate.remove();
-                document.dispatchEvent(new CustomEvent('desktop-lazyloaded'));
-              }else{
-                window.addEvent('resize', function(){
-                  let div = document.createElement('div');
-                  div.innerHTML = deskTemplate.innerHTML;
-                  deskTemplate.insertAdjacentElement('beforebegin', div.firstElementChild);
+            (function () {
+              function insertHeader() {
+                var deskTemplate = document.getElementById('desk-header-template');
+                if (!deskTemplate) return;
+
+                if (window.innerWidth >= 992) {
+                  deskTemplate.insertAdjacentElement('beforebegin', deskTemplate.content.firstElementChild);
                   deskTemplate.remove();
                   document.dispatchEvent(new CustomEvent('desktop-lazyloaded'));
-                }, {once: true});
+                } else {
+                  window.addEventListener('resize', function () {
+                    var div = document.createElement('div');
+                    div.innerHTML = deskTemplate.innerHTML;
+                    deskTemplate.insertAdjacentElement('beforebegin', div.firstElementChild);
+                    deskTemplate.remove();
+                    document.dispatchEvent(new CustomEvent('desktop-lazyloaded'));
+                  }, { once: true });
+                }
               }
-            }
 
-            insertHeader();
-            {%- if request.design_mode -%}
-              document.addEventListener('shopify:section:load', insertHeader);
-            {%- endif -%}
+              insertHeader();
+
+              {%- if request.design_mode -%}
+                document.addEventListener('shopify:section:load', insertHeader);
+              {%- endif -%}
+            })();
           </script>
         </header>
       </div>
 
-      {%- capture mainContent -%}{{ content_for_layout }}{%- endcapture -%}
-      {%- render 'preload-hero-banner', type: 'splitContent', content: mainContent, key: 'preload', firstSection: true, output: 'value' -%}
-
       {%- if template contains 'product' and product.media.first != blank -%}
-        {%- render 'preload-hero-product-page' image: product.media.first, limit: 540 -%}
+        {%- render 'preload-hero-product-page', image: product.media.first, limit: 540 -%}
       {%- endif -%}
-     
+
       <main id="main-content">
         {%- liquid
           assign page_layout = settings.page_layout
@@ -134,46 +135,63 @@
           else
             assign layout_class = 'container'
           endif
+          assign left_column_style = settings.left_column_style
         -%}
 
-        {%- unless template == 'index' or template == 'page.about-us' -%}{%- render 'breadcrumb' -%}{%- endunless -%}
+        {%- unless template == 'index' or template == 'page.about-us' -%}
+          {%- render 'breadcrumb' -%}
+        {%- endunless -%}
 
-        {% if template == 'index' and settings.left_column_style == 'full-slideshow' %}
-          {% section 'section-slideshow' %}
-        {% endif %}
+        {%- if template == 'index' and left_column_style != 'none' -%}
 
-        {%- if template == 'index' and settings.left_column_style != 'none' -%}
-        <div class="{{ layout_class }}">
-        <div class="row">
-        <div id="home-left-column" class="col-lg-3 d-none d-lg-block">
-          {% section 'homepage-left-column' %}
-        </div>
+          {%- if left_column_style == 'full-slideshow' -%}
+            {%- section 'section-slideshow' -%}
+          {%- endif -%}
+
+          <div class="{{ layout_class }}">
+            <div class="row">
+              <div id="home-left-column" class="col-lg-3 d-none d-lg-block">
+                {%- section 'homepage-left-column' -%}
+              </div>
+              <div id="home-main-content" class="col-lg-9 col-md-12">
+                {{ content_for_layout }}
+              </div>
+            </div>
+          </div>
+
+        {%- elsif template == 'index' -%}
+
+          {%- if left_column_style == 'full-slideshow' -%}
+            {%- section 'section-slideshow' -%}
+          {%- endif -%}
+
+          {{ content_for_layout }}
+
+        {%- elsif template contains 'page' -%}
+
+          {{ content_for_layout }}
+
+        {%- else -%}
+
+          <div class="{{ layout_class }}">
+            {{ content_for_layout }}
+          </div>
+
         {%- endif -%}
 
-        {%- unless template == 'index' or template contains 'page' -%}<div class="{{ layout_class }}">{%- endunless -%}
-        {%- if template == 'index' and settings.left_column_style != 'none' -%}
-        <div id="home-main-content" class="col-lg-9 col-md-12">
-        {%- endif -%}
-        {%- capture mainContent -%}{%- render 'preload-hero-banner', type: 'splitContent', content: mainContent, key: 'preload', firstSection: false, output: '' -%}{%- endcapture -%}
-        {%- render 'preload-hero-banner', type: 'splitContent', content: mainContent, firstSection: false, output: '' -%}
-        {%- if template == 'index' and settings.left_column_style != 'none' -%}</div>{%- endif -%}
-        {%- unless template == 'index' or template contains 'page' -%}</div>{%- endunless -%}
-
-        {%- if template == 'index' and settings.left_column_style != 'none' -%}</div></div>{%- endif -%}
       </main>
-      
-      <footer class="footer" data-section-id="{{ 'footer' | md5}}" data-section-type="footer" data-url="{{routes.root_url}}?sections=footer-widget,footer">
-        <link rel="stylesheet" href="{{'footer.css' | asset_url}}" media="print" onload="this.media='all'">
+
+      <footer class="footer" data-section-id="{{ 'footer' | md5 }}" data-section-type="footer" data-url="{{ routes.root_url }}?sections=footer-widget,footer">
+        <link rel="stylesheet" href="{{ 'footer.css' | asset_url }}" media="print" onload="this.media='all'">
         {%- sections 'group-footer' -%}
       </footer>
-    </div>
 
-    <div>
+    </div><!-- /.body-main-content -->
+
+    <div class="utility-bar">
       <button class="btn btn-1" id="back-to-top">{%- render 'svg', type: 'angle-up' -%}</button>
       {%- render 'popup' -%}
-      {%- if shop.permanent_domain contains 'electro-6.myshopify.com' -%}{%- render 'home-demos' -%}{%- endif -%}
       {%- if settings.switcher_mode -%}{%- render 'mode-switcher' -%}{%- endif -%}
-    </div>
     </div>
 
   </body>
